@@ -134,7 +134,7 @@ class InterruptionNode extends Node
 To be able to interrupt and resume a Workflow you need to provide a persistence component, and a workflow ID when creating the Workflow instance:
 
 ```php
-$workflow = new SimpleWorkflow(
+$workflow = new WorkflowAgent(
     new FilePersistence(__DIR__),
     'CUSTOM_ID'
 );
@@ -158,7 +158,7 @@ try {
 Use the information in the `$data` array to guide the human in providing a feedback. Once you finally have the user's feedback you can resume the workflow. Remeber to use the same `ID` of the interrupted execution.
 
 ```php
-$workflow = new SimpleWorkflow(
+$workflow = new WorkflowAgent(
     new FilePersistence(__DIR__),
     'CUSTOM_ID' // <- Use the same ID of the interrupted workflow
 );

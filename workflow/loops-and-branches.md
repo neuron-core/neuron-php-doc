@@ -27,15 +27,26 @@ class NodeOne extends Node
 Notice that we've added "FirstEvent" as an additional return type for the `__invoke` method.
 {% endhint %}
 
-Returning FirstEvent will trigger another execution of NodeOne. The final output could be:
+Returning FirstEvent will trigger another execution of `NodeOne`. The final output could be:
 
-```
+```php
+$state = Workflow::make()
+    ->addNodes([
+        new InitialNode(),
+        new NodeOne(),
+        new NodeTwo()
+    ])
+    ->start()
+    ->getResult();
+
+/*
 - Handling StartEvent
 - InitialNode complete
 - Running a loop on NodeOne
 - Running a loop on NodeOne
 - NodeOne complete
 - NodeTwo complete
+*/
 ```
 
 You can create a loop from any node to any other node by defining the appropriate event types and return types. In this example the node can return FirstEvent, which is managed by itself. Thanks to event types you can come back to any other node in the workflow.
@@ -73,7 +84,7 @@ class BrancheB2Event implements Event
 In the initial node of he workflow we decide what branched we want to go through. Remeber to always define the appropriate return types in the `__invoke` method signature:
 
 ```php
-class InitialOne extends Node
+class InitialNode extends Node
 {
     public function __invoke(StartEvent $event, WorkflowState $state): BrancheA1Event|BrancheB1Event
     {
@@ -88,6 +99,19 @@ class InitialOne extends Node
 ```
 
 The other nodes will move forward sequencially.
+
+```php
+$state = Workflow::make()
+    ->addNodes([
+        new InitialNode(),
+        new A1Node(),
+        new A2Node(),
+        new B1Node(),
+        new B2Node(),
+    ])
+    ->start()
+    ->getResult();
+```
 
 <figure><img src="../.gitbook/assets/workflow-branches.png" alt=""><figcaption></figcaption></figure>
 

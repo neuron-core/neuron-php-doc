@@ -24,7 +24,7 @@ Persistence comes into play when you intend to use interruption. The persistence
 It keep data in memory only for the current execution cycle.
 
 ```php
-$workflow = new SimpleWorkflow(
+$workflow = new WorkflowAgent(
     new InMemoryPersistence(), 
     'CUSTOM_ID'
 );
@@ -35,7 +35,7 @@ $workflow = new SimpleWorkflow(
 It will store the Workflow data and state into a local file.
 
 ```php
-$workflow = new SimpleWorkflow(
+$workflow = new WorkflowAgent(
     new FilePersistence(__DIR__), 
     'CUSTOM_ID'
 );

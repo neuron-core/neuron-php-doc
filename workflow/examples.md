@@ -52,3 +52,45 @@ Stack Used:
 * **GenerateItinerary**: Generates the final report
 
 <a href="https://github.com/neuron-core/travel-planner-agent" class="button secondary" data-icon="github">Check out the GitHub Repository</a>
+
+## Laravel Travel Agent
+
+This project demonstrates how to integrate multi-agent workflows in a Laravel application using Neuron PHP AI framework.&#x20;
+
+Stack Used:
+
+* [Laravel](https://laravel.com/) and [Livewire](https://livewire.laravel.com/) for the application.
+* [Neuron Workflow](https://docs.neuron-ai.dev/workflow/getting-started) for multi-agent orchestration.
+* [SerpAPI](https://serpapi.com/) for finding hotels, flights and places to visit comprehensive research reports on any topic using large language models, with a focus on modularity, extensibility, and real-time results.
+
+<figure><img src="../.gitbook/assets/laravel-travel-planner-ai-agent.png" alt=""><figcaption></figcaption></figure>
+
+### How to use this project
+
+Download the project on your machine and open your terminal in the project directory. First, install the composer dependencies:
+
+```bash
+composer install
+
+npm run build
+
+php artisan migrate
+```
+
+Create a `.env` file in your project root (see `.env.example` for a template), and provides the API keys based on the service you want to connect with.
+
+```
+# At least one required
+ANTHROPIC_API_KEY=
+GEMINI_API_KEY=
+OPENAI_API_KEY=
+
+#Required
+SERPAPI_KEY=
+
+# Optional
+INSPECTOR_INGESTION_KEY=
+INSPECTOR_TRANSPORT=sync
+```
+
+Open the project in your browser, register an account, and start planning your trip.

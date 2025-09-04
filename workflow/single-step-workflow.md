@@ -13,7 +13,7 @@ First, let's create the MyWorkflow class:
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-php vendor/bin/neuron make:workflow App\\Neuron\\MyWorkflow
+php vendor/bin/neuron make:workflow App\\Neuron\\MyAgent
 ```
 {% endtab %}
 
@@ -31,7 +31,7 @@ namespace App\Neuron;
 
 use NeuronAI\Workflow\Workflow;
 
-class MyWorkflow extends Workflow
+class MyAgent extends Workflow
 {
     protected function nodes(): array
     {
