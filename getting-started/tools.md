@@ -569,19 +569,15 @@ class MyAgent extends Agent
 }
 ```
 
-During development of complex agents, I've frequently encountered scenarios where a toolkit provides mostly the right functionality but includes tools that could lead to undesired behavior in specific contexts. The `exclude()` method addresses this challenge elegantly, allowing developers to attach comprehensive toolkits while maintaining fine-grained control over available capabilities. This becomes particularly useful when working with specialized agents that need specific capabilities but you want to reduce the probability of an agent mistake, and reduce tokens consumption.
+### Filters
+
+During development of complex agents, I've frequently encountered scenarios where a toolkit provides mostly the right functionality but includes tools that could lead to undesired behavior in specific contexts, or just need to be restricted and configured individually.&#x20;
+
+#### Exclude
+
+The `exclude()` method addresses this challenge elegantly, allowing developers to attach comprehensive toolkits while maintaining fine-grained control over available capabilities. This becomes particularly useful when working with specialized agents that need specific capabilities but you want to reduce the probability of an agent mistake, and reduce tokens consumption.
 
 ```php
-<?php
-
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Tools\Calculator\CalculatorToolkit;
-use NeuronAI\Tools\Toolkits\Calculator\DivideTool;
-use NeuronAI\Tools\Toolkits\Calculator\ExponentiateTool;
-use NeuronAI\Tools\Toolkits\Calculator\MultiplyTool;
-
 class MyAgent extends Agent
 {
     ...
@@ -599,18 +595,13 @@ class MyAgent extends Agent
 }
 ```
 
-The exclusion mechanism operates at the class level, using fully qualified class names to identify tools for removal. In the same way you can also use the mthod `only()` to request a sub-set of the available tools in the toolkit.
+The exclusion mechanism operates at the class level, using fully qualified class names to identify tools for removal.&#x20;
+
+#### Only
+
+In the same way you can also use the mthod `only()` to request a sub-set of the available tools in the toolkit.
 
 ```php
-<?php
-
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Tools\Calculator\CalculatorToolkit;
-use NeuronAI\Tools\Toolkits\Calculator\MedianTool;
-use NeuronAI\Tools\Toolkits\Calculator\StandardDeviationTool;
-
 class MyAgent extends Agent
 {
     ...
@@ -622,6 +613,25 @@ class MyAgent extends Agent
                 StandardDeviationTool::class,
                 MedianTool::class,
             ]),
+        ];
+    }
+}
+```
+
+#### With
+
+Following the same pattern you may need to retrieve an instance of a specific tool from the toolkit to change its settings. You can do this using the `with()` method. You can pass the fully qualified class name to declare what tool you want to retrieve, and the tool instance will be injected into the callback so you can change its settings and return it back.
+
+```php
+class MyAgent extends Agent
+{
+    ...
+	
+    public function tools(): array
+    {
+    	return [
+            CalculatorToolkit::make()
+                ->with(MedianTool::class, fn (ToolInterface $tool) => $tool->setMaxTries(10)),
         ];
     }
 }
