@@ -90,7 +90,7 @@ Once the Agent decides to use a tool the callable function is executed. Here we 
 
 Neuron provides you with these clear and simple APIs and automates all the underlying interactions with the LLM. Once you get the point it can immediately open to a possibility to connect basically everything you want to the Agent. Being able to execute local functions allows you to invoke any external APIs or application components.
 
-### Implement Custom Tools
+### Custom Tools
 
 Thanks to the Neuron modular architecture, Tools are just a component of the toolkit that implements `ToolInterface` . You are free to create pre-packaged tool classes that implement common functionalities, and release them as external composer packages or submit a PR to our repository to have them integrated into the core framework.
 
