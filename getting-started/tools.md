@@ -630,8 +630,11 @@ class MyAgent extends Agent
     public function tools(): array
     {
     	return [
-            CalculatorToolkit::make()
-                ->with(MedianTool::class, fn (ToolInterface $tool) => $tool->setMaxTries(10)),
+            MySQLToolkit::make()
+                ->with(
+                    MySQLSchemaTool::class, 
+                    fn (ToolInterface $tool) => $tool->setMaxTries(1)
+                ),
         ];
     }
 }
