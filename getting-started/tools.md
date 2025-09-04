@@ -253,7 +253,7 @@ Three most important takeaways:
 */
 ```
 
-### Tool Max Tries
+### Max Tries
 
 Agents now have a safety mechanism that tracks the number of times a tool is invoked during an execution session. If the agent exceeds this limit, execution is interrupted and an exception is thrown. By default the limit is 5 calls, and it count for each tool individually.&#x20;
 
