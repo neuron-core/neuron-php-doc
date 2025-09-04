@@ -124,7 +124,7 @@ class MyChatBot extends RAG
     {
         return new FileVectorStore(
             directory: __DIR__,
-            key: 'demo'
+            name: 'demo'
         );
     }
 }
@@ -218,7 +218,7 @@ class WorkoutTipsAgent extends RAG
     {
         return new FileVectorStore(
             directory: __DIR__,
-            key: 'demo'
+            name: 'demo'
         );
     }
     
