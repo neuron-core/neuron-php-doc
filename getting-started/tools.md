@@ -255,13 +255,19 @@ Three most important takeaways:
 
 ### Tool Max Tries
 
-Agents have a safety mechanism that tracks the number of times a tool is invoked during an execution session. If the agent exceeds this limit, execution is interrupted and an exception is thrown. By default the limit is 5 calls, and it count for each tool individually. You can customize this value with the `toolMaxTries` method.
+Agents now have a safety mechanism that tracks the number of times a tool is invoked during an execution session. If the agent exceeds this limit, execution is interrupted and an exception is thrown. By default the limit is 5 calls, and it count for each tool individually.&#x20;
+
+You can customize this value with the `toolMaxTries()` method at agent level, or use `setMaxTries()` on the tool level. Setting max tries on single tool takes precedence over the global setting.
 
 ```php
 try {
 
     $result = YouTubeAgent::make()
         ->toolMaxTries(5) // Max number of calls for each tool
+        ->addTool(
+            // It takes precedence over the global setting
+            CustomTool::make()->setMaxTries(2)
+        )
         ->chat(...);
         
 } catch (ToolMaxTriesException $exception) {
