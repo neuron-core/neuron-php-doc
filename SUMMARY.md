@@ -4,6 +4,7 @@
 
 * [Introduction](README.md)
   * [Upgrade Guide](overview/readme/upgrade-guide.md)
+  * [Repository Migration](overview/readme/repository-migration.md)
 * [Fast Learning by Video](overview/fast-learning-by-video.md)
 
 ## Getting Started
