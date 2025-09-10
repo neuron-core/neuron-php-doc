@@ -38,7 +38,7 @@ The strongly-typed approach means your IDE can provide accurate autocompletion f
 
 ***
 
-This foundation translates to faster debugging cycles, easy integration patterns with frameworks like Symfony or Laravel, and the ability to confidently refactor AI logic as requirements evolve. We assume you're building systems that need to be maintained, extended, and understood by teams rather than individual experiments.
+This foundation allows faster debugging cycles, easy integration patterns with frameworks like Symfony or Laravel, and the ability to confidently refactor AI logic as requirements evolve. We assume you're building systems that need to be maintained, extended, and understood by teams rather than individual experiments.
 
 ### Carefully Crafted Architecture
 
