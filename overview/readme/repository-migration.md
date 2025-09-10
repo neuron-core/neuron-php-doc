@@ -22,8 +22,8 @@ Here is how Neuron must be referenced in your `composer.json` file:
 },
 ```
 
-If you don’t update the package signature, you will no longer be able to receive updates **after October 1st**.
+If you don’t change the package signature, you will no longer be able to receive new releases **after October 1st**.
 
-### Receive Updates
+### Stay Updated
 
 You can receive live updates subscribing to the Neuron newsletter: [**https://neuron-ai.dev**](https://neuron-ai.dev/)
