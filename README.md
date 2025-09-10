@@ -32,12 +32,6 @@ This isn't just documentation—it's enforced contract specification that catche
 
 ***
 
-#### Well Defined Interfaces
-
-The components architecture follows strict interface segregation principles, where each component operates through well-defined contracts. This design enables you to swap implementations without cascading changes through your application. Need to switch from OpenAI to Anthropic? Change the AI provider. Want to move from in-memory to SQL-backed conversation storage? Swap the chat history component. The interface boundaries make these transitions straightforward rather than architectural overhauls.
-
-***
-
 #### IDE Friendly
 
 The strongly-typed approach means your IDE can provide accurate autocompletion for agent configurations, tool parameters, and response handling. Method signatures include detailed PHPDoc annotations that provide context beyond type hints when needed, explaining parameter expectations and return value structures.
