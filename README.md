@@ -12,9 +12,11 @@ description: Learn what Neuron is and what you can do with it.
 For detailed migration instructions and configuration updates, please visit our [Repository Migration Guide](https://docs.neuron-ai.dev/overview/readme/repository-migration).
 {% endhint %}
 
-Neuron is a framework that helps you create AI Agents in PHP faster and with less effort using the technology you already use and love.&#x20;
+### What is Neuron
 
-Neuron makes AI Agents development accessible, reliable, and scalable. If you're just taking your first steps into AI Agents development, Neuron's extensive documentation, [guides](overview/fast-learning-by-video.md) and [tutorials](overview/fast-learning-by-video.md) will help you delve deeper into core concepts at your pace.
+Neuron is a PHP framework for creating and orchestrating AI Agents. It allows you to integrate AI entities in your existing&#x20;PHP applications with a powerful and flexible architecture.&#x20;
+
+We provide tools for the entire agentic application development lifecycle, from LLM interfaces, to data loading, to multi-agent orchestration, to monitoring and debugging. In addition, we provide [tutorials and other educational content](overview/fast-learning-by-video.md) to help you get started using AI Agents in your projects.
 
 <figure><img src=".gitbook/assets/neuron-ai-architecture.png" alt=""><figcaption><p>Neuron architecture</p></figcaption></figure>
 
