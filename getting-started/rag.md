@@ -6,8 +6,16 @@ description: >-
 
 # RAG
 
+{% hint style="warning" %}
+### 🚨 IMPORTANT: Repository Migration Notice
+
+**Effective October 1st, 2025**, the official Neuron repository will be migrating from the Inspector GitHub organization to a dedicated [**Neuron organization**](https://github.com/neuron-core).
+
+For detailed migration instructions and configuration updates, please visit our [Repository Migration Guide](https://docs.neuron-ai.dev/overview/readme/repository-migration).
+{% endhint %}
+
 {% hint style="info" %}
-PREREQUISITES
+### PREREQUISITES
 
 This guide assumes you are already familiar with the following concepts:
 

@@ -4,6 +4,14 @@ description: Guide, moderate, and control your multi-agent system with human-in-
 
 # Getting Started
 
+{% hint style="warning" %}
+### 🚨 IMPORTANT: Repository Migration Notice
+
+**Effective October 1st, 2025**, the official Neuron repository will be migrating from the Inspector GitHub organization to a dedicated [**Neuron organization**](https://github.com/neuron-core).
+
+For detailed migration instructions and configuration updates, please visit our [Repository Migration Guide](https://docs.neuron-ai.dev/overview/readme/repository-migration).
+{% endhint %}
+
 ### What is a Workflow
 
 A workflow is an event-driven, node-based way to control the execution flow of an application.

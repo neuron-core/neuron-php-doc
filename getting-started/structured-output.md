@@ -5,7 +5,7 @@ description: Enforce the Agent output based on the provided schema.
 # Structured Output
 
 {% hint style="info" %}
-PREREQUISITES
+### PREREQUISITES
 
 This guide assumes you are already familiar with the following concepts:
 
