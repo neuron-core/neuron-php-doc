@@ -82,5 +82,5 @@ INSPECTOR_INGESTION_KEY=nwse877auxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 <figure><img src="../.gitbook/assets/stream-observability.png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
-Learn more about Agent observability in the [dedicated documentation](../components/observability.md).
+Learn more about Agent observability in the [dedicated documentation](observability.md).
 {% endhint %}

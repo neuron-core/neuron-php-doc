@@ -48,7 +48,7 @@ When building AI agents, evaluating their performance is crucial during this pro
 
 Neuron introduces a system to create evaluators against test cases, so you can continues verify the output of your agentic entities overtime.
 
-<a href="../../components/evaluation.md" class="button secondary" data-icon="arrow-right-long">Evaluation Documentation</a>
+<a href="../../getting-started/evaluation.md" class="button secondary" data-icon="arrow-right-long">Evaluation Documentation</a>
 
 #### Structured Output validation rules
 

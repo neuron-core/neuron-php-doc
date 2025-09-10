@@ -229,7 +229,7 @@ We’re using [Discussions](https://github.com/inspector-apm/neuron-ai/discussio
 
 Neuron is part of the Inspector ecosystem as a trustable platform to create reliable and scalable AI driven solutions.&#x20;
 
-Trace and evaluate your agents execution flow to help you maintain production grade implementations with confidence. Check out the [**monitoring integrations**](components/observability.md).
+Trace and evaluate your agents execution flow to help you maintain production grade implementations with confidence. Check out the [**monitoring integrations**](getting-started/observability.md).
 
 ## Core components
 
@@ -240,7 +240,7 @@ Trace and evaluate your agents execution flow to help you maintain production gr
 * [**Vector Store**](components/vector-store.md)
 * [**Chat History**](components/chat-history-and-memory.md)
 * [**MCP connector**](getting-started/mcp-connector.md)
-* [**Monitoring & Debugging**](components/observability.md)
+* [**Monitoring & Debugging**](getting-started/observability.md)
 * [**Pre/Post Processors**](components/pre-post-processor.md)
 * [**Workflow**](broken-reference)
 

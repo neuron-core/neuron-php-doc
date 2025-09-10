@@ -336,7 +336,7 @@ Each segment bring its own debug information to follow the agent execution in re
 <figure><img src="../.gitbook/assets/neuron structured segment.png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
-Learn how to enable [**observability**](../components/observability.md) in the next section.
+Learn how to enable [**observability**](observability.md) in the next section.
 {% endhint %}
 
 ## Available Validation Rules

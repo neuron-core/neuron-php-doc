@@ -242,7 +242,7 @@ class MyChatBot extends RAG
 
 ## Monitoring
 
-Neuron built-in observability features automatically trace the execution of each post processor, so you'll be able to monitor interactions with external services in your [Inspector](https://inspector.dev/) account. Learn more in the [monitoring section](observability.md).
+Neuron built-in observability features automatically trace the execution of each post processor, so you'll be able to monitor interactions with external services in your [Inspector](https://inspector.dev/) account. Learn more in the [monitoring section](../getting-started/observability.md).
 
 <figure><img src="../.gitbook/assets/neuron-reranker-observability.png" alt=""><figcaption></figcaption></figure>
 

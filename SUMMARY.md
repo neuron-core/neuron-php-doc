@@ -17,6 +17,9 @@
 * [Attachments (Documents & Images)](getting-started/attachments-documents-and-images.md)
 * [RAG](getting-started/rag.md)
 * [Asynchronous Processing](getting-started/asynchronous-processing.md)
+* [Monitoring & Debugging](getting-started/observability.md)
+* [Error Handling](getting-started/error-handling.md)
+* [Evaluation](getting-started/evaluation.md)
 
 ## Workflow
 
@@ -38,9 +41,6 @@
 * [Vector Store](components/vector-store.md)
 * [Pre/Post Processor](components/pre-post-processor.md)
 * [Data loader](components/data-loader.md)
-* [Monitoring & Debugging](components/observability.md)
-* [Error Handling](components/error-handling.md)
-* [Evaluation](components/evaluation.md)
 
 ## Resources
 
