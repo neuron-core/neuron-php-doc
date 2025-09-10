@@ -44,7 +44,7 @@ This foundation allows faster debugging cycles, easy integration patterns with f
 
 Whether you're working within a Laravel application, a Symfony project, a WordPress plugin, or a custom MVC framework, Neuron integrates seamlessly with your existing codebase without refactoring or disrupting established environments.
 
-Neuron uses standard PSR interfaces where appropriate and maintains minimal external dependencies, avoiding conflits across different PHP environments and framework versions. This design choice prevents the common problem where introducing a new library requires adopting an entire framework's ecosystem or waiting for dependencies update before moving to a new version.
+Neuron uses standard PSR interfaces where appropriate and maintains minimal external dependencies, avoiding conflits across different PHP environments and framework versions. This design choice prevents the common problem where introducing a new library increase the risks of getting stuck due to conflict in application dependencies.
 
 For teams working across multiple projects, this approach provides consistency. The same Neuron patterns and implementations work regardless of whether you're building a new microservice in pure PHP, extending a WordPress site, or adding features to an enterprise Symfony and Laravel application. Knowledge transfer between projects becomes seamless, and developers can leverage their Neuron expertise across their entire PHP portfolio.
 
