@@ -129,7 +129,6 @@ class MyAgent extends Agent
             ])->exclude([
                 'tool_name_1',
                 'tool_name_2',
-                ...
             ])->tools(),
             
             // ONLY: Select the tools you want to include
@@ -138,7 +137,6 @@ class MyAgent extends Agent
             ])->only([
                 'tool_name_1',
                 'tool_name_2',
-                ...
             ])->tools(),
         ];
     }
