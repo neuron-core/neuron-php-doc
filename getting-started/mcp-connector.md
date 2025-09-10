@@ -1,7 +1,7 @@
 ---
 description: >-
-  Connect your agent with Tools provided by MCP (Model Context Protocol)
-  servers.
+  Connect the tools provided by Model Context Protocol (MCP) servers to your
+  agent.
 ---
 
 # MCP Connector
@@ -10,31 +10,21 @@ MCP (Model Context Protocol) is an open source standard designed by Anthropic to
 
 Thanks to this protocol you can make tools exposed by an external server available to your agent.
 
-Companies can build servers to allow developers to connect Agents to their platforms. Here are a couple of directories with most used MCP servers:
+Companies can build MCP servers to allow developers to connect Agents to their platforms. Here are a couple of directories with most used MCP servers:
 
 * MCP official GitHub - [https://github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)
 * MCP-GET registry - [https://mcp-get.com/](https://mcp-get.com/)
 
-Once you have one or more MCP server on your machine, you can make their tools available to your agent.
+### How it works
+
+Neuron provides you with the `McpConnector` class that you can instantiate passing the MCP server configuration.
 
 ```php
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\MCP\McpConnector;
 
 class MyAgent extends Agent 
 {
-    protected function provider(): AIProviderInterface
-    {
-        ...
-    }
-    
-    public function instructions(): string
-    {
-        ...
-    }
+    ...
     
     protected function tools(): array
     {
@@ -54,7 +44,54 @@ Neuron automatically discovers the tools exposed by the server and connects them
 
 When the agent decides to run a tool, Neuron will generate the appropriate request to call the tool on the MCP servers and return the result to the LLM to continue the task.  It feels exactly like with your own defined tools, but you can access a huge archive of predefined actions your agent can perform with just one line of code.
 
-### Monitoring
+### Local MCP Server
+
+If you want to connect with an MCP server installed locally on your machine or VM, you can use the "command" style configuration.
+
+```php
+use NeuronAI\MCP\McpConnector;
+
+class MyAgent extends Agent 
+{
+    ...
+    
+    protected function tools(): array
+    {
+        return [
+            ...McpConnector::make([
+                'command' => 'php',
+                'args' => ['/home/code/mcp_server.php'],
+            ])->tools(),
+        ];
+    }
+}
+```
+
+### Remote MCP Server
+
+Remote servers are accessible via URLs and typically require authentication. You can use the `token` field in the configuration array, which will be used as an authorization token to communicate with the server:
+
+```php
+use NeuronAI\MCP\McpConnector;
+
+class MyAgent extends Agent 
+{
+    ...
+    
+    protected function tools(): array
+    {
+        return [
+            ...McpConnector::make([
+                'url' => 'https://mcp.example.com',
+                'token' => 'BEARER_TOKEN',
+                'timeout' => 30,
+            ])->tools(),
+        ];
+    }
+}
+```
+
+### Monitoring & Debugging
 
 To stay updated about your Agent decision making process, you can connect the [Inspector monitoring dashboard](https://inspector.dev/) to monitor tool selection and execution in real-time.
 
@@ -79,31 +116,16 @@ This becomes particularly useful when working with specialized agents that need 
 These methods accept a list of tool names that you do or do not want to associate with the agent.
 
 ```php
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Providers\Anthropic\Anthropic;
-use NeuronAI\MCP\McpConnector;
-
 class MyAgent extends Agent 
 {
-    protected function provider()
-    {
-        return new Anthropic(...);
-    }
-    
-    public function instructions(): string
-    {
-        return new SystemPrompt(["<SYSTEM PROMPT>"]);
-    }
+    ...
     
     protected function tools()
     {
         return [
             // EXCLUDE: discard certain tools
             ...McpConnector::make([
-                'command' => 'npx',
-                'args' => ['-y', '@modelcontextprotocol/server-everything'],
+                'url' => 'https://mcp.example.com',
             ])->exclude([
                 'tool_name_1',
                 'tool_name_2',
@@ -112,8 +134,7 @@ class MyAgent extends Agent
             
             // ONLY: Select the tools you want to include
             ...McpConnector::make([
-                'command' => 'npx',
-                'args' => ['-y', '@modelcontextprotocol/server-everything'],
+                'url' => 'https://mcp.example.com',
             ])->only([
                 'tool_name_1',
                 'tool_name_2',
