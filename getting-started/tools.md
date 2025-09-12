@@ -512,6 +512,38 @@ class Color
 }
 ```
 
+## Provider Tools
+
+Some providers offer the possibility to use their built-in tools like web\_search, file\_search, and others instead of relying on external services. Even they offer this service they introduce a lot of constraints using these tools. The most flexible and reliable way to add cpabailities to your agents remains the Tools and Toolkit systems.
+
+You can add a provider tool as usual in the tools array of your agent:
+
+```php
+use NeuronAI\Tools\ProviderTool;
+
+class MyAgent extends Agent
+{
+    public function provider(): AIProviderInterface
+    {
+        return new OpenAIResponses(
+            key: 'OPENAI_API_KEY',
+            model: 'OPENAI_MODEL',
+        );
+    }
+
+    public function tools(): array
+    {
+        return [
+            ProviderTool:make(
+                type: 'web_search'
+            )->setOptions([...]),
+        ];
+    }
+}
+```
+
+Currently only [OpenAIResponses](../components/ai-provider.md#openairesponses), [Gemini](../components/ai-provider.md#gemini), and [Anthropic](../components/ai-provider.md#anthropic) support this tools.
+
 ## Toolkits
 
 The philosophy behind Neuron's toolkit system emerged from a fundamental observation during AI Agent Development: while individual tools provide specific capabilities, real-world AI agents often require coordinated sets of related functionalities.&#x20;
