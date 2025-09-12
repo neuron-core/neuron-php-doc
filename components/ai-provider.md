@@ -34,7 +34,40 @@ echo MyAgent::make()->chat(new UserMessage("Hi!"));
 // Hi, how can I help you today?
 ```
 
+### OpenAIResponses
+
+This component uses the most recent OpenAI responses API:
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Providers\HttpClientOptions;
+use NeuronAI\Providers\OpenAI\Responses\OpenAIResponses;
+
+class MyAgent extends Agent
+{
+    public function provider(): AIProviderInterface
+    {
+        return new OpenAIResponses(
+            key: 'OPENAI_API_KEY',
+            model: 'OPENAI_MODEL',
+            parameters: [], // Add custom params (temperature, logprobs, etc)
+            strict_response: false, // Strict structured output
+            httpOptions: new HttpClientOptions(timeout: 30),
+        );
+    }
+}
+
+echo MyAgent::make()->chat(new UserMessage("Hi!"));
+// Hi, how can I help you today?
+```
+
 ### OpenAI
+
+This component uses the old OpenAI completions API:
 
 ```php
 namespace App\Neuron;
