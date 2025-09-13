@@ -22,13 +22,13 @@ We provide tools for the entire agentic application development lifecycle, from 
 
 ### Developer Experience
 
-Neuron's architecture prioritizes the fundamentals that experienced engineers expect from production-grade software. The framework leverages PHP 8's mature type system throughout its codebase, with every method signature, property, and return value explicitly typed.&#x20;
+Neuron's architecture prioritizes the fundamentals that experienced engineers expect from production-grade software.&#x20;
 
 ***
 
 #### Strong Typing System
 
-This isn't just documentation—it's enforced contract specification that catches integration errors at development time rather than in production. The entire framework passes PHPStan 100% type coverage, ensuring that type safety extends beyond basic scalar types to complex object relationships and generic collections.
+The framework leverages PHP 8's mature type system throughout its codebase, with every method signature, property, and return value explicitly typed. The entire framework passes PHPStan 100% type coverage.
 
 ***
 
@@ -38,7 +38,7 @@ The strongly-typed approach means your IDE can provide accurate autocompletion f
 
 ***
 
-This foundation allows faster debugging cycles, easy integration patterns with frameworks like Symfony or Laravel, and the ability to confidently refactor AI logic as requirements evolve. We assume you're building systems that need to be maintained, extended, and understood by teams rather than individual experiments.
+This foundation allows faster debugging cycles, easy integration patterns with frameworks like Symfony or Laravel. We assume you're building systems that need to be maintained, extended, and understood by teams rather than individual experiments.
 
 ### Carefully Crafted Architecture
 
