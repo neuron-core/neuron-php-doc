@@ -93,6 +93,9 @@ class MyAgent extends Agent
                 'url' => 'https://mcp.example.com',
                 'token' => 'BEARER_TOKEN',
                 'timeout' => 30,
+                'headers' => [
+                    //'x-cutom-header' => 'value'
+                ]
             ])->tools(),
         ];
     }
