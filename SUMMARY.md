@@ -3,7 +3,7 @@
 ## Overview
 
 * [Introduction](README.md)
-  * [Upgrade Guide](overview/readme/upgrade-guide.md)
+  * [Upgrade To v2 From v1](overview/readme/upgrade-to-v2-from-v1.md)
   * [Repository Migration](overview/readme/repository-migration.md)
 * [Fast Learning by Video](overview/fast-learning-by-video.md)
 

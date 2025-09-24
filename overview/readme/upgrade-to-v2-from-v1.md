@@ -1,4 +1,4 @@
-# Upgrade Guide
+# Upgrade To v2 From v1
 
 ### Updating Dependencies
 
@@ -26,7 +26,7 @@ In the previous version the RAG component could interact with a vector store and
 
 Neuron RAG now has a separate retrieval component that allwos you to implement different strategies to accomplish context retrieval from an external data source. By default RAG uses `SimilarityRetrieval` that simply replicate the previous behaviour maintaining backward compatibility. But it depends now by its own interface so you can create custom implementation and inject it into the RAG.
 
-<a href="upgrade-guide.md#rag-retrieval-component" class="button secondary" data-icon="arrow-right-long">Retrieval Documentation</a>
+<a href="upgrade-to-v2-from-v1.md#rag-retrieval-component" class="button secondary" data-icon="arrow-right-long">Retrieval Documentation</a>
 
 ### New Features
 
@@ -52,7 +52,7 @@ Neuron introduces a system to create evaluators against test cases, so you can c
 
 #### Structured Output validation rules
 
-We introduced two new validation rules for structured output: [WordsCount](upgrade-guide.md#structured-output-validation-rules) (works on string), and [InRange](upgrade-guide.md#structured-output-validation-rules) (works on numeric).
+We introduced two new validation rules for structured output: [WordsCount](upgrade-to-v2-from-v1.md#structured-output-validation-rules) (works on string), and [InRange](upgrade-to-v2-from-v1.md#structured-output-validation-rules) (works on numeric).
 
 #### Tool Max Tries
 
