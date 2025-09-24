@@ -66,7 +66,7 @@ try {
     $result = YouTubeAgent::make()
         ->toolMaxTries(5) // Max number of calls for each tool
         ->addTool(
-            // It takes precedence over the global setting
+            // Tool level config takes precedence over the global setting
             CustomTool::make()->setMaxTries(2)
         )
         ->chat(...);
