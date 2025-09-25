@@ -474,9 +474,9 @@ class Person
 }
 ```
 
-### #\[InRange]
+### #\[OutOfRange]
 
-Determin if a `number` is in the given range:
+Determin if a `number` is out of the given range:
 
 ```php
 namespace App\Dto;
@@ -485,11 +485,11 @@ use NeuronAI\StructuredOutput\Validation\Rules\InRange;
 
 class Person 
 {
-    #[InRange(min: 18, max: 35)]
+    #[OutOfRange(min: 18, max: 35)]
     public int $age;
     
-    // The strict argument force to stay within the range
-    #[InRange(min: 48, max: 54, strict: true)]
+    // The strict argument force to stay stricly out of the range limits
+    #[OutOfRange(min: 48, max: 54, strict: true)]
     public int $size;
 }
 ```
