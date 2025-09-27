@@ -102,6 +102,13 @@ class InterruptionNode extends Node
 }
 ```
 
+The checkpoint method accepts two arguments:
+
+* The **name** of the checkpoint must be unique in the node;
+* A **Closure** to wrap the code whose result you want to save.
+
+When the node is executed, the checkpoint method saves the result of the Closure in case of an interruption. When the node is executed again after the interruption, it can reach the interruption point with the exact same state of the previous run to get the external feedback.
+
 ### Consume The Feedback Directly
 
 You can also consume the external feedback somewhere in your code other than where you call the `interrupt()` method.
