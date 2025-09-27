@@ -56,11 +56,57 @@ Calling the `interrupt()` method you can pass the information you need to intera
 
 When the Workflow will be awakened it will restart from this node, and the `$feedback` variable will receive the human's response data.
 
-### Consume The Feedback
+### Checkpointing
 
-When the Workflow is awakened it restarts the execution from the node where it was interrupted. The node will be re-executed entirely including the code present before the interruption. You can also consume the external feedback somewhere in your code other than where you call the interrupt() method.
+When the Workflow is awakened it restarts the execution from the node where it was interrupted. The node will be re-executed entirely including the code present before the interruption.
 
-The consumeInterruptFeedabck() method allows you get the value of the external feedback or null if the node is simply running and not awakening:
+If you need to call for an interruption not at the beginning of the node, but after performing other operations, you can use checkpoints to save the result of some statements to be used when the node is re-starded. Here is an example:
+
+```php
+<?php
+
+namespace App\Neuron;
+
+use NeuronAI\Workflow\Node;
+use NeuronAI\Workflow\WorkflowState;
+
+class InterruptionNode extends Node
+{
+    public function __invoke(InputEvent $event, WorkflowState $state): OutputEvent
+    {
+        // The result of this code block is saved and returned when the workflow is awakened.
+        $sentiment = $this->checkpoint('agent-1', function () {
+            return MyAgent::make()->structured(
+                new UserMessage(...),
+                SentimentResult::class
+            );
+        });
+        
+        // Interrupt the workflow and wait for the feedback.
+        if ($sentiment->isNegative()) {
+            $feedback = $this->interrupt([
+                'question' => 'Should we continue?',
+                'current_value' => $state->get('accuracy')
+            ]);
+        }
+    
+        if ($feedback['approved']) {
+            $state->set('is_sufficient', true);
+            $state->set('user_response', $feedback['response']);
+            return new OutputEvent();
+        }
+        
+        $state->set('is_sufficient', false);
+        return new InputEvent();
+    }
+}
+```
+
+### Consume The Feedback Directly
+
+You can also consume the external feedback somewhere in your code other than where you call the `interrupt()` method.
+
+The `consumeInterruptFeedabck()` method allows you get the value of the external feedback or null if the node is simply running and not awakening:
 
 ```php
 <?php
@@ -94,7 +140,7 @@ class InterruptionNode extends Node
 }
 ```
 
-This allows much more flexibility if you need to condition the beginning of node based on the given feedback.
+This allows much more flexibility if you need to condition the beginning of the node based on the given feedback.
 
 ### Conditional Interruption
 
@@ -114,13 +160,13 @@ class InterruptionNode extends Node
     {
         // Conditional interruption
         $this->interruptIf(
-            $state->set('is_sufficient'), 
+            $state->get('is_sufficient', false), 
             ['question' => 'Should we continue?']
         );
         
         // Using a callback to evaluate the condition
         $this->interruptIf(
-            fn() => $state->set('is_sufficient'), 
+            fn() => $state->get('is_sufficient', false), 
             ['question' => 'Should we continue?']
         );
         
@@ -131,7 +177,7 @@ class InterruptionNode extends Node
 
 ### Catch the Interruption
 
-To be able to interrupt and resume a Workflow you need to provide a persistence component, and a workflow ID when creating the Workflow instance:
+To be able to interrupt and wake up a Workflow you need to provide a persistence layer and a workflow ID when creating the Workflow instance:
 
 ```php
 $workflow = new WorkflowAgent(
@@ -140,7 +186,7 @@ $workflow = new WorkflowAgent(
 );
 ```
 
-The `ID` is the reference to save and load the state of a specific Workflow during the interruption and resume process. The interruption request from a node will fire a special type of exception represented by the `WorkflowInterrupt` class. You can catch this exception to manage the interruption request.
+The `ID` is the reference to save and load the state of a specific Workflow during the interruption and wake up process. When a node call for an interruption it fires a special type of exception represented by the `WorkflowInterrupt` class. You can catch this exception to manage the interruption request.
 
 ```php
 try {
