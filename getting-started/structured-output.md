@@ -299,14 +299,28 @@ class Person
      * @var \App\TextBlock[]|\App\TableBlock[]
      */
     #[SchemaProperty(description: 'The list of tag for the user profile.', required: true)]
-    #[ArrayOf(Tag::class)]
+    #[ArrayOf([TextBlock::class, TableBlock::class])]
     public array $tags;
 }
 ```
 
 Or using the "array<>" syntax:
 
+```php
+class Person 
+{
+    ...
+    
+    /**
+     * @var array<\App\TextBlock|\App\TableBlock>
+     */
+    #[SchemaProperty(description: 'The list of tag for the user profile.', required: true)]
+    #[ArrayOf([TextBlock::class, TableBlock::class])]
+    public array $tags;
+}
+```
 
+As you can notice from the examples above you can pass an array of class-string to the `ArrayOf` validation rule to ensure the final array will contains only instances of the listed classes.
 
 ## Max Retries
 
