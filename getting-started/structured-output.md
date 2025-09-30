@@ -200,7 +200,7 @@ echo $person->name.' like '.$person->preference.'. Address: '.$person->address->
 // John like pizza. Address: st.James Street
 </code></pre>
 
-### Array
+## Array
 
 If you declare a property as an array Neuron assumes the list of items to be a list of string. Assume we want to add a list of tags to the Person object:
 
@@ -255,12 +255,7 @@ use NeuronAI\StructuredOutput\Validation\Rules\ArrayOf;
 
 class Person 
 {
-    #[SchemaProperty(description: 'The user name.', required: true)]
-    #[NotBlank]
-    public string $name;
-    
-    #[SchemaProperty(description: 'What user love to eat.', required: true)]
-    public string $preference;
+    ...
     
     /**
      * @var \App\Agent\Models\Tag[]
@@ -289,7 +284,31 @@ class Tag
 }
 ```
 
-### Max Retries
+### Multiple object types
+
+Neuron also supports the composition of arrays with multiple object types. You have two options to specify the PHP classes you want to build the array with:
+
+Using the square brackets syntax:
+
+```php
+class Person 
+{
+    ...
+    
+    /**
+     * @var \App\TextBlock[]|\App\TableBlock[]
+     */
+    #[SchemaProperty(description: 'The list of tag for the user profile.', required: true)]
+    #[ArrayOf(Tag::class)]
+    public array $tags;
+}
+```
+
+Or using the "array<>" syntax:
+
+
+
+## Max Retries
 
 Since the LLM are not perfectly deterministic it's mandatory to have a retry mechanism in place if something is missing in the LLM response.
 
