@@ -304,7 +304,7 @@ class Person
 }
 ```
 
-Or using the "array<>" syntax:
+Or using the "array<...>" syntax:
 
 ```php
 class Person 
