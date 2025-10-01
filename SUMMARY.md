@@ -46,5 +46,5 @@
 
 ## Resources
 
-* [GitHub](https://github.com/inspector-apm/neuron-ai)
+* [GitHub](https://github.com/neuron-core)
 * [NeuronHub](https://neuronhub.dev/)
