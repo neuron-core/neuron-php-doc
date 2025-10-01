@@ -4,7 +4,7 @@ description: >-
   Neuron framework.
 ---
 
-# RAG
+# Getting Started
 
 {% hint style="warning" %}
 ### 🚨 IMPORTANT: Repository Migration Notice
@@ -19,8 +19,8 @@ For detailed migration instructions and configuration updates, please visit our 
 
 This guide assumes you are already familiar with the following concepts:
 
-* [Agent](agent.md)
-* [Tool & Function Call](tools.md)
+* [Agent](../the-basics/agent.md)
+* [Tool & Function Call](../the-basics/tools.md)
 {% endhint %}
 
 Retrieval-Augmented Generation (RAG) is the process of providing references to a knowledge base outside of the LLM training data sources before generating a response.&#x20;
@@ -139,12 +139,12 @@ class MyChatBot extends RAG
 ```
 
 {% hint style="warning" %}
-Explore [**Data Loaders**](../components/data-loader.md) to learn how to populate the vector store with embeddings representing the knowledge you want to integrate as additional knowledge.
+Explore [**Data Loaders**](data-loader.md) to learn how to populate the vector store with embeddings representing the knowledge you want to integrate as additional knowledge.
 {% endhint %}
 
 ### Talk to the chat bot
 
-Imagine having previously populated the vector store with the knowledge base you want to connect to the RAG agent, and now you want to ask questions. Check out [**Data Loaders**](../components/data-loader.md) to laern about RAG data population.
+Imagine having previously populated the vector store with the knowledge base you want to connect to the RAG agent, and now you want to ask questions. Check out [**Data Loaders**](data-loader.md) to laern about RAG data population.
 
 To start the execution of a RAG you call the `chat()`  method:
 
@@ -167,7 +167,7 @@ echo $response->getContent();
 
 Once you have defined the components of your RAG system it's time to feed the vector database with embedded chunks of text.
 
-Neuron provides you with [Data Loaders](../components/data-loader.md) to help you set up a data loading pipeline with just a few lines of code. You can see an example below. To learn more about data loader you should check out the [dedicated documentation](../components/data-loader.md):&#x20;
+Neuron provides you with [Data Loaders](data-loader.md) to help you set up a data loading pipeline with just a few lines of code. You can see an example below. To learn more about data loader you should check out the [dedicated documentation](data-loader.md):&#x20;
 
 ```php
 use App\Neuron\MyChatBot;

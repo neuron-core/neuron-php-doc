@@ -14,7 +14,7 @@ For detailed migration instructions and configuration updates, please visit our 
 
 ### What is Neuron
 
-Neuron is a PHP framework for creating and orchestrating AI Agents. It allows you to integrate AI entities in your existing&#x20;PHP applications with a powerful and flexible architecture.&#x20;
+Neuron is a PHP framework for creating and orchestrating AI Agents. It allows you to integrate AI entities in your existing PHP applications with a powerful and flexible architecture.&#x20;
 
 We provide tools for the entire agentic application development lifecycle, from LLM interfaces, to data loading, to multi-agent orchestration, to monitoring and debugging. In addition, we provide [tutorials and other educational content](overview/fast-learning-by-video.md) to help you get started using AI Agents in your projects.
 
@@ -64,7 +64,7 @@ Error handling and retry mechanisms are built into the framework, ensuring your 
 
 ### Support For Multiple Providers
 
-Neuron uses a common interface for large language models (`AIProviderInterface`) as well as for the other components, such as [embedding](components/embeddings-provider.md), [vector stores](components/vector-store.md), [toolkits](getting-started/tools.md#toolkits-composable-agent-capabilities), etc. The modular architecture allows you to swap components as needed, whether you're changing language model providers, adjusting memory backends, or scaling across multiple servers.
+Neuron uses a common interface for large language models (`AIProviderInterface`) as well as for the other components, such as [embedding](rag/embeddings-provider.md), [vector stores](rag/vector-store.md), [toolkits](the-basics/tools.md#toolkits-composable-agent-capabilities), etc. The modular architecture allows you to swap components as needed, whether you're changing language model providers, adjusting memory backends, or scaling across multiple servers.
 
 {% tabs %}
 {% tab title="Anthropic" %}
@@ -168,7 +168,7 @@ echo MyAgent::make()->chat(new UserMessage("Hi!"));
 {% endtab %}
 {% endtabs %}
 
-Check out all the supported providers in the [AI Provider](components/ai-provider.md) section.
+Check out all the supported providers in the [AI Provider](the-basics/ai-provider.md) section.
 
 ## What is an AI Agent
 
@@ -235,19 +235,19 @@ We’re using [Discussions](https://github.com/inspector-apm/neuron-ai/discussio
 
 Neuron is part of the Inspector ecosystem as a trustable platform to create reliable and scalable AI driven solutions.&#x20;
 
-Trace and evaluate your agents execution flow to help you maintain production grade implementations with confidence. Check out the [**monitoring integrations**](getting-started/observability.md).
+Trace and evaluate your agents execution flow to help you maintain production grade implementations with confidence. Check out the [**monitoring integrations**](the-basics/observability.md).
 
 ## Core components
 
-* [**AI Provider**](components/ai-provider.md)
-* [**Toolkit**](getting-started/tools.md#toolkits-composable-agent-capabilities)
-* [**Embeddings Provider**](components/embeddings-provider.md)
-* [**Data Loader**](components/data-loader.md)
-* [**Vector Store**](components/vector-store.md)
-* [**Chat History**](components/chat-history-and-memory.md)
-* [**MCP connector**](getting-started/mcp-connector.md)
-* [**Monitoring & Debugging**](getting-started/observability.md)
-* [**Pre/Post Processors**](components/pre-post-processor.md)
+* [**AI Provider**](the-basics/ai-provider.md)
+* [**Toolkit**](the-basics/tools.md#toolkits-composable-agent-capabilities)
+* [**Embeddings Provider**](rag/embeddings-provider.md)
+* [**Data Loader**](rag/data-loader.md)
+* [**Vector Store**](rag/vector-store.md)
+* [**Chat History**](the-basics/chat-history-and-memory.md)
+* [**MCP connector**](the-basics/mcp-connector.md)
+* [**Monitoring & Debugging**](the-basics/observability.md)
+* [**Pre/Post Processors**](rag/pre-post-processor.md)
 * [**Workflow**](broken-reference)
 
 ## Additional Resources

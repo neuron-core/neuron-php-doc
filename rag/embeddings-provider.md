@@ -4,7 +4,7 @@ description: Integrate services to transform text into vectors for semantic sear
 
 # Embeddings Provider
 
-Transform your text into vector representations! Embeddings let you add Retrieval-Augmented Generation ([RAG](../getting-started/rag.md)) into your AI applications.
+Transform your text into vector representations! Embeddings let you add Retrieval-Augmented Generation ([RAG](rag.md)) into your AI applications.
 
 ## Available Embeddings Providers
 

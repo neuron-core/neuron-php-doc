@@ -42,5 +42,5 @@ $workflow = new WorkflowAgent(
 ```
 
 {% hint style="warning" %}
-_FilePersistence_ component uses PHP serialization to store the current state of the Workflow. While this allows you to use any PHP object as an item of the Workflow state (e.g. [ChatHistory](../components/chat-history-and-memory.md)), it also has some limitations like it does not support serialization of Closure. If objects you want to save in the Workflow state conflict with the PHP standard serialization process, you can implement the [Serializable interface](https://www.php.net/manual/en/class.serializable.php) to let the NeuronAI persistence component know of how to serialize the object in the correct way.
+_FilePersistence_ component uses PHP serialization to store the current state of the Workflow. While this allows you to use any PHP object as an item of the Workflow state (e.g. [ChatHistory](../the-basics/chat-history-and-memory.md)), it also has some limitations like it does not support serialization of Closure. If objects you want to save in the Workflow state conflict with the PHP standard serialization process, you can implement the [Serializable interface](https://www.php.net/manual/en/class.serializable.php) to let the NeuronAI persistence component know of how to serialize the object in the correct way.
 {% endhint %}

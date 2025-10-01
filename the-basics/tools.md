@@ -542,7 +542,7 @@ class MyAgent extends Agent
 }
 ```
 
-Currently only [OpenAIResponses](../components/ai-provider.md#openairesponses), [Gemini](../components/ai-provider.md#gemini), and [Anthropic](../components/ai-provider.md#anthropic) support this tools.
+Currently only [OpenAIResponses](ai-provider.md#openairesponses), [Gemini](ai-provider.md#gemini), and [Anthropic](ai-provider.md#anthropic) support this tools.
 
 ## Toolkits
 
@@ -1074,7 +1074,7 @@ class MyAgent extends Agent
 
 ### Zep Memory
 
-This toolkit connects a NeuronAI Agent to [Zep](https://www.getzep.com/) knowledge graph. This kind of system allows the agent to store relevant facts that may emerge during interactions with the agent over time. It's a long term memory in the sense that is not limited to the current conversation like the [ChatHistory](../components/chat-history-and-memory.md) component does. It's an external persistent storage the agent will use to store and retrieve single pieces of information that can allow more personalized answers.
+This toolkit connects a NeuronAI Agent to [Zep](https://www.getzep.com/) knowledge graph. This kind of system allows the agent to store relevant facts that may emerge during interactions with the agent over time. It's a long term memory in the sense that is not limited to the current conversation like the [ChatHistory](chat-history-and-memory.md) component does. It's an external persistent storage the agent will use to store and retrieve single pieces of information that can allow more personalized answers.
 
 To learn more about the capabilities of these kind of system you can visit the Zep website: [https://www.getzep.com/](https://www.getzep.com/)
 

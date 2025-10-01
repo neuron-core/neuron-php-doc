@@ -7,20 +7,29 @@
   * [Repository Migration](overview/readme/repository-migration.md)
 * [Fast Learning by Video](overview/fast-learning-by-video.md)
 
-## Getting Started
+## The Basics
 
-* [Installation](getting-started/getting-started.md)
-* [Agent](getting-started/agent.md)
-* [Tools & Toolkits](getting-started/tools.md)
-* [MCP Connector](getting-started/mcp-connector.md)
-* [Streaming](getting-started/streaming.md)
-* [Structured Output](getting-started/structured-output.md)
-* [Attachments (Documents & Images)](getting-started/attachments-documents-and-images.md)
-* [RAG](getting-started/rag.md)
-* [Asynchronous Processing](getting-started/asynchronous-processing.md)
-* [Monitoring & Debugging](getting-started/observability.md)
-* [Error Handling](getting-started/error-handling.md)
-* [Evaluation](getting-started/evaluation.md)
+* [Installation](the-basics/getting-started.md)
+* [Agent](the-basics/agent.md)
+* [Tools & Toolkits](the-basics/tools.md)
+* [MCP Connector](the-basics/mcp-connector.md)
+* [Streaming](the-basics/streaming.md)
+* [Structured Output](the-basics/structured-output.md)
+* [Attachments (Documents & Images)](the-basics/attachments-documents-and-images.md)
+* [Asynchronous Processing](the-basics/asynchronous-processing.md)
+* [Monitoring & Debugging](the-basics/observability.md)
+* [Error Handling](the-basics/error-handling.md)
+* [Evaluation](the-basics/evaluation.md)
+* [AI Provider](the-basics/ai-provider.md)
+* [Chat History & Memory](the-basics/chat-history-and-memory.md)
+
+## RAG
+
+* [Getting Started](rag/rag.md)
+* [Data loader](rag/data-loader.md)
+* [Embeddings Provider](rag/embeddings-provider.md)
+* [Vector Store](rag/vector-store.md)
+* [Pre/Post Processor](rag/pre-post-processor.md)
 
 ## Workflow
 
@@ -33,15 +42,6 @@
 * [Persistence](workflow/persistence.md)
 * [Streaming](workflow/streaming.md)
 * [Examples](workflow/examples.md)
-
-## Components
-
-* [AI Provider](components/ai-provider.md)
-* [Chat History & Memory](components/chat-history-and-memory.md)
-* [Embeddings Provider](components/embeddings-provider.md)
-* [Vector Store](components/vector-store.md)
-* [Pre/Post Processor](components/pre-post-processor.md)
-* [Data loader](components/data-loader.md)
 
 ## Resources
 

@@ -105,7 +105,7 @@ class YouTubeAgent extends Agent
 }
 ```
 
-You can also use other providers like OpenAI, Gemini, or Ollama if you want to run the model locally. Check out the [supported providers](../components/ai-provider.md).
+You can also use other providers like OpenAI, Gemini, or Ollama if you want to run the model locally. Check out the [supported providers](ai-provider.md).
 
 ### System instructions
 
@@ -200,7 +200,7 @@ The agent always accepts input as a `Message` class, and returns Message instanc
 
 As you saw in the example above we sent a `UserMessage` instance to the agent and it responded with an `AssistantMessage` instance. A list of assistant messages and user messages creates a chat.
 
-We will learn more about [ChatHistory](../components/chat-history-and-memory.md) later, but it's important to know that the unified interface for the agent input and response is the Message object.
+We will learn more about [ChatHistory](chat-history-and-memory.md) later, but it's important to know that the unified interface for the agent input and response is the Message object.
 
 ### Fluent Agent Definition
 
