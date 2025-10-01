@@ -80,6 +80,6 @@ Most retrieval-augmented models work by breaking down documents into small chunk
 * Users primarily need quick, specific fact retrieval
 * Processing speed and token efficiency are critical constraints
 
-You can learn more about RAPTOR in the dedicated repository:
+Learn more about RAPTOR in the dedicated repository:
 
 {% embed url="https://github.com/neuron-core/raptor-retrieval" %}
