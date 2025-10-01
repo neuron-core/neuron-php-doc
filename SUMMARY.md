@@ -30,6 +30,7 @@
 * [Embeddings Provider](rag/embeddings-provider.md)
 * [Vector Store](rag/vector-store.md)
 * [Pre/Post Processor](rag/pre-post-processor.md)
+* [Retrieval](rag/retrieval.md)
 
 ## Workflow
 
