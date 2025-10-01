@@ -23,7 +23,7 @@ For detailed migration instructions and configuration updates, please visit our 
 Run the composer command below to install the latest version:
 
 ```bash
-composer require inspector-apm/neuron-ai
+composer require neuron-core/neuron-ai
 ```
 
 ### Create an Agent
