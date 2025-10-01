@@ -17,6 +17,8 @@ There are many use cases where we need Agents to understand natural language, bu
 
 <figure><img src="../.gitbook/assets/Neuron AI.png" alt=""><figcaption></figcaption></figure>
 
+{% embed url="https://www.youtube.com/watch?v=T8PM-t_AQ-c" %}
+
 ### How to use Structured Output
 
 The central concept is that the output structure of LLM responses needs to be represented in some way. The schema that Neuron validates against is defined by PHP type hints. Basically you have to define a class with strictly typed properties:
