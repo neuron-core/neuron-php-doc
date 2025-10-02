@@ -49,7 +49,7 @@ Notice that each file reader is associated to a file extension. So based on the 
 ### PDF Reader
 
 {% hint style="warning" %}
-To use `PdfReader` you need to install the [**pdftotext**](https://en.wikipedia.org/wiki/Pdftotext) php extension.
+To use `PdfReader` you need to install the [**poppler**](https://en.wikipedia.org/wiki/Pdftotext) utility.
 {% endhint %}
 
 ```php
