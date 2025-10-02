@@ -11,8 +11,10 @@
 
 * [Installation](the-basics/getting-started.md)
 * [Agent](the-basics/agent.md)
+* [AI Provider](the-basics/ai-provider.md)
 * [Tools & Toolkits](the-basics/tools.md)
 * [MCP Connector](the-basics/mcp-connector.md)
+* [Chat History & Memory](the-basics/chat-history-and-memory.md)
 * [Streaming](the-basics/streaming.md)
 * [Structured Output](the-basics/structured-output.md)
 * [Attachments (Documents & Images)](the-basics/attachments-documents-and-images.md)
@@ -20,8 +22,6 @@
 * [Monitoring & Debugging](the-basics/observability.md)
 * [Error Handling](the-basics/error-handling.md)
 * [Evaluation](the-basics/evaluation.md)
-* [AI Provider](the-basics/ai-provider.md)
-* [Chat History & Memory](the-basics/chat-history-and-memory.md)
 
 ## RAG
 
