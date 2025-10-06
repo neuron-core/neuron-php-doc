@@ -67,9 +67,11 @@ class MyAgent extends Agent
 }
 ```
 
-### Remote MCP Server
+## Remote MCP Server
 
-Remote servers are accessible via URLs and typically require authentication. You can use the `token` field in the configuration array, which will be used as an authorization token to communicate with the server:
+### Streamable HTTP Server
+
+Remote servers are accessible via URLs and typically require authentication. You can use the `token` field in the configuration array, which will be used as the authorization token to authenticate on the server:
 
 ```php
 use NeuronAI\MCP\McpConnector;
@@ -88,6 +90,33 @@ class MyAgent extends Agent
                 'headers' => [
                     //'x-cutom-header' => 'value'
                 ]
+            ])->tools(),
+        ];
+    }
+}
+```
+
+### SSE HTTP Transport
+
+SSE ([Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events)) is a mechanism that allows web clients to receive automatic updates from a server. Those updates are known as "events", and are sent over a single, long-lived HTTP connection.
+
+To use the SSE transport you need to set `async ⇒ true` in the configuration parameters.
+
+```php
+use NeuronAI\MCP\McpConnector;
+
+class MyAgent extends Agent 
+{
+    ...
+    
+    protected function tools(): array
+    {
+        return [
+            ...McpConnector::make([
+                'url' => 'https://mcp.example.com',
+                'token' => 'BEARER_TOKEN',
+                'timeout' => 30,
+                'async' => true
             ])->tools(),
         ];
     }
