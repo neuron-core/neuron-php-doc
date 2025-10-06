@@ -4,14 +4,6 @@ description: Easily implement LLM interactions extending the basic Agent class.
 
 # Agent
 
-{% hint style="warning" %}
-### 🚨 IMPORTANT: Repository Migration Notice
-
-**Effective October 1st, 2025**, the official Neuron repository will be migrating from the Inspector GitHub organization to a dedicated [**Neuron organization**](https://github.com/neuron-core).
-
-For detailed migration instructions and configuration updates, please visit our [Repository Migration Guide](https://docs.neuron-ai.dev/overview/readme/repository-migration).
-{% endhint %}
-
 You can create your agent by extending the `NeuronAI\Agent` class to inherit the main features of the framework and create fully functional agents. This class automatically manages some advanced mechanisms for you such as memory, tools and function calls, up to the RAG systems. We will go into more detail about these aspects in the following sections.
 
 This implementation strategy ensures the portability of your agent because all the moving parts are encapsulated into a single entity that you can run wherever you want in your application, or even release as stand alone composer packages.

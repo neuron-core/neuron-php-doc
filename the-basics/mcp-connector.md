@@ -6,14 +6,6 @@ description: >-
 
 # MCP Connector
 
-{% hint style="warning" %}
-### 🚨 IMPORTANT: Repository Migration Notice
-
-**Effective October 1st, 2025**, the official Neuron repository will be migrating from the Inspector GitHub organization to a dedicated [**Neuron organization**](https://github.com/neuron-core).
-
-For detailed migration instructions and configuration updates, please visit our [Repository Migration Guide](https://docs.neuron-ai.dev/overview/readme/repository-migration).
-{% endhint %}
-
 MCP (Model Context Protocol) is an open source standard designed by Anthropic to connect your agents to external service providers, such as your application database or external APIs.
 
 Thanks to this protocol you can make tools exposed by an external server available to your agent.
