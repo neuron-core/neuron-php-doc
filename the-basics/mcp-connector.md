@@ -123,7 +123,7 @@ class MyAgent extends Agent
 }
 ```
 
-### Monitoring & Debugging
+## Monitoring & Debugging
 
 To stay updated about your Agent decision making process, you can connect the [Inspector monitoring dashboard](https://inspector.dev/) to monitor tool selection and execution in real-time.
 
@@ -139,7 +139,7 @@ When your agent runs you will be able to explore the execution timeline in the d
 
 <figure><img src="../.gitbook/assets/mcp-tool-call.png" alt=""><figcaption></figcaption></figure>
 
-### Filter the list of tools
+## Filter the list of tools
 
 During connection with complex MCP servers they can includes tools that could lead to undesired behavior in specific contexts. The `exclude()` and `only()` methods address this challenge elegantly, allowing developers to connect with comprehensive MCP servers while maintaining fine-grained control over available capabilities you want to provide to your agent.&#x20;
 
