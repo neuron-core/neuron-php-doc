@@ -1261,7 +1261,32 @@ class MyAgent extends Agent
 
 If your agents are tool-hungry, you can enable parallel execution if the model ask for multiple tool calls in a single request.
 
-Just attach the `ParallelToolCalls` trait to your Agent:
+#### Sequential Execution (Standard)
+
+The agent calls tools **one at a time**, waiting for each to complete before starting the next:
+
+```
+1. Call tool A → wait for result
+2. Call tool B → wait for result  
+3. Call tool C → wait for result
+
+Total time: Time(A) + Time(B) + Time(C)
+```
+
+#### Parallel Execution (With `pcntl`)
+
+The agent calls **multiple tools simultaneously**, letting them run at the same time:
+
+```
+1. Call tool A, B, and C all at once
+2. Wait for all to complete
+
+Total time: Max(Time(A), Time(B), Time(C))
+```
+
+### Enable parallel execution
+
+Just attach the `ParallelToolCalls` trait to your Agent or RAG agent:
 
 ```php
 use NeuronAI\Tools\ParallelToolCalls;
@@ -1301,6 +1326,6 @@ This implementation requires the `pcntl` extension which is installed in many Un
 
 
 
-If the `pcntl` extension is not present in the system running the agent the trait automatically fallbacks to the standard tool calls execution. This can be helpful if you have a missmatch between your local development environment and the production environment. You can develop locally with `pcntl` disabled, then deploy to production environments where it may be enabled—**without modifying a single line of code**. The agent adapts automatically to whatever execution environment it finds itself in.
+If the `pcntl` extension is not present in the system running the agent (e.g. Windows machines) the trait automatically fallbacks to the standard tool calls execution. This can be helpful if you have a missmatch between your local development environment and the production environment. You can develop locally with `pcntl` disabled, then deploy to production environments where it may be enabled—**without modifying a single line of code**. The agent adapts automatically to whatever execution environment it finds itself in.
 {% endhint %}
 
