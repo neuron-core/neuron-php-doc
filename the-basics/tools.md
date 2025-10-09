@@ -1256,3 +1256,51 @@ class MyAgent extends Agent
     }
 }
 ```
+
+## Parallel Tool Calls
+
+If your agents are tool-hungry, you can enable parallel execution if the model ask for multiple tool calls in a single request.
+
+Just attach the `ParallelToolCalls` trait to your Agent:
+
+```php
+use NeuronAI\Tools\ParallelToolCalls;
+
+class DemoAgent extends Agent
+{
+    use ParallelToolCalls;
+
+    protected function provider(): AIProviderInterface
+    {
+        ...
+    }
+
+    protected function tools(): array
+    {
+        return [
+            CalculatorToolkit::make(),
+        ];
+    }
+}
+```
+
+### Requirements
+
+To use this trait you need to install the `spatie/fork` package. For more information check out the GitHub repository: [https://github.com/spatie/fork](https://github.com/spatie/fork)
+
+```
+composer require spatie/fork
+```
+
+{% hint style="warning" %}
+#### Limitations
+
+This implementation requires the `pcntl` extension which is installed in many Unix and Mac systems by default.
+
+**pcntl only works in CLI processes, not in a web context.**
+
+
+
+If the `pcntl` extension is not present in the system running the agent the trait automatically fallbacks to the standard tool calls execution. This can be helpful if you have a missmatch between your local development environment and the production environment. You can develop locally with `pcntl` disabled, then deploy to production environments where it may be enabled—**without modifying a single line of code**. The agent adapts automatically to whatever execution environment it finds itself in.
+{% endhint %}
+
