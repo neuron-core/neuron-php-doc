@@ -92,7 +92,7 @@ Neuron provides you with these clear and simple APIs and automates all the under
 
 ### Custom Tools
 
-Thanks to the Neuron modular architecture, Tools are just a component of the toolkit that implements `ToolInterface` . You are free to create pre-packaged tool classes that implement common functionalities, and release them as external composer packages or submit a PR to our repository to have them integrated into the core framework.
+Thanks to the Neuron modular architecture, Tools are components that implement  `ToolInterface` . You are free to create pre-packaged tool classes to make the agent able to perform sapecific actions, and release them as external composer packages or submit a PR to our repository to have them integrated into the core framework.
 
 To create a new Tool execute the console command below:
 
@@ -181,7 +181,7 @@ class GetTranscriptionTool extends Tool
 
 **The properties method**: Implement this method to return the list of properties the tool expects.
 
-**The \_\_invoke method**: Here you need to implement the logic of the tool, and return a result that will be returned back to the model. The PHP `__invoke` magic method is used by default.
+**The `__invoke` method**: Here you need to implement the logic of the tool, and return a result that will be returned back to the model. The PHP `__invoke` magic method is used by default.
 
 Notice how the `__invoke()` method accepts the same arguments defined by the `ToolProperty` . In this example I'm using an external service to retrieve the YouTube video transcription called [Supadata.ai](https://supadata.ai/).
 
@@ -223,9 +223,9 @@ class YouTubeAgent extends Agent
 }
 ```
 
-Transcriptions are just an example. You can eventually implement other tools to make the Agent able to retrieve other video metadata to enhance its video analysis capabilities.
+GetTranscriptions is just an example. You can eventually implement other tools to make the Agent able to retrieve other video metadata to enhance its video analysis capabilities.
 
-Finally you can talk to the agent asking the summary of a YouTube video.
+Finally you can talk to the agent asking for the summary of a YouTube video.
 
 ```php
 use NeuronAI\Chat\Messages\UserMessage;
