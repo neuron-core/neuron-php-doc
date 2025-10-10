@@ -305,10 +305,6 @@ In the image below you can see all the details about the execution of the tool t
 
 Neuron allows you to define the format of the data you want to receive into the tool function. You can nest these objects inside each other to define complex data structures.
 
-{% hint style="warning" %}
-Be careful when defining complex data structures. Even the more advanced models can make mistakes with just a couple of properties. We strongly recommend to keep the input properties of your tools as simple as possible to improve reliability of your agent.
-{% endhint %}
-
 ### ToolProperty
 
 This class represent a simple scalar value like string, int, or boolean.
