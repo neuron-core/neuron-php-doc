@@ -740,10 +740,6 @@ The PDO instance is basically a connection to a specific database, so you could 
 
 Anyway you have separate tools for reading and writing to the database. If you are not confident about your agent behaviour you may not provide the writing tool.
 
-{% hint style="warning" %}
-Examples below refer to the `MySQLToolkit` but it's exactly the same using `PGSQLToolkit` and indivudual tools.
-{% endhint %}
-
 ```php
 <?php
 
@@ -773,6 +769,10 @@ class MyAgent extends Agent
     }
 }
 ```
+
+{% hint style="warning" %}
+These examples refer to the `MySQLToolkit` but it's exactly the same using `PGSQLToolkit`.
+{% endhint %}
 
 #### MySQLSchemaTool / PGSQLSchemaTool
 
@@ -854,8 +854,9 @@ class MyAgent extends Agent
 
 Use this tool to make your agent able to performs write operations against the database (INSERT, UPDATE, DELETE).
 
-<pre class="language-php"><code class="lang-php"><strong>namespace App\Neuron;
-</strong>
+```php
+namespace App\Neuron;
+
 use NeuronAI\Agent;
 use NeuronAI\Tools\Toolkits\MySQL\MySQLSchemaTool;
 use NeuronAI\Tools\Toolkits\MySQL\MySQLWriteTool;
@@ -872,7 +873,7 @@ class MyAgent extends Agent
         ];
     }
 }
-</code></pre>
+```
 
 ### Tavily&#x20;
 
