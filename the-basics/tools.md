@@ -530,7 +530,7 @@ class MyAgent extends Agent
 }
 ```
 
-Currently only [OpenAIResponses](ai-provider.md#openairesponses), [Gemini](ai-provider.md#gemini), and [Anthropic](ai-provider.md#anthropic) support this tools.
+Currently only [OpenAIResponses](ai-provider.md#openairesponses), [Gemini](ai-provider.md#gemini), and [Anthropic](ai-provider.md#anthropic) support these tools.
 
 ## Toolkits
 
