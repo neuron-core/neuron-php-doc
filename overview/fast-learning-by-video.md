@@ -17,6 +17,8 @@ description: >-
 
 {% embed url="https://www.youtube.com/watch?v=T8PM-t_AQ-c" %}
 
+{% embed url="https://www.youtube.com/watch?v=JWRlcaGnsXw" %}
+
 {% embed url="https://www.youtube.com/watch?v=q6GqgPMUJFY" %}
 
 ## Agent Development
