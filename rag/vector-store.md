@@ -341,7 +341,7 @@ class MyChatBot extends RAG
     {
         return new ChromaVectorStore(
             collection: 'neuron-ai',
-            //host: 'http://localhost:8000', <-- This is by default
+            //host: 'http://localhost:8000/api/v2', <-- This is by default
             topK: 5
         );
     }
