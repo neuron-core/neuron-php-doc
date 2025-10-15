@@ -119,3 +119,28 @@ Asynchronous processing in Neuron enables you to build scalable, efficient AI-po
 **Memory Usage**: Each agent instance consumes memory. For very large batches, consider processing in smaller chunks to manage memory consumption.
 
 **Rate Limits**: Be mindful of API rate limits when processing large volumes. Implement appropriate delays or throttling if needed.
+
+### Monitoring & Debugging
+
+For processes that run multiple async requests you have to explicitly ask for splitting the monitoring data for each process to avoid wrong association because of the concurrenct execution. To do it you need to set NEURON\_SPLIT\_MONITORING environment variable to `true`.&#x20;
+
+You can set it as an environment variable if your background process runs in isolation:
+
+{% code title=".env" %}
+```
+NEURON_SPLIT_MONITORING=true
+```
+{% endcode %}
+
+Or set it on the fly before executing the concurrent requests:
+
+```php
+$_ENV['NEURON_SPLIT_MONITORING'] = true;
+
+// Execute multiple parallel requests
+$results = Utils::unwrap([
+    'product_a' => $agent1->chatAsync(new UserMessage("Classify: Red cotton shirt, size M")),
+    'product_b' => $agent2->chatAsync(new UserMessage("Classify: wireless headphones, Bluetooth 5.3")),
+    'product_c' => $agent3->chatAsync(new UserMessage("Classify: laptop, Intel i7, 16GB RAM"))
+]);
+```
