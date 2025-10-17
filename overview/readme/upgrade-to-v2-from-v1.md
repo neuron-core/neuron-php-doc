@@ -18,28 +18,6 @@ We strongly recommend to use the V2 documentation to understand the new system a
 
 <a href="broken-reference" class="button secondary" data-icon="arrow-right-long">Workflow Documentation</a>
 
-### Medium Impact
-
-#### ChromaDB URL
-
-The url for ChromaDB vector store now must specify the api version:
-
-```php
-class MyChatBot extends RAG
-{
-    ...
-
-    protected function vectorStore(): VectorStoreInterface
-    {
-        return new ChromaVectorStore(
-            collection: 'neuron-ai',
-            host: 'http://localhost:8000/api/v2',
-            topK: 5
-        );
-    }
-}
-```
-
 ### Low Impact
 
 #### RAG Retrieval component
