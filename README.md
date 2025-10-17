@@ -200,7 +200,7 @@ If you're already working with PHP, Neuron allows you to integrate AI capabiliti
 
 Modern PHP offers robust object-oriented programming features, strong typing capabilities, and excellent performance characteristics that make it well-suited for AI Agents development. The language's mature ecosystem, and straightforward deployment model provide a solid foundation for building reliable agentic systems.
 
-### Integrate AI Agent In Laravel -  Video Tutorial
+### Create AI Agents In Laravel -  Video Tutorial
 
 {% embed url="https://www.youtube.com/watch?v=oSA1bP_j41w" %}
 
