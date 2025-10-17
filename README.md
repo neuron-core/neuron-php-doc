@@ -24,7 +24,7 @@ Neuron offers a well defined encapsulation pattern, allowing you to work on your
 
 ### Symfony
 
-All Neuron components belong to its own interface, so you can easily define dependecies and automate objects creation using the Symfony service container. Watch how it works in a real project.
+All Neuron components belong to its own interface, so you can easily define dependencies and automate objects creation using the Symfony service container. Watch how it works in a real project.
 
 <a href="https://www.youtube.com/watch?v=JWRlcaGnsXw" class="button primary" data-icon="youtube">Symfony &#x26; Neuron</a>
 
