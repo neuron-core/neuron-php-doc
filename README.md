@@ -12,6 +12,28 @@ We provide tools for the entire agentic application development lifecycle, from 
 
 <figure><img src=".gitbook/assets/neuron-ai-architecture.png" alt=""><figcaption><p>Neuron architecture</p></figcaption></figure>
 
+Neuron is the perfect AI branch of your favorite framework.
+
+{% columns fullWidth="true" %}
+{% column %}
+### Laravel
+
+Neuron offer a well defined encapsulation pattern, allowing you to work on your AI components in a dedicated namespace. You can enjoy the exact same experience of the other ecosystem packages you already love, like Filament, Nova, Horizon, Volt, etc.
+
+<a href="https://github.com/neuron-core/laravel-travel-agent" class="button primary" data-icon="github">Example project</a>
+
+<a href="https://www.youtube.com/watch?v=oSA1bP_j41w" class="button primary" data-icon="youtube">Watch a demo</a>
+{% endcolumn %}
+
+{% column %}
+### Symfony
+
+All Neuron components belong to its own interface, so you can easily define dependecies and automate objects creation using the Symfony service container. Watch how it works in a real project.
+
+<a href="https://www.youtube.com/watch?v=JWRlcaGnsXw" class="button primary" data-icon="youtube">Symfony &#x26; Neuron</a>
+{% endcolumn %}
+{% endcolumns %}
+
 ### Developer Experience
 
 Neuron's architecture prioritizes the fundamentals that experienced engineers expect from production-grade software.&#x20;
@@ -32,7 +54,7 @@ The strongly-typed approach means your IDE can provide accurate autocompletion f
 
 This foundation allows faster debugging cycles, easy integration patterns with frameworks like Symfony or Laravel. We assume you're building systems that need to be maintained, extended, and understood by teams rather than individual experiments.
 
-### Carefully Crafted Architecture
+#### Carefully Crafted Architecture
 
 Whether you're working within a Laravel application, a Symfony project, a WordPress plugin, or a custom MVC framework, Neuron integrates seamlessly with your existing codebase without refactoring or disrupting established environments.
 
@@ -40,13 +62,13 @@ Neuron uses standard PSR interfaces where appropriate and maintains minimal exte
 
 For teams working across multiple projects, this approach provides consistency. The same Neuron patterns and implementations work regardless of whether you're building a new microservice in pure PHP, extending a WordPress site, or adding features to an enterprise Symfony and Laravel application. Knowledge transfer between projects becomes seamless, and developers can leverage their Neuron expertise across their entire PHP portfolio.
 
-### Community Driven
+#### Community Driven
 
 These design principles create a unified ecosystem for AI development across all PHP communities. Rather than fragmenting innovation across framework-specific solutions, Neuron enables collaboration between Laravel developers, Symfony contributors, WordPress plugin authors, and custom framework maintainers. When improvements are made to Neuron's core capabilities, they benefit every PHP developer regardless of their architectural preferences.
 
 The result is a larger, more diverse community working toward common goals. Framework-specific AI libraries naturally limit their contributor base to developers familiar with that particular framework. Neuron's universal approach attracts contributors from across the PHP ecosystem, leading to more robust implementations, broader testing across different environments, and faster development of new features. This collaborative approach also means better support for newcomers, as experienced developers from various PHP backgrounds can provide guidance and assistance regardless of which framework someone happens to be learning alongside Neuron.
 
-### Production Readiness
+#### Production Readiness
 
 Integrating AI Agents into your application you’re not working only with functions and deterministic code, you program your agent also influencing probability distributions. Same input ≠ output. That means reproducibility, versioning, and debugging become real problems.
 
