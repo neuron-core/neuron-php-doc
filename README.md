@@ -14,8 +14,6 @@ We provide tools for the entire agentic application development lifecycle, from 
 
 Neuron is the perfect AI branch of your favorite framework.
 
-{% columns fullWidth="true" %}
-{% column %}
 ### Laravel
 
 Neuron offer a well defined encapsulation pattern, allowing you to work on your AI components in a dedicated namespace. You can enjoy the exact same experience of the other ecosystem packages you already love, like Filament, Nova, Horizon, Volt, etc.
@@ -23,16 +21,12 @@ Neuron offer a well defined encapsulation pattern, allowing you to work on your 
 <a href="https://github.com/neuron-core/laravel-travel-agent" class="button primary" data-icon="github">Example project</a>
 
 <a href="https://www.youtube.com/watch?v=oSA1bP_j41w" class="button primary" data-icon="youtube">Watch a demo</a>
-{% endcolumn %}
 
-{% column %}
 ### Symfony
 
 All Neuron components belong to its own interface, so you can easily define dependecies and automate objects creation using the Symfony service container. Watch how it works in a real project.
 
 <a href="https://www.youtube.com/watch?v=JWRlcaGnsXw" class="button primary" data-icon="youtube">Symfony &#x26; Neuron</a>
-{% endcolumn %}
-{% endcolumns %}
 
 ### Developer Experience
 
