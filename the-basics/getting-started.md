@@ -79,6 +79,8 @@ echo $response->getContent();
 // I'm a friendly AI Agent built with Neuron, how can I help you today?
 ```
 
+
+
 ### Monitoring & Debugging
 
 Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls, tools, external memory system, etc. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
@@ -90,3 +92,7 @@ After you sign up at the link above, make sure to set the `INSPECTOR_INGESTION_K
 INSPECTOR_INGESTION_KEY=nwse877auxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 {% endcode %}
+
+### Video Tutorial On A Laravel Application
+
+{% embed url="https://www.youtube.com/watch?v=oSA1bP_j41w" %}
