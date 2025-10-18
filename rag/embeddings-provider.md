@@ -107,6 +107,38 @@ class MyRAG extends RAG
 }
 ```
 
+### Aws Bedrock
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\RAG\Embeddings\EmbeddingsProviderInterface;
+use NeuronAI\RAG\Embeddings\AwsBedrockEmbeddingsProvider;
+use NeuronAI\RAG\RAG;
+
+class MyRAG extends RAG
+{
+    ...
+    
+    protected function embeddings(): EmbeddingsProviderInterface
+    {
+        $client = new BedrockAgentRuntimeClient([
+            'version' => 'latest',
+            'region' => 'us-east-1',
+            'credentials' => [
+                'key' => 'AWS_BEDROCK_KEY',
+                'secret' => 'AWS_BEDROCK_SECRET',
+            ],
+        ]);
+        
+        return new AwsBedrockEmbeddingsProvider(
+            client: $client,
+            model: 'AWS_EMBEDDINGS_MODEL'
+        );
+    }
+}
+```
+
 ## Implement a new Provider
 
 To create a custom provider you just have to extend the `AbstractEmbeddingsProvider` class. This class already implement the framework specific methods and let's you free to implement the only provider specific HTTP call into the `embedText()` method:
