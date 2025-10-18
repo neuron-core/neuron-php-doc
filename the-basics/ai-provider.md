@@ -355,7 +355,7 @@ class MyAgent extends Agent
 {
     public function provider(): AIProviderInterface
     {
-        $client = new BedrockAgentRuntimeClient([
+        $client = new BedrockRuntimeClient([
             'version' => 'latest',
             'region' => 'us-east-1',
             'credentials' => [

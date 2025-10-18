@@ -112,6 +112,7 @@ class MyRAG extends RAG
 ```php
 namespace App\Neuron;
 
+use Aws\BedrockRuntime\BedrockRuntimeClient;
 use NeuronAI\RAG\Embeddings\EmbeddingsProviderInterface;
 use NeuronAI\RAG\Embeddings\AwsBedrockEmbeddingsProvider;
 use NeuronAI\RAG\RAG;
@@ -122,7 +123,7 @@ class MyRAG extends RAG
     
     protected function embeddings(): EmbeddingsProviderInterface
     {
-        $client = new BedrockAgentRuntimeClient([
+        $client = new BedrockRuntimeClient([
             'version' => 'latest',
             'region' => 'us-east-1',
             'credentials' => [
