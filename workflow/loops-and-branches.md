@@ -1,10 +1,14 @@
 # Loops & Branches
 
-Workflow makes branching and looping logic, more simply and flexibly than graph-based approaches.
+Workflow makes branching and looping logic easy to implement thanks to its event driven design.
 
 ### Loops
 
-To create a loop, we'll take our example MyWorkflow from the previous tutorial and modify the `NodeOne` implementation to randomly decide either to loop or to continue:
+To create a loop, simply return the entry event of a previous node as the exit event of the current node. You can also use the same entry event as the current node's exit event to loop over the current node.
+
+Take a look at the example below. The `NodeOne` can have two events as return type, `FirstEvent` and `SecondEvent`. If the node returns FirstEvent it will cause another execution of the same node because FirstEvent is handled by itself, creating a loop.
+
+If the node returns SecondEvent it will finally move forward the execution to another node.&#x20;
 
 ```php
 class NodeOne extends Node
@@ -18,16 +22,16 @@ class NodeOne extends Node
             return new FirstEvent("Running a loop on NodeOne");
         }
         
-        return new SecondEvent("NodeOne complete");
+        return new SecondEvent("NodeOne complete, move forward");
     }
 }
 ```
 
 {% hint style="warning" %}
-Notice that we've added "FirstEvent" as an additional return type for the `__invoke` method.
+Notice the node has now two return types for the `__invoke` method: `FirstEvent` and `SecondEvent`. You have to declare all possible return events on the method signature to let the Workflow build the execution chain.
 {% endhint %}
 
-Returning FirstEvent will trigger another execution of `NodeOne`. The final output could be:
+Returning FirstEvent will trigger another execution of `NodeOne`. So the final output could be:
 
 ```php
 $state = Workflow::make()
@@ -44,18 +48,18 @@ $state = Workflow::make()
 - InitialNode complete
 - Running a loop on NodeOne
 - Running a loop on NodeOne
-- NodeOne complete
+- NodeOne complete, move forward
 - NodeTwo complete
 */
 ```
 
-You can create a loop from any node to any other node by defining the appropriate event types and return types. In this example the node can return FirstEvent, which is managed by itself. Thanks to event types you can come back to any other node in the workflow.
+You can create a loop from any node to any other node in the workflow by defining the appropriate input event and return events of the invoke method.&#x20;
 
 <figure><img src="../.gitbook/assets/workflow-loop.png" alt=""><figcaption></figcaption></figure>
 
 ### Branches
 
-Closely related to looping is branching. As you've already seen, you can conditionally return different events. Let's see a workflow that branches into two different paths. First let's create some custom events:
+As you've already seen, you can conditionally return different events from a node. Let's see a workflow that branches into two different paths. First let's create some custom events:
 
 ```php
 namespace App\Neuron;
