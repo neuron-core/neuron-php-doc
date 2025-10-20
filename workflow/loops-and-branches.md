@@ -57,9 +57,13 @@ You can create a loop from any node to any other node in the workflow by definin
 
 <figure><img src="../.gitbook/assets/workflow-loop.png" alt=""><figcaption></figcaption></figure>
 
+The `NodeOne` can even return a StartEvent to jump right to the first node of the Workflow. The event driven architecutre allows you to directly point any node in the workflow both forward and backward.
+
 ### Branches
 
-As you've already seen, you can conditionally return different events from a node. Let's see a workflow that branches into two different paths. First let's create some custom events:
+As you've already seen, you can conditionally return different events from a node to define custom execution flows. In this section we'll see an example of a workflow that branches into two different paths.&#x20;
+
+First let's create some custom events:
 
 ```php
 namespace App\Neuron;
