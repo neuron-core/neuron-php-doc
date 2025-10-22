@@ -1,6 +1,6 @@
 # Loops & Branches
 
-Workflow makes branching and looping logic easy to implement thanks to its event driven design.
+Workflow makes branching and looping logic easy to implement thanks to its event driven design. Once you understand how nodes belong to events, it's easy to start imagining how you can create loops and branching, which is just deciding which event should be returned in an "if condition" or whatever logic.
 
 ### Loops
 
