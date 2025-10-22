@@ -10,7 +10,11 @@ A workflow is an event-driven, node-based way to control the execution flow of a
 
 Your application is divided into sections called Nodes which are triggered by Events, and themselves return Events which trigger further nodes. By combining nodes and events, you can create arbitrarily complex flows that encapsulate logic and make your application more maintainable and easier to understand. A node can be anything from a single line of code to a complex agent. It can have arbitrary inputs and outputs, which are passed around by Events.
 
-The idea behind Workflow is to allow developers to use all the Neuron components like AI providers, embeddings, data loaders, chat history, vector store, etc, as standalone components to create totally customized agentic entities.
+It's like n8n at code level. The return event of a node is the entry point of another node. Returning an event from a node your are deciding which node will be executed next:
+
+<figure><img src="../.gitbook/assets/workflow-node-chain.png" alt=""><figcaption></figcaption></figure>
+
+Workflow allows you to use all the Neuron components like AI providers, embeddings, data loaders, chat history, vector store, etc, as standalone components to create totally customized agentic entities.
 
 Agent and RAG classes represent a ready to use implementation of the most common patterns when it comes to retrieval use cases, or tool calls, structured output, etc. Workflow allows you to program your agentic system completely from scratch. Agent and RAG can be used inside a Workflow to complete tasks as any other component if you need their built-in capabilities.
 
