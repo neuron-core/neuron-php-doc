@@ -131,7 +131,7 @@ Of course there is still not much point to a workflow if you just run through it
 
 ### Monitoring & Debugging
 
-Before moving into the Workflow creation process, we recommend having the monitoring system in place. It could make the learning curve of how Workflow works much more easier. The best way to monitoring Workflow is with [Inspector](https://inspector.dev/).
+Before moving into the Workflow creation process, we recommend having the monitoring system in place. It could make the learning curve of how Workflow works much easier. The best way to monitoring Workflow is with [Inspector](https://inspector.dev/).
 
 After you sign up at the link above, make sure to set the `INSPECTOR_INGESTION_KEY` variable in the application environment file to monitoring Workflow execution:
 
