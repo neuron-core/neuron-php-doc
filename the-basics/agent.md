@@ -200,13 +200,13 @@ In alternative to the single class encapsulation you can also instruct the agent
 
 ```php
 $agent = Agent::make()
-    ->withAiProvider(
+    ->setAiProvider(
         new Anthropic(
             key: 'ANTHROPIC_API_KEY',
             model: 'ANTHROPIC_MODEL',
         )
     )
-    ->withInstructions(
+    ->setInstructions(
         (string) new SystemPrompt(...)
     )
     ->addTool([...]);
