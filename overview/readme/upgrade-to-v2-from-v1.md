@@ -4,7 +4,7 @@
 
 You should update the following dependencies in your application's `composer.json` file:
 
-* **inspector-apm/neuron-ai** to **^2.0**
+* **neuron-core/neuron-ai** to **^2.0**
 
 ### High Impact Changes
 
