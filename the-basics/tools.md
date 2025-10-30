@@ -6,6 +6,10 @@ description: >-
 
 # Tools & Toolkits
 
+The core agent loop involves calling a model, letting it choose tools to execute, and then finishing when no more tools are needed to provide a response:
+
+<figure><img src="../.gitbook/assets/NeuronAI.png" alt=""><figcaption></figcaption></figure>
+
 ### What is a Tool
 
 Tools enable Agents to go beyond generating text by facilitating interaction with your application services, or external APIs.
@@ -277,13 +281,7 @@ try {
 
 ### Monitoring & Debugging
 
-When you provide the Agent with tools, Neuron sends their information to the LLM along with the user message.
-
-Once the LLM reads the prompt and the information of the tools attached, it will decide if some tool can help to gather additional information to respond to the user prompt. In that case it will return a special response that contains the tools the LLM wants to call.
-
-Neuron automatically manages this response for you, executing the callable of the tools the LLM decided to call, and return the result back to the LLM to get its final response.
-
-<figure><img src="../.gitbook/assets/Neuron Architecture.png" alt=""><figcaption></figcaption></figure>
+Neuron automatically manages the tool loop for you, based on what the LLM decided to call.
 
 To watch inside this workflow you should connect your Agent to the [Inspector monitoring dashboard](https://inspector.dev/) in order to see the tool call execution flow in real-time.
 
