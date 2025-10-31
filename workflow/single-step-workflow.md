@@ -4,7 +4,7 @@ description: How to create the first workflow with a single node
 
 # Single Step Workflow
 
-### Create the Workflow
+### Create a Workflow
 
 A workflow is usually implemented as a class that inherits from Workflow. The class can define an arbitrary number of nodes, each of which is a class that extens `NeuronAI\Workflow\Node`.
 
@@ -101,7 +101,7 @@ In this code we:
 
 ### Type hint for events
 
-The $event type (e.g. StartEvent) and -> StopEvent are essential the way to guide Workflow execution. The expected types determine what Node will be triggered next.
+The $event types (e.g. `StartEvent`) guide the Workflow execution. The expected return types of a node determine what node will be triggered next.
 
 Event types are validated at compile time, so you will get an error message if for instance you return an event that is never consumed by another Node.
 
