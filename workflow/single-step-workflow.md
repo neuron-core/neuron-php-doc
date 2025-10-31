@@ -101,7 +101,7 @@ In this code we:
 
 ### Type hint for events
 
-The $event type (e.g. StartEvent) and -> StopEvent are essential to the way Workflows work. The expected types determine what event types will trigger a Node.
+The $event type (e.g. StartEvent) and -> StopEvent are essential the way to guide Workflow execution. The expected types determine what Node will be triggered next.
 
 Event types are validated at compile time, so you will get an error message if for instance you return an event that is never consumed by another Node.
 
