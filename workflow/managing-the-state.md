@@ -59,3 +59,59 @@ $finalState = Workflow::make()
 // It will print "Hello World!"
 echo $finalState->get('message');
 ```
+
+### Typed State
+
+The default `WorkflowState` class is just a proxy to an internal array to carry data during workflow execution. It might be useful to create a custom state class to define strictly typed properties for better code completion, validation, and debugging.
+
+Create a `CustomState` class:
+
+```php
+use App\Models\User;
+use NeuronAI\Workflow\WorkflowState;
+
+class CustomState extends WorkflowState
+{
+    protected User $user;
+    
+    public function setUser(User $user): CustomState
+    {
+        $this->user = $user;
+        return $this;
+    }
+    
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+}
+```
+
+Nodes can accept an instance of `CustomState` instead of the default `WorkflowState`:
+
+```php
+class ExampleNode extends Node 
+{
+    public function __invoke(StartEvent $event, CustomState $state): StopEvent
+    {
+        // Use state properties in your nodes
+        if ($state->getUser()->isAdmin()) {
+            //...
+        }
+        
+        return new StopEvent();
+    }
+}
+```
+
+Finally, inject the `CustomState` into the workflow:
+
+```php
+$state = new CustomState();
+$state->setUser($user);
+
+$workflow = MyWorkflow::make($state);
+
+$finalState = $workflow->start()->getResult();
+echo $finalState->getUser()->email;
+```
