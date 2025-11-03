@@ -44,3 +44,44 @@ $workflow = new WorkflowAgent(
 {% hint style="warning" %}
 _FilePersistence_ component uses PHP serialization to store the current state of the Workflow. While this allows you to use any PHP object as an item of the Workflow state (e.g. [ChatHistory](../the-basics/chat-history-and-memory.md)), it also has some limitations like it does not support serialization of Closure. If objects you want to save in the Workflow state conflict with the PHP standard serialization process, you can implement the [Serializable interface](https://www.php.net/manual/en/class.serializable.php) to let the NeuronAI persistence component know of how to serialize the object in the correct way.
 {% endhint %}
+
+### DatabasePersistence
+
+To persist the workflow interruption in the database you need to pass a `PDO` instance. If you are working on top of a framework you can get it from the ORM in the same way of the [SQLChatHistory](../the-basics/chat-history-and-memory.md#sqlchathistory).
+
+```php
+use NeuronAI\Workflow\Persistence\DatabasePersistence;
+
+$workflow = new WorkflowAgent(
+    new DatabasePersistence(
+        pdo: new \PDO(...),
+        table: 'workflow_interrupts'
+    ), 
+    'CUSTOM_ID'
+);
+```
+
+Here are the SQL scripts to create the table:
+
+{% tabs %}
+{% tab title="MySQL/MariaDB" %}
+```javascript
+const message = "hello world";
+console.log(message);
+```
+{% endtab %}
+
+{% tab title="PostgreSQL" %}
+```python
+message = "hello world"
+print(message)
+```
+{% endtab %}
+
+{% tab title="SQLite" %}
+```ruby
+message = "hello world"
+puts message
+```
+{% endtab %}
+{% endtabs %}
