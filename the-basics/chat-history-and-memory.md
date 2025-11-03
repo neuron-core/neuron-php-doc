@@ -261,6 +261,68 @@ class MyAgent extends Agent
 }
 ```
 
+### EloquentChatHisotry
+
+You should create your own Eloquent model and pass the class string to this implementation. The model can have custom relations, scopes, attributes, etc. but the basic structure must be based on this migration script:
+
+```php
+Schema::create('chat_messages', function (Blueprint $table) {
+     $table->id();
+     $table->string('thread_id')->index();
+     $table->string('role');
+     $table->json('content');
+     $table->json('meta')->nullable();
+     $table->timestamps();
+
+     $table->index(['thread_id', 'id']); // For efficient ordering and trimming
+});
+```
+
+#### Example ChatMessage model
+
+```php
+class ChatMessage extends Model
+{
+    protected $fillable = [
+        'thread_id', 'role', 'content', 'meta'
+    ];
+    
+    protected $casts = [
+        'content' => 'array', 
+        'meta' => 'array'
+    ];
+    
+    public function conversation()
+    {
+        return $this->belongsTo(Conversation::class, 'thread_id');
+    }
+}
+```
+
+#### Use in your agent
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent\Agent;
+use NeuronAI\Chat\History\ChatHistoryInterface;
+use NeuronAI\Chat\History\EloquentChatHistory;
+
+class MyAgent extends Agent
+{
+    ...
+    
+    protected function chatHistory(): ChatHistoryInterface
+    {
+        return new EloquentChatHistory(
+            thread_id: 'THREAD_ID',
+            modelClass: ChatMessage::class,
+            contextWindow: 50000
+        );
+    }
+}
+```
+
 ## How to implement a new chat history
 
 To create a new implementation of the chat history you must implement the `AbstractChatHistory`. It allows you to inherit several behaviors for the internal history management, so you have just to implement a couple of methods to save messages into the external storage you want to use.
