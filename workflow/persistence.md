@@ -93,9 +93,16 @@ CREATE INDEX idx_updated_at ON workflow_interrupts(updated_at);
 {% endtab %}
 
 {% tab title="SQLite" %}
-```ruby
-message = "hello world"
-puts message
+```sql
+CREATE TABLE workflow_interrupts (
+    workflow_id TEXT PRIMARY KEY,
+    data BLOB NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
+CREATE INDEX idx_workflow_id ON workflow_interrupts(workflow_id);
+CREATE INDEX idx_updated_at ON workflow_interrupts(updated_at);
 ```
 {% endtab %}
 {% endtabs %}
