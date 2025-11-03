@@ -263,7 +263,7 @@ class MyAgent extends Agent
 
 ### EloquentChatHisotry
 
-You should create your own Eloquent model and pass the class string to this implementation. The model can have custom relations, scopes, attributes, etc. but the basic structure must be based on this migration script:
+You should create your own Eloquent model and pass the class string as the constructor argument. The model can have custom relations, scopes, attributes, etc. but the basic structure must be based on this migration script:
 
 ```php
 Schema::create('chat_messages', function (Blueprint $table) {
