@@ -65,9 +65,16 @@ Here are the SQL scripts to create the table:
 
 {% tabs %}
 {% tab title="MySQL/MariaDB" %}
-```javascript
-const message = "hello world";
-console.log(message);
+```sql
+CREATE TABLE IF NOT EXISTS workflow_interrupts (
+    workflow_id VARCHAR(255) PRIMARY KEY,
+    data LONGBLOB NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    
+    INDEX idx_workflow_id (workflow_id),
+    INDEX idx_updated_at (updated_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 {% endtab %}
 
