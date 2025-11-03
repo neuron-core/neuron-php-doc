@@ -79,9 +79,16 @@ CREATE TABLE IF NOT EXISTS workflow_interrupts (
 {% endtab %}
 
 {% tab title="PostgreSQL" %}
-```python
-message = "hello world"
-print(message)
+```sql
+CREATE TABLE workflow_interrupts (
+    workflow_id VARCHAR(255) PRIMARY KEY,
+    data BYTEA NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX idx_workflow_id ON workflow_interrupts(workflow_id);
+CREATE INDEX idx_updated_at ON workflow_interrupts(updated_at);
 ```
 {% endtab %}
 
