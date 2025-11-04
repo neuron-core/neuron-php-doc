@@ -283,6 +283,10 @@ Schema::create('chat_messages', function (Blueprint $table) {
 #### Example ChatMessage model
 
 ```php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
 class ChatMessage extends Model
 {
     protected $fillable = [
@@ -294,7 +298,12 @@ class ChatMessage extends Model
         'meta' => 'array'
     ];
     
-    public function conversation()
+    /**
+     * The conversation that owns the chat message.
+     *
+     * @return BelongsTo<Conversation, $this>
+     */
+    public function conversation(): BelongsTo
     {
         return $this->belongsTo(Conversation::class, 'thread_id');
     }
@@ -306,7 +315,8 @@ class ChatMessage extends Model
 ```php
 namespace App\Neuron;
 
-use NeuronAI\Agent\Agent;
+use App\Models\ChatMessage;
+use NeuronAI\Agent;
 use NeuronAI\Chat\History\ChatHistoryInterface;
 use NeuronAI\Chat\History\EloquentChatHistory;
 
