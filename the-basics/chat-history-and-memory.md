@@ -265,9 +265,11 @@ class MyAgent extends Agent
 
 You should create your own Eloquent model and pass the class string as the constructor argument. The model can have custom relations, scopes, attributes, etc. but the basic structure must be based on this migration script:
 
-```php
-// php artisan make:migration create_chat_messages_table --create=chat_messages
+```bash
+php artisan make:migration create_chat_messages_table --create=chat_messages
+```
 
+```php
 Schema::create('chat_messages', function (Blueprint $table) {
      $table->id();
      $table->string('thread_id')->index();
