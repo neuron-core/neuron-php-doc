@@ -70,7 +70,7 @@ To use `HtmlReader` you need to install the [**html2text**](https://github.com/m
 ```php
 use NeuronAI\RAG\DataLoader\FileDataLoader;
 
-// Register the PDF reader
+// Register the HTML reader
 $documents = FileDataLoader::for(__DIR__)
     ->addReader(['html', 'xhtml'], new \NeuronAI\RAG\DataLoader\HtmlReader())
     ->getDocuments();
