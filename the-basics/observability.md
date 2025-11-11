@@ -37,3 +37,17 @@ To create an Ingestion key head to the [**Inspector dashboard**](https://app.ins
 {% hint style="success" %}
 For any additional support drop in a live chat in the dashboard. We are happy to listen from your experience, find new possible improvements, and make the tool better overtime.
 {% endhint %}
+
+## Logging
+
+If you want to report agent activity into your log system you can attach the built-in `LogObserver` to your agent passing an instance of a PSR `LoggerInterface` compatible logger, like monolog for example:
+
+```php
+use NeuronAI\Observability\LogObserver;
+
+$agent = MyAgent::make()->observe(
+    new LogObserver($logger)
+);
+```
+
+All itnernal events with their payload will be logged.
