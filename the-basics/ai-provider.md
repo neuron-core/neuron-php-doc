@@ -30,7 +30,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -61,7 +62,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -92,7 +94,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -121,7 +124,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -153,7 +157,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -181,7 +186,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -209,7 +215,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -238,7 +245,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -270,7 +278,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -299,7 +308,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -332,7 +342,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
@@ -372,7 +383,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
