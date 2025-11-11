@@ -61,7 +61,7 @@ $documents = FileDataLoader::for(__DIR__)
     ->getDocuments();
 ```
 
-### HML to Markdown Reader
+### HTML to Markdown Reader
 
 {% hint style="warning" %}
 To use `HtmlReader` you need to install the [**html2text**](https://github.com/mtibben/html2text) composer package.
