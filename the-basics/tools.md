@@ -625,7 +625,7 @@ The exclusion mechanism operates at the class level, using fully qualified class
 
 #### Only
 
-In the same way you can also use the mthod `only()` to request a sub-set of the available tools in the toolkit.
+In the same way you can also use the method `only()` to request a sub-set of the available tools in the toolkit.
 
 ```php
 class MyAgent extends Agent
