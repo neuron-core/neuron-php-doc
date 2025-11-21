@@ -254,7 +254,7 @@ class MyAgent extends Agent
         return new SQLChatHistory(
             thread_id: 'CHAT_THREAD_ID',
             pdo: $this->connection->getNativeConnection(),
-            table: 'chat_hisotry',
+            table: 'chat_history',
             contextWindow: 50000
         );
     }
