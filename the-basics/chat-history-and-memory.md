@@ -274,7 +274,7 @@ Schema::create('chat_messages', function (Blueprint $table) {
      $table->id();
      $table->string('thread_id')->index();
      $table->string('role');
-     $table->json('content');
+     $table->json('content')->nullable();
      $table->json('meta')->nullable();
      $table->timestamps();
 
