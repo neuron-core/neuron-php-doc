@@ -91,8 +91,8 @@ $content = base64_encode(file_get_contents('/image.jpg'));
 $message = (new UserMessage("Describe this image"))
     ->addAttachment(
         new Image(
-            content: $content,
-            contentType: AttachmentContentType::BASE64,
+            image: $content,
+            type: AttachmentContentType::BASE64,
             mediaType: 'image/jpeg'
         )
     );
