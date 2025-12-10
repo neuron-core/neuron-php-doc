@@ -49,8 +49,8 @@ $content = base64_encode(file_get_contents('/document.pdf'));
 $message = (new UserMessage("Describe this document"))
     ->addAttachment(
         new Document(
-            content: $content,
-            contentType: AttachmentContentType::BASE64,
+            document: $content,
+            type: AttachmentContentType::BASE64,
             mediaType: 'application/pdf'
         )
     );
@@ -91,8 +91,8 @@ $content = base64_encode(file_get_contents('/image.jpg'));
 $message = (new UserMessage("Describe this image"))
     ->addAttachment(
         new Image(
-            content: $content,
-            contentType: AttachmentContentType::BASE64,
+            image: $content,
+            type: AttachmentContentType::BASE64,
             mediaType: 'image/jpeg'
         )
     );
