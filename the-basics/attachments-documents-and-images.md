@@ -17,7 +17,7 @@ You have two options to attach items to your messages: as an URL, or encoded in 
 Be sure about the possible limitations of your AI provider to handle documents and images in specific formats.&#x20;
 {% endhint %}
 
-## Documents
+### Documents
 
 #### URL
 
@@ -59,7 +59,7 @@ $response = MyAgent::make()->chat($message);
 // The document is a contract...
 ```
 
-## Images
+### Images
 
 #### URL
 
