@@ -101,6 +101,28 @@ $response = MyAgent::make()->chat($message);
 // The image shows...
 ```
 
+### File ID
+
+Usually you can attach files to your message (images or documents) as URLs, or encoded in base64 format. Many provider allows you to upload files on their platform once, and reference these files with a simple ID on the message. This can unlock big savings in token consumption and can improve the model response time.
+
+```php
+use App\Neuron\MyAgent;
+use NeuronAI\Chat\Attachments\AttachmentContentType;
+use NeuronAI\Chat\Attachments\Image;
+use NeuronAI\Chat\Messages\UserMessage;
+
+$message = (new UserMessage("Describe this document"))
+    ->addAttachment(
+        new Document(
+            document: $document_id,
+            type: AttachmentContentType::ID,
+        )
+    );
+    
+$response = MyAgent::make()->chat($message);
+// The document is about...
+```
+
 ## Ollama limitations
 
 Ollama only support images in base64 format, so you have to take care to convert the file content and set up the right type for attachments:
