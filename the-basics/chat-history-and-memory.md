@@ -329,7 +329,7 @@ class MyAgent extends Agent
     protected function chatHistory(): ChatHistoryInterface
     {
         return new EloquentChatHistory(
-            thread_id: 'THREAD_ID',
+            threadId: 'THREAD_ID',
             modelClass: ChatMessage::class,
             contextWindow: 50000
         );
