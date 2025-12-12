@@ -196,7 +196,7 @@ class MyAgent extends Agent
         return new SQLChatHistory(
             thread_id: 'THREAD_ID',
             pdo: new \PDO("mysql:host=localhost;dbname=DB_NAME;charset=utf8mb4", "DB_USER", "DB_PASS"),
-            table: 'chat_hisotry',
+            table: 'chat_history',
             contextWindow: 50000
         );
     }
@@ -224,7 +224,7 @@ class MyAgent extends Agent
         return new SQLChatHistory(
             thread_id: 'CHAT_THREAD_ID',
             pdo: \DB::connection()->getPdo(),
-            table: 'chat_hisotry',
+            table: 'chat_history',
             contextWindow: 50000
         );
     }
@@ -254,7 +254,7 @@ class MyAgent extends Agent
         return new SQLChatHistory(
             thread_id: 'CHAT_THREAD_ID',
             pdo: $this->connection->getNativeConnection(),
-            table: 'chat_hisotry',
+            table: 'chat_history',
             contextWindow: 50000
         );
     }
