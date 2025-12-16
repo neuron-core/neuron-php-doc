@@ -178,6 +178,32 @@ echo $message->getContent();
 // Hi, how can I help you today?
 ```
 {% endtab %}
+
+{% tab title="Mistral" %}
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Providers\Gemini\Mistral;
+
+class MyAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        return new Mistral(
+            key: 'MISTRAL_API_KEY',
+            model: 'MISTRAL_MODEL',
+        );
+    }
+}
+
+$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $message->getContent();
+// Hi, how can I help you today?
+```
+{% endtab %}
 {% endtabs %}
 
 Check out all the supported providers in the [AI Provider](the-basics/ai-provider.md) section.
