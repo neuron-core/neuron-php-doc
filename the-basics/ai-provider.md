@@ -222,7 +222,13 @@ echo $response->getContent();
 
 ### Gemini Vertex AI
 
-This provider allows you to interact with LLM deployed into your Vertex environment on Google Cloud.
+To use this provider you need to install the `google/auth` package:
+
+```bash
+composer require google/auth
+```
+
+Below you can find the syntax to use it in your agent.
 
 ```php
 namespace App\Neuron;
@@ -378,9 +384,13 @@ echo $response->getContent();
 
 ### AWS Bedrock Runtime
 
-{% hint style="warning" %}
-To use The BedrockRuntime provider you need to install the [`aws/aws-sdk-php`](https://github.com/aws/aws-sdk-php) package.
-{% endhint %}
+To use The `BedrockRuntime` provider you need to install the [`aws/aws-sdk-php`](https://github.com/aws/aws-sdk-php) package.
+
+```bash
+composer require aws/aws-sdk-php
+```
+
+Below you can find the syntax to use it in your agent.
 
 ```php
 namespace App\Neuron;
