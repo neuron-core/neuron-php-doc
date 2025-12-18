@@ -220,6 +220,39 @@ echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
+### Gemini Vertex AI
+
+This provider allows you to interact with LLM deployed into your Vertex environment on Google Cloud.
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Providers\Gemini\GeminiVertex;
+use NeuronAI\Providers\HttpClientOptions;
+
+class MyAgent extends Agent
+{
+    public function provider(): AIProviderInterface
+    {
+        return new GeminiVertex(
+            pathJsonCredentials: 'GOOGLE_FILE_CREDENTIALS_PATH',
+            location: 'GOOGLE_LOCATION',
+            projectId: 'GOOGLE_PROJECT_ID',
+            model: 'GEMINI_MODEL',
+            parameters: [], // Add custom params (temperature, logprobs, etc)
+            httpOptions: new HttpClientOptions(timeout: 30),
+        );
+    }
+}
+
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
+// Hi, how can I help you today?
+```
+
 ### Mistral
 
 ```php
@@ -312,10 +345,6 @@ $response = MyAgent::make()->chat(new UserMessage("Hi!"));
 echo $response->getContent();
 // Hi, how can I help you today?
 ```
-
-{% hint style="danger" %}
-Due to the Deepseek API limitations, it doesn't support document and image attachments.
-{% endhint %}
 
 ### Grok (X-AI)
 
