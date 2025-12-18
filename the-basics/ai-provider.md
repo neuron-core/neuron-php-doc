@@ -50,7 +50,7 @@ use NeuronAI\Providers\OpenAI\Responses\OpenAIResponses;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new OpenAIResponses(
             key: 'OPENAI_API_KEY',
@@ -82,7 +82,7 @@ use NeuronAI\Providers\OpenAI\OpenAI;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new OpenAI(
             key: 'OPENAI_API_KEY',
@@ -113,7 +113,7 @@ use NeuronAI\Providers\AzureOpenAI;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new AzureOpenAI(
             key: 'AZURE_API_KEY',
@@ -144,7 +144,7 @@ use NeuronAI\Providers\OpenAILike;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new OpenAILike(
             baseUri: 'https://api.together.xyz/v1',
@@ -175,7 +175,7 @@ use NeuronAI\Providers\Ollama\Ollama;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new Ollama(
             url: 'OLLAMA_URL',
@@ -204,7 +204,7 @@ use NeuronAI\Providers\HttpClientOptions;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new Gemini(
             key: 'GEMINI_API_KEY',
@@ -235,7 +235,7 @@ use NeuronAI\Providers\HttpClientOptions;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new GeminiVertex(
             pathJsonCredentials: 'GOOGLE_FILE_CREDENTIALS_PATH',
@@ -296,7 +296,7 @@ use NeuronAI\Providers\HuggingFace\InferenceProvider;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new HuggingFace(
             key: 'HF_ACCESS_TOKEN',
@@ -359,7 +359,7 @@ use NeuronAI\Providers\XAI\Grok;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new Grok(
             key: 'GROK_API_KEY',
@@ -393,7 +393,7 @@ use NeuronAI\Providers\AWS\BedrockRuntime;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         $client = new BedrockRuntimeClient([
             'version' => 'latest',
@@ -426,7 +426,7 @@ use NeuronAI\Providers\HttpClientOptions;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new Ollama(
             url: 'OLLAMA_URL',
@@ -585,7 +585,7 @@ use NeuronAI\Providers\AIProviderInterface;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new MyAIProvider (
             key: 'PROVIDER_API_KEY',
