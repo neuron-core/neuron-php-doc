@@ -50,7 +50,7 @@ use NeuronAI\Providers\OpenAI\Responses\OpenAIResponses;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new OpenAIResponses(
             key: 'OPENAI_API_KEY',
@@ -82,7 +82,7 @@ use NeuronAI\Providers\OpenAI\OpenAI;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new OpenAI(
             key: 'OPENAI_API_KEY',
@@ -113,7 +113,7 @@ use NeuronAI\Providers\AzureOpenAI;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new AzureOpenAI(
             key: 'AZURE_API_KEY',
@@ -144,7 +144,7 @@ use NeuronAI\Providers\OpenAILike;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new OpenAILike(
             baseUri: 'https://api.together.xyz/v1',
@@ -175,7 +175,7 @@ use NeuronAI\Providers\Ollama\Ollama;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new Ollama(
             url: 'OLLAMA_URL',
@@ -204,10 +204,49 @@ use NeuronAI\Providers\HttpClientOptions;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new Gemini(
             key: 'GEMINI_API_KEY',
+            model: 'GEMINI_MODEL',
+            parameters: [], // Add custom params (temperature, logprobs, etc)
+            httpOptions: new HttpClientOptions(timeout: 30),
+        );
+    }
+}
+
+$response = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $response->getContent();
+// Hi, how can I help you today?
+```
+
+### Gemini Vertex AI
+
+To use this provider you need to install the `google/auth` package:
+
+```bash
+composer require google/auth
+```
+
+Below you can find the syntax to use it in your agent.
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Providers\Gemini\GeminiVertex;
+use NeuronAI\Providers\HttpClientOptions;
+
+class MyAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        return new GeminiVertex(
+            pathJsonCredentials: 'GOOGLE_FILE_CREDENTIALS_PATH',
+            location: 'GOOGLE_LOCATION',
+            projectId: 'GOOGLE_PROJECT_ID',
             model: 'GEMINI_MODEL',
             parameters: [], // Add custom params (temperature, logprobs, etc)
             httpOptions: new HttpClientOptions(timeout: 30),
@@ -263,7 +302,7 @@ use NeuronAI\Providers\HuggingFace\InferenceProvider;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new HuggingFace(
             key: 'HF_ACCESS_TOKEN',
@@ -313,10 +352,6 @@ echo $response->getContent();
 // Hi, how can I help you today?
 ```
 
-{% hint style="danger" %}
-Due to the Deepseek API limitations, it doesn't support document and image attachments.
-{% endhint %}
-
 ### Grok (X-AI)
 
 ```php
@@ -330,7 +365,7 @@ use NeuronAI\Providers\XAI\Grok;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new Grok(
             key: 'GROK_API_KEY',
@@ -349,9 +384,13 @@ echo $response->getContent();
 
 ### AWS Bedrock Runtime
 
-{% hint style="warning" %}
-To use The BedrockRuntime provider you need to install the [`aws/aws-sdk-php`](https://github.com/aws/aws-sdk-php) package.
-{% endhint %}
+To use The `BedrockRuntime` provider you need to install the [`aws/aws-sdk-php`](https://github.com/aws/aws-sdk-php) package.
+
+```bash
+composer require aws/aws-sdk-php
+```
+
+Below you can find the syntax to use it in your agent.
 
 ```php
 namespace App\Neuron;
@@ -364,7 +403,7 @@ use NeuronAI\Providers\AWS\BedrockRuntime;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         $client = new BedrockRuntimeClient([
             'version' => 'latest',
@@ -397,7 +436,7 @@ use NeuronAI\Providers\HttpClientOptions;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new Ollama(
             url: 'OLLAMA_URL',
@@ -556,7 +595,7 @@ use NeuronAI\Providers\AIProviderInterface;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new MyAIProvider (
             key: 'PROVIDER_API_KEY',

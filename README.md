@@ -95,7 +95,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $message->getContent();
 // Hi, how can I help you today?
 ```
 {% endtab %}
@@ -120,7 +121,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $message->getContent();
 // Hi, how can I help you today?
 ```
 {% endtab %}
@@ -145,7 +147,8 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $message->getContent();
 // Hi, how can I help you today?
 ```
 {% endtab %}
@@ -170,7 +173,34 @@ class MyAgent extends Agent
     }
 }
 
-echo MyAgent::make()->chat(new UserMessage("Hi!"));
+$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $message->getContent();
+// Hi, how can I help you today?
+```
+{% endtab %}
+
+{% tab title="Mistral" %}
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Providers\Gemini\Mistral;
+
+class MyAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        return new Mistral(
+            key: 'MISTRAL_API_KEY',
+            model: 'MISTRAL_MODEL',
+        );
+    }
+}
+
+$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+echo $message->getContent();
 // Hi, how can I help you today?
 ```
 {% endtab %}
@@ -208,7 +238,7 @@ Modern PHP offers robust object-oriented programming features, strong typing cap
 
 Building AI applications quickly becomes complex when multiple agents need to collaborate. Managing state between agents, handling failures gracefully,  and maintaining conversation context across different AI services creates intricate dependency chains. Without proper orchestration, developers often resort to brittle conditional logic, manual state management, and sequential processing that doesn't scale. The challenge isn't just technical—it's architectural. How do you design systems where agents can work together, share information, and recover from failures while maintaining clear, debuggable code?
 
-<a href="broken-reference" class="button secondary" data-icon="arrow-progress">Neuron Workflow</a>
+<a href="/broken/pages/LwiA5oss8HSjzdefFNvg" class="button secondary" data-icon="arrow-progress">Neuron Workflow</a>
 
 ## Ecosystem
 
@@ -256,7 +286,7 @@ Trace and evaluate your agents execution flow to help you maintain production gr
 * [**MCP connector**](the-basics/mcp-connector.md)
 * [**Monitoring & Debugging**](the-basics/observability.md)
 * [**Pre/Post Processors**](rag/pre-post-processor.md)
-* [**Workflow**](broken-reference)
+* [**Workflow**](/broken/pages/LwiA5oss8HSjzdefFNvg)
 
 ## Additional Resources
 
