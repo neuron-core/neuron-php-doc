@@ -86,7 +86,7 @@ class NodeOne extends Node
 // Takes SecondEvent as input and returns StopEvent
 class NodeTwo extends Node
 {
-    public function __invoke(SecondEvent$event, WorkflowState $state): StopEvent
+    public function __invoke(SecondEvent $event, WorkflowState $state): StopEvent
     {
         echo "\n- ".$event->secondMsg;
         
