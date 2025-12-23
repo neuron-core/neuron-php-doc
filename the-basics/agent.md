@@ -4,9 +4,9 @@ description: Easily implement LLM interactions extending the basic Agent class.
 
 # Agent
 
-You can create your agent by extending the `NeuronAI\Agent` class to inherit the main features of the framework and create fully functional agents. This class automatically manages some advanced mechanisms for you such as memory, tools and function calls, up to the RAG systems. We will go into more detail about these aspects in the following sections.
+You can create your agent by extending the `NeuronAI\Agent` class to inherit the main features of the framework and create fully functional agents. This class automatically manages some advanced mechanisms for you such as chat hisotry, tools and function calls, up to RAG systems. We will go into more detail about these aspects in the following sections.
 
-This implementation strategy ensures the portability of your agent because all the moving parts are encapsulated into a single entity that you can run wherever you want in your application, or even release as stand alone composer packages.
+Extending the base class make it easier to add custom methods and behaviour to the agent, and also promote portability, because all the moving parts are encapsulated into a single entity that you can run wherever you want in your application, or even release as a stand alone composer package.
 
 Let's start creating an AI Agent summarizing YouTube videos. We start creating the `YouTubeAgent` class:
 
