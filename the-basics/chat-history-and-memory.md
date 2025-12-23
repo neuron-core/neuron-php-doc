@@ -100,8 +100,6 @@ class MyAgent extends Agent
 }
 ```
 
-[`InMemoryChatHistory`](chat-history-and-memory.md#inmemorychathistory) is used into the agent by default. Check out below to learn more.
-
 {% hint style="warning" %}
 The internal `TokenCounter` component estimates token usage for each message. Actual usage may vary between providers, so we recommend configuring the `contextWindow` value slightly below the maximum supported by your provider to avoid unexpected API errors.
 {% endhint %}
@@ -110,7 +108,7 @@ The internal `TokenCounter` component estimates token usage for each message. Ac
 
 ### InMemoryChatHistory
 
-It simply store the list of messages into an array. It is kept in memory only during the current execution.
+It simply store the list of messages into an array. It is kept in memory only during the current execution. It's used by default if you don't explicitly register another component.
 
 ```php
 namespace App\Neuron;
