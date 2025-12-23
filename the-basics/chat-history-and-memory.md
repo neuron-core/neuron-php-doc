@@ -75,7 +75,7 @@ echo $response->getContent();
 
 The last message in the list will be considered the most recent.
 
-## How to register a chat history
+## Register the chat history
 
 ```php
 namespace App\Neuron;
@@ -100,13 +100,17 @@ class MyAgent extends Agent
 }
 ```
 
-[`InMemoryChatHistory`](chat-history-and-memory.md#inmemorychathistory) is used into the agent by default.  Check out below to learn more&#x20;
+[`InMemoryChatHistory`](chat-history-and-memory.md#inmemorychathistory) is used into the agent by default. Check out below to learn more.
+
+{% hint style="warning" %}
+The internal `TokenCounter` component estimates token usage for each message. Actual usage may vary between providers, so we recommend configuring the `contextWindow` value slightly below the maximum supported by your chosen provider to avoid unexpected API errors.
+{% endhint %}
 
 ## Available Chat History Implementations
 
 ### InMemoryChatHistory
 
-It simply store the list of messages into an array. It is kept in memory only during the current execution.&#x20;
+It simply store the list of messages into an array. It is kept in memory only during the current execution.
 
 ```php
 namespace App\Neuron;
@@ -131,7 +135,7 @@ class MyAgent extends Agent
 
 ### FileChatHistory
 
-This compnent makes you able  to persist the ongoing conversation with the agent in a file, and resume it later in time. To create an instance of the `FileChatHistory` you need to pass the absolute path of the `directory` where you want to store conversations, and the unique `key` for the current conversation.
+This compnent makes you able to persist the ongoing conversation with the agent in a file, and resume it later in time. To create an instance of the `FileChatHistory` you need to pass the absolute path of the `directory` where you want to store conversations, and the unique `key` for the current conversation.
 
 ```php
 namespace App\Neuron;
@@ -370,7 +374,7 @@ We strongly suggest to look at other implementations like `FileChatHistory` to u
 
 ### Serialize/Deserialize Messages
 
-When the ChatHistory needs to store a message it must be serialized. The same way, when the ChatHistory component is instantiated it should load all the previous messages from the underlying storage (database, cache, etc) and deserialize them to the original message type.&#x20;
+When the ChatHistory needs to store a message it must be serialized. The same way, when the ChatHistory component is instantiated it should load all the previous messages from the underlying storage (database, cache, etc) and deserialize them to the original message type.
 
 To serialize/deserialize messages consistently the `AbstractChatHistory` provides you with `serializeMessage()` and `deserializeMessage()` methods. Here is an example of how to use them in an hypothetical database chat history implementation:
 
