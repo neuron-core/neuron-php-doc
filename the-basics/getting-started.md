@@ -54,7 +54,7 @@ class MyAgent extends Agent
         );
     }
 
-    public function instructions(): string
+    protected function instructions(): string
     {
         return (string) new SystemPrompt(
             background: ["You are a friendly AI Agent created with Neuron framework."],

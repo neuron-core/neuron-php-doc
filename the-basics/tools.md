@@ -42,7 +42,7 @@ class YouTubeAgent extends Agent
         );
     }
     
-    public function instructions(): string 
+    protected function instructions(): string 
     {
         return (string) new SystemPrompt(
             background: ["You are an AI Agent specialized in writing YouTube video summaries."],
@@ -204,7 +204,7 @@ use App\Neuron\Tools\MyCustomTool;
 
 class YouTubeAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         // return an AI provider instance (Gemini, OpenAI, Ollama, etc.)
         return new Anthropic(
@@ -213,12 +213,12 @@ class YouTubeAgent extends Agent
         );
     }
     
-    public function instructions(): string
+    protected function instructions(): string
     {
         return (string) new SystemPrompt(...);
     }
     
-    public function tools(): array
+    protected function tools(): array
     {
         return [
             GetTranscriptionTool::make('API_KEY'),
@@ -586,7 +586,7 @@ class MyAgent extends Agent
 {
     ...
 	
-    public function tools(): array
+    protected function tools(): array
     {
         return [
             CalculatorToolkit::make(),
@@ -608,7 +608,7 @@ class MyAgent extends Agent
 {
     ...
 	
-    public function tools(): array
+    protected function tools(): array
     {
     	return [
             CalculatorToolkit::make()->exclude([
@@ -632,7 +632,7 @@ class MyAgent extends Agent
 {
     ...
 	
-    public function tools(): array
+    protected function tools(): array
     {
     	return [
             CalculatorToolkit::make()->only([
@@ -653,7 +653,7 @@ class MyAgent extends Agent
 {
     ...
 	
-    public function tools(): array
+    protected function tools(): array
     {
     	return [
             MySQLToolkit::make()

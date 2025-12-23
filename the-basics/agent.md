@@ -41,7 +41,7 @@ class YouTubeAgent extends Agent
         // return an instance of Anthropic, OpenAI, Gemini, Ollama, etc...
     }
     
-    public function instructions(): string
+    protected function instructions(): string
     {
         return (string) new SystemPrompt(
             background: ["You are a friendly AI Agent created with Neuron framework."],
@@ -88,7 +88,7 @@ class YouTubeAgent extends Agent
         );
     }
     
-    public function instructions(): string
+    protected function instructions(): string
     {
         return (string) new SystemPrompt(
             background: ["You are a friendly AI Agent created with Neuron framework."],
@@ -126,7 +126,7 @@ class YouTubeAgent extends Agent
         );
     }
     
-    public function instructions(): string
+    protected function instructions(): string
     {
         return (string) new SystemPrompt(
             background: ["You are an AI Agent specialized in writing YouTube video summaries."],
@@ -163,7 +163,7 @@ class YouTubeAgent extend Agent
 {
     ...
     
-    public function instructions(): string
+    protected function instructions(): string
     {
         return "You are an AI Agent specialized in writing YouTube video summaries.";
     }
