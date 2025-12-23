@@ -42,7 +42,7 @@ class YouTubeAgent extends Agent
         );
     }
     
-    protected function instructions(): string 
+    public function instructions(): string 
     {
         return (string) new SystemPrompt(
             background: ["You are an AI Agent specialized in writing YouTube video summaries."],
@@ -213,7 +213,7 @@ class YouTubeAgent extends Agent
         );
     }
     
-    protected function instructions(): string
+    public function instructions(): string
     {
         return (string) new SystemPrompt(...);
     }
@@ -509,7 +509,7 @@ use NeuronAI\Tools\ProviderTool;
 
 class MyAgent extends Agent
 {
-    public function provider(): AIProviderInterface
+    protected function provider(): AIProviderInterface
     {
         return new OpenAIResponses(
             key: 'OPENAI_API_KEY',
@@ -517,7 +517,7 @@ class MyAgent extends Agent
         );
     }
 
-    public function tools(): array
+    protected function tools(): array
     {
         return [
             ProviderTool:make(
