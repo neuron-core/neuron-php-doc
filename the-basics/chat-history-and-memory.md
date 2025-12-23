@@ -103,7 +103,7 @@ class MyAgent extends Agent
 [`InMemoryChatHistory`](chat-history-and-memory.md#inmemorychathistory) is used into the agent by default. Check out below to learn more.
 
 {% hint style="warning" %}
-The internal `TokenCounter` component estimates token usage for each message. Actual usage may vary between providers, so we recommend configuring the `contextWindow` value slightly below the maximum supported by your chosen provider to avoid unexpected API errors.
+The internal `TokenCounter` component estimates token usage for each message. Actual usage may vary between providers, so we recommend configuring the `contextWindow` value slightly below the maximum supported by your provider to avoid unexpected API errors.
 {% endhint %}
 
 ## Available Chat History Implementations
