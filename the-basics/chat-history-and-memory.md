@@ -65,7 +65,7 @@ use NeuronAI\Chat\Messages\Message;
 $response = MyAgent::make()
     ->chat([
         new Message(MessageRole::USER, "Hi, my company is called Inspector.dev"),
-        new Message(MessageRole::ASSISTANT, "Hi, how can I assist you today?"),
+        new Message(MessageRole::ASSISTANT, "Great, how can I assist you today?"),
         new Message(MessageRole::USER, "What's the name of the company I work for?"),
     ]);
     
