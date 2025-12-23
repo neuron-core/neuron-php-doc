@@ -16,7 +16,7 @@ A node can be anything from a single line of code to a complex agent. It can hav
 
 Workflow allows you to use all the Neuron components like AI providers, embeddings, data loaders, chat history, vector store, etc, as standalone components to create totally customized agentic entities.
 
-Agent and RAG classes represent a ready to use implementation of the most common patterns when it comes to tool calls, retrieval use cases, structured output, etc. Workflow allows you to program your agentic system completely from scratch. Agent and RAG can be used inside a Workflow to complete tasks as any other component if you need to perform AI tasks during workflow wxecution.
+Agent and RAG classes represent a ready to use implementation of the most common patterns when it comes to tool calls, retrieval use cases, structured output, etc. Workflow allows you to program your agentic system completely from scratch. Agent and RAG can be used inside a Workflow to complete tasks as any other component if you need to perform AI tasks during workflow execution.
 
 What makes Neuron Workflows special is their **streaming** and **interruption** capabilities. This means your multi agent system can stream updates directly to clients, pause mid-process, ask for human input, wait for feedback, and then continue exactly where it left off – even if that's hours or days later.
 

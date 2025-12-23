@@ -19,7 +19,7 @@ class ProgressEvent implements Event
 }
 ```
 
-We'll take our example MyWorkflow with multiple nodes from the previous tutorial and modify the nodes  to stream upadtes instead of echoing output directly:
+We'll take our example MyWorkflow with multiple nodes from the previous tutorial and modify the nodes  to stream updates instead of echoing output directly:
 
 ```php
 namespace App\Neuron;
