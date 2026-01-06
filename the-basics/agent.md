@@ -32,6 +32,7 @@ The command will create a class like this:
 namespace App\Neuron;
 
 use NeuronAI\Agent;
+use NeuronAI\SystemPrompt;
 use NeuronAI\Providers\AIProviderInterface;
 
 class YouTubeAgent extends Agent
