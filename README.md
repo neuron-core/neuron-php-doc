@@ -277,8 +277,10 @@ Trace and evaluate your agents execution flow to help you maintain production gr
 
 ## Core components
 
+* [**Agent**](the-basics/agent.md)
 * [**AI Provider**](the-basics/ai-provider.md)
 * [**Toolkit**](the-basics/tools.md#toolkits-composable-agent-capabilities)
+* [**RAG**](/broken/pages/YfKZq0KNcn61OqRWibRv)
 * [**Embeddings Provider**](rag/embeddings-provider.md)
 * [**Data Loader**](rag/data-loader.md)
 * [**Vector Store**](rag/vector-store.md)
