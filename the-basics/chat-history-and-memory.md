@@ -2,7 +2,7 @@
 description: Learn how Neuron AI manage multi turn conversations.
 ---
 
-# Chat History & Memory
+# Chat History
 
 Neuron AI provides you with a built-in system to manage the memory of a chat session you perform with the agent.
 
@@ -274,7 +274,7 @@ php artisan make:migration create_chat_messages_table --create=chat_messages
 ```php
 Schema::create('chat_messages', function (Blueprint $table) {
      $table->id();
-     $table->string('thread_id')->index();
+     $table->string('thread_id');
      $table->string('role');
      $table->json('content')->nullable();
      $table->json('meta')->nullable();
