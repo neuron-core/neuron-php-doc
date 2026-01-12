@@ -26,7 +26,7 @@ The central concept is that the output structure of LLM responses needs to be re
 ```php
 <?php
 
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\SchemaProperty;
 
@@ -98,7 +98,7 @@ We strongly recommend to use the `SchemaProperty` attribute to define at least t
 ```php
 <?php
 
-namespace App\Neuron\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\SchemaProperty;
 
@@ -119,7 +119,7 @@ The Validation component already contains many validation rules that you can app
 ```php
 <?php
 
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\SchemaProperty;
 use NeuronAI\StructuredOutput\Validation\Rules\NotBlank;
@@ -142,7 +142,7 @@ You can construct complex output structures using other PHP objects as a propert
 ```php
 <?php
 
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Property;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -167,7 +167,7 @@ In the `Address` definition we require only the street and zip code properties, 
 ```php
 <?php
 
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\SchemaProperty;
 use NeuronAI\StructuredOutput\Validation\Rules\NotBlank;
@@ -209,7 +209,7 @@ If you declare a property as an array Neuron assumes the list of items to be a l
 ```php
 <?php
 
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\SchemaProperty;
 use NeuronAI\StructuredOutput\Validation\Rules\NotBlank;
@@ -249,7 +249,7 @@ It could be needed to populate the list of tags with another structured data typ
 ```php
 <?php
 
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\SchemaProperty;
 use NeuronAI\StructuredOutput\Validation\Rules\NotBlank;
@@ -273,7 +273,7 @@ And here is the hypotetical implementation of the `Tag` class with its own valid
 ```php
 <?php
 
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\SchemaProperty;
 use NeuronAI\StructuredOutput\Validation\Rules\NotBlank;
@@ -381,7 +381,7 @@ Learn how to enable [**observability**](observability.md) in the next section.
 The property under validation cannot be blank. It accept the `allowNull` flag to treat explicitly null value as empty equivalent or not.
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\NotBlank;
 
@@ -397,7 +397,7 @@ class Person
 Determine if the length of a `string` match the given criteria:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\Length;
 
@@ -416,7 +416,7 @@ class Person
 Determine if the number of words in a `string` match the given criteria:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\WordsCount;
 
@@ -435,7 +435,7 @@ class Person
 Determine if the size of an `array` match the given criteria:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\Count;
 
@@ -454,7 +454,7 @@ class Person
 These rules have the same structure and meaning, and accept a single argument to define the value to compare against. The property under validation must be strictly equal (_#\[EqualTo]_) or different (_#\[NotEqualTo]_) than the reference value:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\EqualTo;
 use NeuronAI\StructuredOutput\Validation\Rules\NotEqualTo;
@@ -474,7 +474,7 @@ class Person
 These rules have the same structure and meaning, and accept a single argument to define the value to compare against. The property under validation must be strictly greater (_#\[GreaterThan]_) or equal (_#\[GreaterThanEqual]_) than the reference value:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\GreaterThan;
 use NeuronAI\StructuredOutput\Validation\Rules\GreaterThanEqual;
@@ -494,7 +494,7 @@ class Person
 These rules have the same structure and meaning, and accept a single argument to define the value to compare against. The property under validation must be strictly lower (_#\[LowerThan]_) or equal (_#\[LowerThanEqual]_) than the reference value:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\LowerThan;
 use NeuronAI\StructuredOutput\Validation\Rules\LowerThanEqual;
@@ -514,7 +514,7 @@ class Person
 Determin if a `number` is out of the given range:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\InRange;
 
@@ -534,7 +534,7 @@ class Person
 The property under validation must have exactly the boolean value defined by the rule:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\IsFalse;
 use NeuronAI\StructuredOutput\Validation\Rules\IsTrue;
@@ -554,7 +554,7 @@ class Phone
 The property under validation must respect the nullable condition defined by the rule:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\IsNotNull;
 use NeuronAI\StructuredOutput\Validation\Rules\IsNull;
@@ -574,7 +574,7 @@ class Phone
 The property under validation must contains a valid JSON string:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\Json;
 
@@ -590,7 +590,7 @@ class Person
 The property under validation must contains a valid URL:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\Url;
 
@@ -606,7 +606,7 @@ class Person
 The property under validation must contains a valid Email address:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\Email;
 
@@ -622,7 +622,7 @@ class Person
 The property under validation must contains a valid IP address:
 
 ```php
-namespace App\Dto;
+namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\IpAddress;
 
@@ -635,18 +635,19 @@ class Person
 
 ### #\[ArrayOf]
 
-The property under validation must be an array that contains all of the given type of object. Notice that you also need to add the doc-block in order to make the agent able to instance the correct class. Use the full class namespace in the doc-block.
+The property under validation must be an array that contains all of the given types of objects. Notice that you also need to add the doc-block in order to make the agent able to instance the correct class. Use the full class namespace in the doc-block.
 
-<pre class="language-php"><code class="lang-php"><strong>namespace App\Dto;
-</strong>
+```php
+namespace App\Neuron\Output;
+
 use NeuronAI\StructuredOutput\Validation\Rules\ArrayOf;
 
 class Person
 {
     /**
-     * @var \App\Dto\Tag[]
+     * @var \App\Neuron\Output\Tag[]
      */
     #[ArrayOf(Tag::class)]
     public array $tags;
 }
-</code></pre>
+```
