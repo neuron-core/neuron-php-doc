@@ -349,9 +349,15 @@ class MyChatHistory extends AbstractChatHistory
     /**
      * @param Message[] $messages
      */
-    abstract public function setMessages(array $messages): ChatHistoryInterface;
+    public function setMessages(array $messages): ChatHistoryInterface
+    {
+        // Store all messages at once every time the hisotry is updated
+    }
 
-    abstract protected function clear(): ChatHistoryInterface;
+    protected function clear(): ChatHistoryInterface
+    {
+        // Empty the hisotry
+    }
 
     protected function onNewMessage(Message $message): void
     {
@@ -360,7 +366,7 @@ class MyChatHistory extends AbstractChatHistory
 
     protected function onTrimHistory(int $index): void
     {
-        // When the trim is triggered, the messages in the position from zero to the index are removed.
+        // When the trim is triggered, the messages in the position from zero to the index must be removed.
     }
 }
 ```
