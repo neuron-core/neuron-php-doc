@@ -81,8 +81,9 @@ The last message in the list will be considered the most recent.
 namespace App\Neuron;
 
 use NeuronAI\Agent;
-use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Chat\History\ChatHistoryInterface;
 use NeuronAI\Chat\History\InMemoryChatHistory;
+use NeuronAI\Providers\AIProviderInterface;
 
 class MyAgent extends Agent
 {
@@ -91,7 +92,7 @@ class MyAgent extends Agent
         ...
     }
     
-    protected function chatHistory()
+    protected function chatHistory(): ChatHistoryInterface
     {
         return new InMemoryChatHistory(
             contextWindow: 50000
