@@ -128,7 +128,7 @@ $response = MyRAG::make()
     ->addVectorStoreFilters([
         // Add filters
     ])
-    ->answer(new UserMessage(...));
+    ->chat(new UserMessage(...));
 ```
 
 Take a look at the Pinecone official documentation to better understand the metadata filters: [https://docs.pinecone.io/reference/api/2025-04/data-plane/query#body-filter](https://docs.pinecone.io/reference/api/2025-04/data-plane/query#body-filter)
@@ -230,7 +230,7 @@ $response = MyRAG::make()
     ->addVectorStoreFilters([
         // Add filters
     ])
-    ->answer(new UserMessage(...));
+    ->chat(new UserMessage(...));
 ```
 
 ### Typesense
