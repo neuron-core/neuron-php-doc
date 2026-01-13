@@ -339,30 +339,29 @@ class MyAgent extends Agent
 }
 ```
 
-## How to implement a new chat history
+## Implement custom chat history
 
-To create a new implementation of the chat history you must implement the `AbstractChatHistory`. It allows you to inherit several behaviors for the internal history management, so you have just to implement a couple of methods to save messages into the external storage you want to use.
+You can create a custom implementation of the chat history to support different persistent layer just  implementing `AbstractChatHistory`. It allows you to inherit several behaviors for the internal history management, so you have just to implement a couple of methods to save messages into the storage system you want to use.
 
 ```php
-abstract class AbstractChatHistory implements ChatHistoryInterface
+class MyChatHistory extends AbstractChatHistory
 {
-    public function addMessage(Message $message): ChatHistoryInterface;
-
-    /**
-     * @return Message[]
-     */
-    public function getMessages(): array;
-
-    public function getLastMessage(): Message|false;
-
     /**
      * @param Message[] $messages
      */
-    public function setMessages(array $messages): ChatHistoryInterface;
+    abstract public function setMessages(array $messages): ChatHistoryInterface;
 
-    public function flushAll(): ChatHistoryInterface;
+    abstract protected function clear(): ChatHistoryInterface;
 
-    public function calculateTotalUsage(): int;
+    protected function onNewMessage(Message $message): void
+    {
+        // Handle single message addition
+    }
+
+    protected function onTrimHistory(int $index): void
+    {
+        // When the trim is triggered, the messages in the position from zero to the index are removed.
+    }
 }
 ```
 
@@ -403,11 +402,10 @@ class DatabaseChatHistory extends AbstractChatHistory
         );
     }
 
-    protected function storeMessage(Message $message): ChatHistoryInterface
+    protected function onNewMessage(Message $message): void
     {
-        // Store the serialized version.
+        // Store the json version.
         $this->db->insert($message->jsonSerialize());
-        return $this;
     }
 
     ...
