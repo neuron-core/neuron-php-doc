@@ -260,7 +260,7 @@ class MyChatBot extends RAG
                 key: 'LOCALAI_KEY',
                 model: 'LOCALAI_MODEL',
                 topN: 3,
-                host: 'LOCALAI_HOST' // http://localhost:8080 by default
+                host: 'LOCALAI_HOST' // "http://localhost:8080" by default
             ),
         ];
     }
