@@ -12,13 +12,12 @@ The RAG module has a separate retrieval component that allows you to implement d
 namespace App\Neuron;
 
 use NeuronAI\Providers\AIProviderInterface;
-use NeuronAI\Providers\Anthropic\Anthropic;
 use NeuronAI\RAG\Embeddings\EmbeddingsProviderInterface;
-use NeuronAI\RAG\Embeddings\OpenAIEmbeddingsProvider;
 use NeuronAI\RAG\RAG;
+use NeuronAI\RAG\RAG\Retrieval\RetrievalInterface;
+use NeuronAI\RAG\RAG\Retrieval\SimilarityRetrieval;
 use NeuronAI\RAG\VectorStore\FileVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
-use NeuronAI\Tools\Toolkits\Calculator\CalculatorToolkit;
 
 class WorkoutTipsAgent extends RAG
 {
@@ -28,6 +27,11 @@ class WorkoutTipsAgent extends RAG
             $this->resolveVectorStore(),
             $this->resolveEmbeddingsProvider()
         );
+    }
+    
+    protected function provider(): AIProviderInterface
+    {
+        // Return an instance of an AI provider...
     }
     
     protected function embeddings(): EmbeddingsProviderInterface
