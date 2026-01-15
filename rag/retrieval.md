@@ -25,25 +25,19 @@ class WorkoutTipsAgent extends RAG
     protected function retrieval(): RetrievalInterface
     {
         return new SimilarityRetrieval(
-            $this->vectorStore(),
-            $this->embeddings()
+            $this->resolveVectorStore(),
+            $this->resolveEmbeddingsProvider()
         );
     }
     
     protected function embeddings(): EmbeddingsProviderInterface
     {
-        return new OpenAIEmbeddingsProvider(
-            key: 'OPENAI_API_KEY',
-            model: 'OPENAI_MODEL'
-        );
+        // Return an embeddings provider instance...
     }
     
     protected function vectorStore(): VectorStoreInterface
     {
-        return new FileVectorStore(
-            directory: __DIR__,
-            name: 'demo'
-        );
+        // Return a vector store instance...
     }
 }
 ```
