@@ -60,6 +60,8 @@ interface RetrievalInterface
 }
 ```
 
+If you are implementing custom workflow you can use retrieval as a standalone component to dynamically retrieve context data for use in your agentic systems.
+
 ### RAPTOR Retrieval Module
 
 Most retrieval-augmented models work by breaking down documents into small chunks and retrieving only the most relevant ones. However, this approach has some limitations:
