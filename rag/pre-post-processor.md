@@ -240,6 +240,32 @@ class MyChatBot extends RAG
 }
 ```
 
+### LocalAI Reranker
+
+LocalAI is an all-in-one complete AI stack. You can run large language models locally on your hardware. It provides an OpenAI compatible API for LLMs, so you can use it with the [OpenAILike](../the-basics/ai-provider.md#openailike) provider.
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\RAG\PostProcessor\LocalAIPostProcessor;
+
+class MyChatBot extends RAG
+{
+    ...
+
+    protected function postProcessors(): array
+    {
+        return [
+            new LocalAIPostProcessor(
+                key: 'LOCALAI_KEY',
+                model: 'LOCALAI_MODEL',
+                topN: 3
+            ),
+        ];
+    }
+}
+```
+
 ## Monitoring
 
 Neuron built-in observability features automatically trace the execution of each post processor, so you'll be able to monitor interactions with external services in your [Inspector](https://inspector.dev/) account. Learn more in the [monitoring section](../the-basics/observability.md).
