@@ -18,6 +18,27 @@ Run the composer command below to install the latest version:
 composer require neuron-core/neuron-ai
 ```
 
+# Installation for Laravel
+
+### Requirements
+
+* PHP: ^8.1
+* Laravel >= 10.x
+
+### Install
+
+```bash
+composer require neuron-core/neuron-laravel
+```
+
+### Configuration file
+
+```bash
+php artisan vendor:publish --tag=neuron-config
+````
+
+For more details about the features of the Laravel package, you can visit: https://github.com/neuron-core/neuron-laravel
+
 ### Create an Agent
 
 You can easily create your first agent with command below:
