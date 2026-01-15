@@ -242,7 +242,7 @@ class MyChatBot extends RAG
 
 ### LocalAI Reranker
 
-LocalAI is an all-in-one complete AI stack. You can run large language models locally on your hardware. It provides an OpenAI compatible API for LLMs, so you can use it with the [OpenAILike](../the-basics/ai-provider.md#openailike) provider.
+[LocalAI](https://localai.io/) is an all-in-one complete AI stack. You can run large language models locally on your hardware. It provides an OpenAI compatible API for LLMs, so you can use it with the [OpenAILike](../the-basics/ai-provider.md#openailike) provider.
 
 ```php
 namespace App\Neuron;
