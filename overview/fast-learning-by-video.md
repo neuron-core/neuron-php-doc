@@ -65,9 +65,9 @@ Neuron changes all that.
 
 <figure><img src="../.gitbook/assets/Neuron Book Cover.png" alt="" width="375"><figcaption></figcaption></figure>
 
-As a PHP developer, you now stand at a unique intersection of technologies. For years, PHP has powered a substantial portion of the web. Now, with Neuron AI, you can acquire the ability to infuse these web experiences with artificial intelligence, without leaving the language and ecosystem you know and love.
+As a PHP developer, you now stand at a unique intersection of technologies. For years, PHP has powered a substantial portion of the web. Now, with Neuron AI, you have the ability to infuse these web experiences with artificial intelligence, without leaving the language and ecosystem you know and love.
 
-Neuron is the most advanced PHP framework to build AI driven features into existing PHP applications. This book serves as both an introduction to AI Agents concepts for developers and a comprehensive guide to Neuron PHP agentic framework.&#x20;
+Neuron is the most advanced PHP framework to build AI driven applications. This book serves as both an introduction to AI Agents concepts for developers and a comprehensive guide to Neuron PHP agentic framework.&#x20;
 
 Get it from [Amazon](https://www.amazon.com/dp/B0F1YX8KJB) or [Google Play](https://play.google.com/store/books/details?pcampaignid=books_read_action\&id=agJPEQAAQBAJ\&pli=1).
 
