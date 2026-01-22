@@ -1,6 +1,6 @@
 ---
 description: >-
-  NeuronAI provides you with several ready to use interfaces against several
+  NeuronAI provides you with ready to use components to connect your agent to
   vector databases.
 ---
 
