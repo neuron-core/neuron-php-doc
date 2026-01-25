@@ -10,12 +10,12 @@ This documentation is also available and searchable as a Model Context Protocol 
 
 This allows AI assistants to access Neuron AI documentation content directly, making it easy for tools like Claude Code, Cursor, and VS Code extensions reliably understand what Neuron AI can do, its components, how to configure them, and how to compose workflows agents and RAG.
 
-The MCP server is available at: [https://docs.neuron-ai.dev/\~gitbook/mcp](https://docs.neuron-ai.dev/~gitbook/mcp)
+The MCP server is available at: [https://docs.neuron-ai.dev/neuron-v2/\~gitbook/mcp](https://docs.neuron-ai.dev/neuron-v2/~gitbook/mcp)
 
 ### Claude Code
 
 ```
-claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/mcp
+claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/neuron-v2/~gitbook/mcp
 ```
 
 ### VS Code
@@ -25,7 +25,7 @@ claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/m
     "servers": {
         "neuron-ai-doc": {
             "type": "http",
-            "url": "https://docs.neuron-ai.dev/~gitbook/mcp"
+            "url": "https://docs.neuron-ai.dev/neuron-v2/~gitbook/mcp"
         }
     }
 }
@@ -37,7 +37,7 @@ claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/m
 {
   "mcpServers": {
     "neuron-ai-doc": {
-        "url": "https://docs.neuron-ai.dev/~gitbook/mcp"
+        "url": "https://docs.neuron-ai.dev/neuron-v2/~gitbook/mcp"
     }
   }
 }
@@ -49,7 +49,7 @@ claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/m
 {
   "mcpServers": {
     "neuron-ai-doc": {
-      "serverUrl": "https://docs.neuron-ai.dev/~gitbook/mcp"
+      "serverUrl": "https://docs.neuron-ai.dev/neuron-v2/~gitbook/mcp"
     }
   }
 }
@@ -63,7 +63,7 @@ claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/m
   "mcp": {
     "neuron-ai-doc": {
       "type": "remote",
-      "url": "https://docs.neuron-ai.dev/~gitbook/mcp",
+      "url": "https://docs.neuron-ai.dev/neuron-v2/~gitbook/mcp",
       "enabled": true
     }
   }
