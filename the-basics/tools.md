@@ -67,7 +67,7 @@ class YouTubeAgent extends Agent
             )->addProperty(
                 new ToolProperty(
                     name: 'video_url',
-                    type: PropertyType::STRING
+                    type: PropertyType::STRING,
                     description: 'The URL of the YouTube video.',
                     required: true
                 )
@@ -1097,7 +1097,8 @@ The `user_id` arguments allows you to separate the long term memory in different
 
 #### Simple Email Service (SES)
 
-This tool allows the agent to send an email message to one or more recipients, send notifications, confirmations, reports, or any other email-based communication. The tool handles proper email&#x20;delivery, and basic error handling automatically.
+This tool allows the agent to send an email message to one or more recipients, send notifications, confirmations, reports, or any other email-based communication. The tool handles proper email
+&#x20;delivery, and basic error handling automatically.
 
 In order ti use this tool the AWS sdk for PHP must be installed.
 
@@ -1132,7 +1133,8 @@ class MyAgent extends Agent
 
 ### Supadata YouTube
 
-This toolkit provides access to YouTube video transcriptions, metadata, channel information,\
+This toolkit provides access to YouTube video transcriptions, metadata, channel information,
+\
 and playlist data through Supadata.ai for content analysis and research purposes.
 
 ```php
