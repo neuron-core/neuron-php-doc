@@ -23,7 +23,7 @@ claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/m
 ```json
 "mcp": {
     "servers": {
-        "neuron-doc": {
+        "neuron-ai-doc": {
             "type": "http",
             "url": "https://docs.neuron-ai.dev/~gitbook/mcp"
         }
@@ -36,7 +36,7 @@ claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/m
 ```json
 {
   "mcpServers": {
-    "neuron-doc": {
+    "neuron-ai-doc": {
         "url": "https://docs.neuron-ai.dev/~gitbook/mcp"
     }
   }
@@ -48,7 +48,7 @@ claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/m
 ```json
 {
   "mcpServers": {
-    "neuron-doc": {
+    "neuron-ai-doc": {
       "serverUrl": "https://docs.neuron-ai.dev/~gitbook/mcp"
     }
   }
@@ -61,7 +61,7 @@ claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/m
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "neuron-doc": {
+    "neuron-ai-doc": {
       "type": "remote",
       "url": "https://docs.neuron-ai.dev/~gitbook/mcp",
       "enabled": true
