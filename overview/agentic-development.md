@@ -54,3 +54,18 @@ claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/m
   }
 }
 ```
+
+### OpenCode
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "neuron-doc": {
+      "type": "remote",
+      "url": "https://docs.neuron-ai.dev/~gitbook/mcp",
+      "enabled": true
+    }
+  }
+}
+```
