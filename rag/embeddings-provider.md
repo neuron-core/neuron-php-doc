@@ -84,6 +84,32 @@ class MyRAG extends RAG
 }
 ```
 
+### OpenAILikeEmbeddings
+
+You can use any providers comaptible with OpenAI API format:
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\RAG\Embeddings\EmbeddingsProviderInterface;
+use NeuronAI\RAG\Embeddings\OpenAILikeEmbeddings;
+use NeuronAI\RAG\RAG;
+
+class MyRAG extends RAG
+{
+    ...
+    
+    protected function embeddings(): EmbeddingsProviderInterface
+    {
+        return new OpenAILikeEmbeddings(
+            baseUri: 'PRODIDER_URL',
+            key: 'PROVIDER_API_KEY',
+            model: 'PROVIDER_EMBEDDING_MODEL'
+        );
+    }
+}
+```
+
 ### Gemini
 
 ```php
