@@ -19,7 +19,7 @@
 * [Streaming](the-basics/streaming.md)
 * [Structured Output](the-basics/structured-output.md)
 * [Attachments (Documents & Images)](the-basics/attachments-documents-and-images.md)
-* [Asynchronous Processing](the-basics/asynchronous-processing.md)
+* [Async](the-basics/asynchronous-processing.md)
 * [Monitoring & Debugging](the-basics/observability.md)
 * [Error Handling](the-basics/error-handling.md)
 * [Evaluation](the-basics/evaluation.md)
