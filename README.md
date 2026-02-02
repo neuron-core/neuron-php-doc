@@ -290,8 +290,12 @@ Trace and evaluate your agents execution flow to help you maintain production gr
 * [**Pre/Post Processors**](rag/pre-post-processor.md)
 * [**Workflow**](/broken/pages/LwiA5oss8HSjzdefFNvg)
 
-## Additional Resources
+## Keep In Touch
 
 * Repository: [https://github.com/inspector-apm/neuron-ai](https://github.com/inspector-apm/neuron-ai)
 * Inspector: [https://inspector.dev](https://inspector.dev)
 * E-Book: [https://www.amazon.it/dp/B0F1YX8KJB](https://www.amazon.it/dp/B0F1YX8KJB)
+* Linkedin: [https://www.linkedin.com/company/neuron-ai-php-framework](https://www.linkedin.com/company/neuron-ai-php-framework)
+* X: [https://x.com/neuronai\_php](https://x.com/neuronai_php)
+* Instagram: [https://www.instagram.com/neuronai\_php\_adk/](https://www.instagram.com/neuronai_php_adk/)
+* Newsletter: [https://neuron-ai.dev](https://neuron-ai.dev/)
