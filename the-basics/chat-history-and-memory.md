@@ -382,7 +382,7 @@ We strongly suggest to look at other implementations like `FileChatHistory` to u
 
 When the ChatHistory needs to store a message it must be serialized. The same way, when the ChatHistory component is instantiated it should load all the previous messages from the underlying storage (database, cache, etc) and deserialize them to the original message type.
 
-To serialize/deserialize messages consistently the `AbstractChatHistory` provides you with `serializeMessage()` and `deserializeMessage()` methods. Here is an example of how to use them in an hypothetical database chat history implementation:
+To serialize/deserialize messages consistently the `AbstractChatHistory` provides you with `jsonSerialize()` and `deserializeMessages()` methods. Here is an example of how to use them in an hypothetical database chat history implementation:
 
 ```php
 <?php
@@ -390,25 +390,16 @@ To serialize/deserialize messages consistently the `AbstractChatHistory` provide
 namespace NeuronAI\Chat\History;
 
 use NeuronAI\Chat\Messages\Message;
-use NeuronAI\Exceptions\ChatHistoryException;
 
 class DatabaseChatHistory extends AbstractChatHistory
 {
-    public function __construct(
-        protected string $db,
-        protected string $key,
-    ) {
+    public function __construct(protected \PDO $db) 
+    {
         // Retrieve the current conversation from the underlying storage
         $messages = $this->db->select(...);
         
         // Deserialize properly initialize the correct message types with the correct data.
         $this->history = $this->deserializeMessages($messages);
-        
-        // Or deserialize messages individually
-        $this->history = \array_map(
-            fn(array $message) => $this->deserializeMessage($message),
-            $messages
-        );
     }
 
     protected function onNewMessage(Message $message): void
@@ -420,5 +411,3 @@ class DatabaseChatHistory extends AbstractChatHistory
     ...
 }
 ```
-
-The serialization/deserialization process makes messages is aveable in any type of storage.
