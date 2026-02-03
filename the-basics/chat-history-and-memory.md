@@ -77,6 +77,8 @@ The last message in the list will be considered the most recent.
 
 ## Register the chat history
 
+By default Neuron Agent uses an "in memory" chat history. That means it keeps messages only for the current execution cycle. But, if you want to persist messages across sessions you can tell the agent to use a different component by implementing the `chatHistory` method in the Agent class.
+
 ```php
 namespace App\Neuron;
 
@@ -419,4 +421,4 @@ class DatabaseChatHistory extends AbstractChatHistory
 }
 ```
 
-The serialization/deserialization process makes messages saveable in any type of storage.
+The serialization/deserialization process makes messages is aveable in any type of storage.
