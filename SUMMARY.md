@@ -47,5 +47,6 @@
 
 ## Resources
 
+* [Testing](resources/testing.md)
 * [GitHub](https://github.com/neuron-core)
 * [NeuronHub](https://neuronhub.dev/)
