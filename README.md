@@ -14,7 +14,7 @@ We provide tools for the entire agentic application development lifecycle, from 
 
 <figure><img src=".gitbook/assets/neuron-ai-architecture.png" alt=""><figcaption><p>Neuron architecture</p></figcaption></figure>
 
-Neuron is the perfect AI branch of your favorite framework.
+Neuron is the perfect AI branch of your favorite stack.
 
 ### Laravel
 
