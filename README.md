@@ -4,6 +4,14 @@ description: Learn what Neuron is and what you can do with it.
 
 # Introduction
 
+{% hint style="warning" %}
+### Neuron v3 scheduled for the end of February.
+
+Start with it or read the upgrade guide to update your project.&#x20;
+
+[**Upgrade guide**](https://docs.neuron-ai.dev/neuron-v3/overview/upgrade)
+{% endhint %}
+
 ### What is Neuron
 
 Neuron is a PHP framework designed to turn your "what if" into reality. We believe that building agentic applications should be as flexible as your own logic.

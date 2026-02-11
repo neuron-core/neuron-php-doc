@@ -6,6 +6,14 @@ description: >-
 
 # Installation
 
+{% hint style="warning" %}
+### Neuron v3 scheduled for the end of February.
+
+Start with it or read the upgrade guide to update your project.&#x20;
+
+[**Upgrade guide**](https://docs.neuron-ai.dev/neuron-v3/overview/upgrade)
+{% endhint %}
+
 ### Requirements
 
 * PHP: ^8.1
