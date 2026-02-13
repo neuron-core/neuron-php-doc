@@ -18,4 +18,4 @@ try {
 }
 ```
 
-If you want to be alerted on any error, consider to connect Inspector to your Agent instance. Learn more at the [**Observability**](observability.md) section.
+If you want to be alerted on any error, consider to connect Inspector to your application. Learn more on the [**documentation**](observability.md).
