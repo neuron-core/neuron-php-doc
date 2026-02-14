@@ -16,7 +16,7 @@ It also supports real-time streaming.
 
 We strongly recommend to use the V2 documentation to understand the new system and move your previously created Workflow to the new architecture.
 
-<a href="broken-reference" class="button secondary" data-icon="arrow-right-long">Workflow Documentation</a>
+<a href="/broken/pages/LwiA5oss8HSjzdefFNvg" class="button secondary" data-icon="arrow-right-long">Workflow Documentation</a>
 
 ### Low Impact
 

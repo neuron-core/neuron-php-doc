@@ -51,3 +51,5 @@ After you sign up at the link above, make sure to set the `INSPECTOR_INGESTION_K
 INSPECTOR_INGESTION_KEY=nwse877auxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 {% endcode %}
+
+<figure><img src="../.gitbook/assets/inspector.png" alt=""><figcaption></figcaption></figure>
