@@ -4,7 +4,7 @@ description: Managing errors fired by your agent.
 
 # Error Handling
 
-All exceptions fired from Neuron AI  are an extension of `NeuronException` . There several type of exception that can help you understand unexpected errors, but since they inherit from the same root exception gives you the ability to precisely catch agent errors in the context of your code:
+All exceptions fired from Neuron AI  are an extension of `NeuronException` . There are several types of exceptions that can help you understand what's going wrong, but because they inherit from the same root exception, they give you the ability to accurately detect agent errors in the context of your code:
 
 ```php
 try {
