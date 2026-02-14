@@ -19,7 +19,7 @@ First, let's create the MyWorkflow class:
 
 {% tab title="Windows" %}
 ```powershell
-.\vendor\bin\neuron make:workflow App\Neuron\MyWorkflow
+.\vendor\bin\neuron make:workflow App\Neuron\MyAgent
 ```
 {% endtab %}
 {% endtabs %}
