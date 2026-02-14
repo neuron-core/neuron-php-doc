@@ -13,13 +13,13 @@ Let's start creating an AI Agent summarizing YouTube videos. We start creating t
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-php vendor/bin/neuron make:agent App\\Neuron\\YouTubeAgent
+./vendor/bin/neuron make:agent App\\Neuron\\YouTubeAgent
 ```
 {% endtab %}
 
 {% tab title="Windows" %}
 ```powershell
-php .\vendor\bin\neuron make:agent App\Neuron\YouTubeAgent
+.\vendor\bin\neuron make:agent App\Neuron\YouTubeAgent
 ```
 {% endtab %}
 {% endtabs %}

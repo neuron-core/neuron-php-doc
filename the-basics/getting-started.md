@@ -33,13 +33,13 @@ You can easily create your first agent with command below:
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-php vendor/bin/neuron make:agent App\\Neuron\\MyAgent
+./vendor/bin/neuron make:agent App\\Neuron\\MyAgent
 ```
 {% endtab %}
 
 {% tab title="Windows" %}
 ```powershell
-php .\vendor\bin\neuron make:agent App\Neuron\MyAgent
+.\vendor\bin\neuron make:agent App\Neuron\MyAgent
 ```
 {% endtab %}
 {% endtabs %}

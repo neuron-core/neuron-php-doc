@@ -33,21 +33,21 @@ Now we define the workflow itself. We do this by defining the input and output t
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-php vendor/bin/neuron make:node App\\Neuron\\InitialNode
+./vendor/bin/neuron make:node App\\Neuron\\InitialNode
 
-php vendor/bin/neuron make:node App\\Neuron\\NodeOne
+./vendor/bin/neuron make:node App\\Neuron\\NodeOne
 
-php vendor/bin/neuron make:node App\\Neuron\\NodeTwo
+./vendor/bin/neuron make:node App\\Neuron\\NodeTwo
 ```
 {% endtab %}
 
 {% tab title="Windows" %}
 ```powershell
-php .\vendor\bin\neuron make:node App\Neuron\InitialNode
+.\vendor\bin\neuron make:node App\Neuron\InitialNode
 
-php .\vendor\bin\neuron make:node App\Neuron\NodeOne
+.\vendor\bin\neuron make:node App\Neuron\NodeOne
 
-php .\vendor\bin\neuron make:node App\Neuron\NodeTwo
+.\vendor\bin\neuron make:node App\Neuron\NodeTwo
 ```
 {% endtab %}
 {% endtabs %}

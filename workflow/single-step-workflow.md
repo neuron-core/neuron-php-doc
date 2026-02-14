@@ -13,13 +13,13 @@ First, let's create the MyWorkflow class:
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-php vendor/bin/neuron make:workflow App\\Neuron\\MyAgent
+./vendor/bin/neuron make:workflow App\\Neuron\\MyAgent
 ```
 {% endtab %}
 
 {% tab title="Windows" %}
 ```powershell
-php .\vendor\bin\neuron make:workflow App\Neuron\MyWorkflow
+.\vendor\bin\neuron make:workflow App\Neuron\MyWorkflow
 ```
 {% endtab %}
 {% endtabs %}
@@ -47,13 +47,13 @@ Now let's create the node:
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-php vendor/bin/neuron make:node App\\Neuron\\InitialNode
+./vendor/bin/neuron make:node App\\Neuron\\InitialNode
 ```
 {% endtab %}
 
 {% tab title="Windows" %}
 ```powershell
-php .\vendor\bin\neuron make:node App\Neuron\InitialNode
+.\vendor\bin\neuron make:node App\Neuron\InitialNode
 ```
 {% endtab %}
 {% endtabs %}
