@@ -279,9 +279,9 @@ try {
 }
 ```
 
-### Authorization
+### Visibility
 
-You can condition the availability of tools based on custom rules. The Tool class provides you with the `authorize` method to determine if the agent should even known this tool exists:
+You can condition the visibility of tools based on custom rules. The Tool class provides you with the `canSee` method to determine if the agent should even known this tool exists:
 
 ```php
 class YouTubeAgent extends Agent
@@ -291,7 +291,7 @@ class YouTubeAgent extends Agent
     protected function tools(): array
     {
         return [
-            GetTranscriptionTool::make('API_KEY')->authorize(
+            GetTranscriptionTool::make('API_KEY')->canSee(
                 auth()->user()->can(...)
             ),
         ];
@@ -299,7 +299,7 @@ class YouTubeAgent extends Agent
 }
 ```
 
-If the `authorize` method get `false`, the tool will not be available during agent execution.
+If the `canSee` method get `false`, the tool will not be available during agent execution.
 
 ### Monitoring & Debugging
 
