@@ -279,6 +279,28 @@ try {
 }
 ```
 
+### Authorization
+
+You can condition the availability of tools based on custom rules. The Tool class provides you with the `authorize` method to determine if the agent should even known this tool exists:
+
+```php
+class YouTubeAgent extends Agent
+{
+    ...
+    
+    protected function tools(): array
+    {
+        return [
+            GetTranscriptionTool::make('API_KEY')->authorize(
+                auth()->user()->can(...)
+            ),
+        ];
+    }
+}
+```
+
+If the `authorize` method get `false`, the tool will not be available during agent execution.
+
 ### Monitoring & Debugging
 
 Neuron automatically manages the tool loop for you, based on what the LLM decided to call.
