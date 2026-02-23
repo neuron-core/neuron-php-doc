@@ -106,5 +106,5 @@ class AgentEvaluator extends BaseEvaluator
 If you have properly configured your composer file you can use the Neuron CLI to launch the evaluators:
 
 ```bash
-php vendor/bin/neuron evaluations --path=evaluators
+./vendor/bin/neuron evaluations --path=evaluators
 ```
