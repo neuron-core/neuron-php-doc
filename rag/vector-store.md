@@ -246,17 +246,18 @@ namespace App\Neuron;
 use NeuronAI\RAG\RAG;
 use NeuronAI\RAG\VectorStore\TypesenseVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
+use Typesense\Client;
 
 class MyChatBot extends RAG
 {
-    public function __construct(protected Client $typesenseClient) {}
+    public function __construct(protected Client $typesense) {}
 
     ...
 
     protected function vectorStore(): VectorStoreInterface
     {
         return new TypesenseVectorStore(
-            client: $this->typesenseClient,
+            client: $this->typesense,
             collection: 'neuron-ai',
             vectorDimension: 1024
         );
@@ -267,12 +268,9 @@ class MyChatBot extends RAG
 Passing the instance of the typesense client to the Agent:
 
 ```php
-// The Inspector instance in your application - https://inspector.dev/
-$inspector = new \Inspector\Inspector(
-    new \Inspector\Configuration('INSPECTOR_INGESTION_KEY')
-);
+use Typesense\Client;
 
-$typesenseClient = new Client([
+$typesense = new Client([
     'api_key' => 'TYPESENSE_API_KEY',
     'nodes' => [
         [
@@ -283,9 +281,7 @@ $typesenseClient = new Client([
     ]
 ]);
 
-$response = MyChatBot::make($typesenseClient)
-    ->observe(new AgentMonitoring($inspector))
-    ->chat(new UserMessage('Hello!'));
+$response = MyChatBot::make($typesense)->chat(new UserMessage('Hello!'));
 
 echo $response->getContent();
 ```
