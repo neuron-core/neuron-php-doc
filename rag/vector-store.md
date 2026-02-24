@@ -177,7 +177,7 @@ You can add the `addVectorStoreFilters()` method to your agent class to pass dow
 ```php
 namespace App\Neuron;
 
-use Elastic\Elasticsearch\Client;
+use Elastic\Elasticsearch\ClientBuilder;
 use NeuronAI\RAG\RAG;
 use NeuronAI\RAG\VectorStore\ElasticsearchVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
