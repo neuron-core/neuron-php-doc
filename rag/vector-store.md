@@ -238,7 +238,7 @@ Once you have the official client installed in your app you can return an instan
 namespace App\Neuron;
 
 use NeuronAI\RAG\RAG;
-use NeuronAI\RAG\VectorStore\OpensearchVectorStore;
+use NeuronAI\RAG\VectorStore\OpenSearchVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
 use OpenSearch\GuzzleClientFactory;
 
