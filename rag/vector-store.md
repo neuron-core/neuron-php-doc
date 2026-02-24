@@ -240,7 +240,7 @@ namespace App\Neuron;
 use NeuronAI\RAG\RAG;
 use NeuronAI\RAG\VectorStore\OpensearchVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
-use OpenSearch\Client;
+use OpenSearch\GuzzleClientFactory;
 
 class MyChatBot extends RAG
 {
