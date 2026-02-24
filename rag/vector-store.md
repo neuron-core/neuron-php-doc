@@ -146,40 +146,28 @@ Here is how to create a RAG that uses Elasticsearch:
 ```php
 namespace App\Neuron;
 
-use Elastic\Elasticsearch\Client;
+use Elastic\Elasticsearch\ClientBuilder;
 use NeuronAI\RAG\RAG;
 use NeuronAI\RAG\VectorStore\ElasticsearchVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
 
 class MyChatBot extends RAG
 {
-    public function __construct(protected Client $elasticsearch) {}
-
     ...
 
     protected function vectorStore(): VectorStoreInterface
     {
+        $elasticsearch = ClientBuilder::create()
+           ->setHosts(['<elasticsearch-endpoint>'])
+           ->setApiKey('<api-key>')
+           ->build();
+       
         return new ElasticsearchVectorStore(
-            client: $this->elasticsearch,
+            client: $elasticsearch,
             index: 'neuron-ai'
         );
     }
 }
-```
-
-Passing the elasticsearch client instance to the agent:
-
-```php
-use Elastic\Elasticsearch\ClientBuilder;
-
-$elasticsearch = ClientBuilder::create()
-   ->setHosts(['<elasticsearch-endpoint>'])
-   ->setApiKey('<api-key>')
-   ->build();
-
-$response = MyChatBot::make($elasticsearch)->chat(new UserMessage('Hello!'));
-
-echo $response->getContent();
 ```
 
 Elasticsearch also support hybrid search. You can pass additional filters to your agent instance so Elasticsearch will take them in consideration while filtering documents.
@@ -198,17 +186,23 @@ class MyChatBot extends RAG
 {
     protected array $vectorStoreFilters = [];
 
-    public function __construct(protected Client $elasticsearch) {}
-
     ...
 
     protected function vectorStore(): VectorStoreInterface
     {
+        // Create the client
+        $elasticsearch = ClientBuilder::create()
+           ->setHosts(['<elasticsearch-endpoint>'])
+           ->setApiKey('<api-key>')
+           ->build();
+        
+        // Create the store
         $store = new ElasticsearchVectorStore(
-            client: $this->elasticsearch,
+            client: $elasticsearch,
             index: 'neuron-ai'
         );
 
+        // Apply filters
         return $store->withFilter($this->vectorStoreFilters);
     }
 
@@ -250,32 +244,20 @@ use OpenSearch\Client;
 
 class MyChatBot extends RAG
 {
-    public function __construct(protected Client $opensearch) {}
-
     ...
 
     protected function vectorStore(): VectorStoreInterface
     {
+        $opensearch = new GuzzleClientFactory()->create([
+            'base_uri' => 'http://localhost:9200',
+        ]);
+        
         return new OpenSearchVectorStore(
-            client: $this->opensearch,
+            client: $opensearch,
             index: 'neuron-ai',
         );
     }
 }
-```
-
-Passing the OpenSearch client instance to the agent:
-
-```php
-use OpenSearch\GuzzleClientFactory;
-
-$opensearch = new GuzzleClientFactory()->create([
-    'base_uri' => 'http://localhost:9200',
-]);
-
-$response = MyChatBot::make($opensearch)->chat(new UserMessage('Hello!'));
-
-echo $response->getContent();
 ```
 
 ### Typesense
@@ -298,40 +280,28 @@ use Typesense\Client;
 
 class MyChatBot extends RAG
 {
-    public function __construct(protected Client $typesense) {}
-
     ...
 
     protected function vectorStore(): VectorStoreInterface
     {
+        $typesense = new Client([
+            'api_key' => 'TYPESENSE_API_KEY',
+            'nodes' => [
+                [
+                    'host' => 'TYPESENSE_NODE_HOST',
+                    'port' => 'TYPESENSE_NODE_PORT',
+                    'protocol' => 'TYPESENSE_NODE_PROTOCOL'
+                ],
+            ]
+        ]);
+        
         return new TypesenseVectorStore(
-            client: $this->typesense,
+            client: $typesense,
             collection: 'neuron-ai',
             vectorDimension: 1024
         );
     }
 }
-```
-
-Passing the instance of the typesense client to the Agent:
-
-```php
-use Typesense\Client;
-
-$typesense = new Client([
-    'api_key' => 'TYPESENSE_API_KEY',
-    'nodes' => [
-        [
-            'host' => 'TYPESENSE_NODE_HOST',
-            'port' => 'TYPESENSE_NODE_PORT',
-            'protocol' => 'TYPESENSE_NODE_PROTOCOL'
-        ],
-    ]
-]);
-
-$response = MyChatBot::make($typesense)->chat(new UserMessage('Hello!'));
-
-echo $response->getContent();
 ```
 
 ### Qdrant
