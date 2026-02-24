@@ -170,12 +170,14 @@ class MyChatBot extends RAG
 Passing the elasticsearch client instance to the agent:
 
 ```php
-$elasticClient = ClientBuilder::create()
+use Elastic\Elasticsearch\ClientBuilder;
+
+$elasticsearch = ClientBuilder::create()
    ->setHosts(['<elasticsearch-endpoint>'])
    ->setApiKey('<api-key>')
    ->build();
 
-$response = MyChatBot::make($elasticClient)->chat(new UserMessage('Hello!'));
+$response = MyChatBot::make($elasticsearch)->chat(new UserMessage('Hello!'));
 
 echo $response->getContent();
 ```
