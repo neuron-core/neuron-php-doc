@@ -230,6 +230,54 @@ $response = MyRAG::make()
     ->chat(new UserMessage(...));
 ```
 
+### OpenSearch
+
+Opensearch is the pure open source alternative to Elasticsearch. To use Opensearch in your agents you need to install its official client:
+
+```bash
+composer require opensearch-project/opensearch-php
+```
+
+Once you have the official client installed in your app you can return an instance of the `OpenSearchVectorStore` in your RAG agent:
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\RAG\RAG;
+use NeuronAI\RAG\VectorStore\OpensearchVectorStore;
+use NeuronAI\RAG\VectorStore\VectorStoreInterface;
+use OpenSearch\Client;
+
+class MyChatBot extends RAG
+{
+    public function __construct(protected Client $opensearch) {}
+
+    ...
+
+    protected function vectorStore(): VectorStoreInterface
+    {
+        return new OpenSearchVectorStore(
+            client: $this->opensearch,
+            index: 'neuron-ai',
+        );
+    }
+}
+```
+
+Passing the OpenSearch client instance to the agent:
+
+```php
+use OpenSearch\GuzzleClientFactory;
+
+$opensearch = new GuzzleClientFactory()->create([
+    'base_uri' => 'http://localhost:9200',
+]);
+
+$response = MyChatBot::make($opensearch)->chat(new UserMessage('Hello!'));
+
+echo $response->getContent();
+```
+
 ### Typesense
 
 [Typesense](https://typesense.org/) is an open source alternative to the options above. To use Typesense in your agents you need to install its official client:
@@ -238,7 +286,7 @@ $response = MyRAG::make()
 composer require typesense/typesense-php
 ```
 
-Once you have the official client installed in your app you can return an instance of the TypesenseVectorStore in your RAG agent:
+Once you have the official client installed in your app you can return an instance of the `TypesenseVectorStore` in your RAG agent:
 
 ```php
 namespace App\Neuron;
