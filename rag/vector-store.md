@@ -146,20 +146,21 @@ Here is how to create a RAG that uses Elasticsearch:
 ```php
 namespace App\Neuron;
 
+use Elastic\Elasticsearch\Client;
 use NeuronAI\RAG\RAG;
 use NeuronAI\RAG\VectorStore\ElasticsearchVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
 
 class MyChatBot extends RAG
 {
-    public function __construct(protected Client $elasticClient) {}
+    public function __construct(protected Client $elasticsearch) {}
 
     ...
 
     protected function vectorStore(): VectorStoreInterface
     {
         return new ElasticsearchVectorStore(
-            client: $this->elasticClient,
+            client: $this->elasticsearch,
             index: 'neuron-ai'
         );
     }
@@ -169,19 +170,12 @@ class MyChatBot extends RAG
 Passing the elasticsearch client instance to the agent:
 
 ```php
-// The Inspector instance in your application - https://inspector.dev/
-$inspector = new \Inspector\Inspector(
-    new \Inspector\Configuration('INSPECTOR_INGESTION_KEY')
-);
-
 $elasticClient = ClientBuilder::create()
    ->setHosts(['<elasticsearch-endpoint>'])
    ->setApiKey('<api-key>')
    ->build();
 
-$response = MyChatBot::make($elasticClient)
-    ->observe(new AgentMonitoring($inspector))
-    ->chat(new UserMessage('Hello!'));
+$response = MyChatBot::make($elasticClient)->chat(new UserMessage('Hello!'));
 
 echo $response->getContent();
 ```
@@ -193,6 +187,7 @@ You can add the `addVectorStoreFilters()` method to your agent class to pass dow
 ```php
 namespace App\Neuron;
 
+use Elastic\Elasticsearch\Client;
 use NeuronAI\RAG\RAG;
 use NeuronAI\RAG\VectorStore\ElasticsearchVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
@@ -201,14 +196,14 @@ class MyChatBot extends RAG
 {
     protected array $vectorStoreFilters = [];
 
-    public function __construct(protected Client $elasticClient) {}
+    public function __construct(protected Client $elasticsearch) {}
 
     ...
 
     protected function vectorStore(): VectorStoreInterface
     {
         $store = new ElasticsearchVectorStore(
-            client: $this->elasticClient,
+            client: $this->elasticsearch,
             index: 'neuron-ai'
         );
 
