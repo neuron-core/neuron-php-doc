@@ -363,6 +363,7 @@ class MyChatBot extends RAG
 
 [Meilisearch](https://www.meilisearch.com/) is a hybrid search engine, but the Neuron implementation uses it exclusively as a vector store for embeddings and similarity search.
 
+The `indexUid` parameter should be the identifier of a Meilisearch index that you have created and configured. Make sure this index defines a vector field whose dimension matches the embedding size produced by the embedder you are using. The `embedder` value (for example, `default`) must correspond to a named embedder configured in your Neuron setup so that the stored vectors and the index configuration stay aligned.
 Add the component to your RAG:
 
 ```php
