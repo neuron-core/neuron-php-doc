@@ -17,16 +17,17 @@ As usual in Neuron the Workflow persistence layer is built on top of a common in
 
 ### When to use Persistence
 
-Persistence comes into play when you intend to use interruption. The persistence component requires to decalre also a workflow ID.
+Persistence comes into play when you intend to use interruption (e.g. [Tool Approval](../agent/middleware.md#tool-approval-human-in-the-loop)).
 
 ### InMemoryPersistence
 
 It keep data in memory only for the current execution cycle.
 
 ```php
+use NeuronAI\Workflow\Persistence\InMemoryPersistence;
+
 $workflow = new WorkflowAgent(
-    new InMemoryPersistence(), 
-    'CUSTOM_ID'
+    new InMemoryPersistence()
 );
 ```
 
@@ -35,19 +36,16 @@ $workflow = new WorkflowAgent(
 It will store the Workflow data and state into a local file.
 
 ```php
+use NeuronAI\Workflow\Persistence\FilePersistence;
+
 $workflow = new WorkflowAgent(
     new FilePersistence(__DIR__), 
-    'CUSTOM_ID'
 );
 ```
 
-{% hint style="warning" %}
-_FilePersistence_ component uses PHP serialization to store the current state of the Workflow. While this allows you to use any PHP object as an item of the Workflow state (e.g. [ChatHistory](../the-basics/chat-history-and-memory.md)), it also has some limitations like it does not support serialization of Closure. If objects you want to save in the Workflow state conflict with the PHP standard serialization process, you can implement the [Serializable interface](https://www.php.net/manual/en/class.serializable.php) to let the NeuronAI persistence component know of how to serialize the object in the correct way.
-{% endhint %}
+### Database
 
-### DatabasePersistence
-
-To persist the workflow interruption in the database you need to pass a `PDO` instance. If you are working on top of a framework you can get it from the ORM in the same way of the [SQLChatHistory](../the-basics/chat-history-and-memory.md#sqlchathistory).
+To persist the workflow interruption in the database you need to pass a `PDO` instance. If you are working on top of a framework you can easily get it from the ORM in the same way of the [SQLChatHistory](../agent/chat-history-and-memory.md#sqlchathistory).
 
 ```php
 use NeuronAI\Workflow\Persistence\DatabasePersistence;
@@ -57,7 +55,6 @@ $workflow = new WorkflowAgent(
         pdo: new \PDO(...),
         table: 'workflow_interrupts'
     ), 
-    'CUSTOM_ID'
 );
 ```
 
@@ -68,7 +65,7 @@ Here are the SQL scripts to create the table:
 ```sql
 CREATE TABLE IF NOT EXISTS workflow_interrupts (
     workflow_id VARCHAR(255) PRIMARY KEY,
-    data LONGBLOB NOT NULL,
+    interrupt LONGBLOB NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     
@@ -82,7 +79,7 @@ CREATE TABLE IF NOT EXISTS workflow_interrupts (
 ```sql
 CREATE TABLE workflow_interrupts (
     workflow_id VARCHAR(255) PRIMARY KEY,
-    data BYTEA NOT NULL,
+    interrupt BYTEA NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
@@ -96,7 +93,7 @@ CREATE INDEX idx_updated_at ON workflow_interrupts(updated_at);
 ```sql
 CREATE TABLE workflow_interrupts (
     workflow_id TEXT PRIMARY KEY,
-    data BLOB NOT NULL,
+    interrupt BLOB NOT NULL,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
 );
@@ -106,3 +103,43 @@ CREATE INDEX idx_updated_at ON workflow_interrupts(updated_at);
 ```
 {% endtab %}
 {% endtabs %}
+
+### Eloquent
+
+You should create your own Eloquent model and pass the class string as the constructor argument. The model can have custom relations, scopes, attributes, etc. but the basic structure must be based on this migration script:
+
+```bash
+php artisan make:migration create_workflow_interrupts_table --create=workflow_interrupts
+```
+
+```php
+Schema::create('workflow_interrupts', function (Blueprint $table) {
+    $table->id();
+    $table->string('workflow_id')->unique();
+    $table->longText('interrupt')->charset('binary');
+    $table->timestamps();
+});
+```
+
+#### WorkflowInterrupt model
+
+This is the minimal required structure:
+
+```php
+class WorkflowInterrupt extends Model
+{    
+    protected $fillable = ['workflow_id', 'interrupt'];
+}
+```
+
+Use with Workflow:
+
+```php
+use App\Models\WorkflowInterrupt;
+use NeuronAI\Workflow\Persistence\EloquentPersistence;
+
+// Creating a workflow
+$workflow = WorkflowAgent(
+    persistence: new EloquentPersistence(WorkflowInterrupt::class)
+);
+```

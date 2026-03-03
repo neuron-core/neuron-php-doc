@@ -15,7 +15,7 @@ The MCP server is available at: [https://docs.neuron-ai.dev/\~gitbook/mcp](https
 ### Claude Code
 
 ```
-claude mcp add --transport http neuron-doc https://docs.neuron-ai.dev/~gitbook/mcp
+claude mcp add --transport http neuron-ai-doc https://docs.neuron-ai.dev/~gitbook/mcp
 ```
 
 ### VS Code

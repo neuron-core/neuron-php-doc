@@ -8,7 +8,7 @@ When you test an agent, you don't want every test run to make real API calls to 
 
 Neuron ships with drop-in test doubles that solve this problem. `FakeAIProvider` replaces the AI provider, `FakeEmbeddingsProvider` replaces the embeddings provider, and `FakeVectorStore` replaces the vector store. They return predetermined responses, never hit the network, and record every interaction so you can assert exactly what your agent did.
 
-#### Setup <a href="#setup" id="setup"></a>
+### Setup
 
 Create a `FakeAIProvider` with the responses you expect the model to return, then inject it into your agent:
 
@@ -32,7 +32,7 @@ $provider = new FakeAIProvider(
 );
 ```
 
-#### Chat <a href="#chat" id="chat"></a>
+### Chat
 
 ```php
 public function test_agent_responds(): void
@@ -50,7 +50,7 @@ public function test_agent_responds(): void
 }
 ```
 
-#### Streaming <a href="#streaming" id="streaming"></a>
+### Streaming
 
 The fake provider splits the response text into chunks, simulating a real stream:
 
@@ -87,7 +87,7 @@ You can change the chunk size with `setStreamChunkSize()`:
 $provider->setStreamChunkSize(10);
 ```
 
-#### Structured Output <a href="#structured-output" id="structured-output"></a>
+### Structured Output
 
 Provide a JSON string that matches your output class schema. The agent will deserialize and validate it as usual:
 
@@ -107,7 +107,7 @@ public function test_agent_returns_structured_output(): void
 }
 ```
 
-#### Tool Calls <a href="#tool-calls" id="tool-calls"></a>
+### Tool Calls
 
 When the model decides to call a tool, it returns a `ToolCallMessage`. The agent executes the tool and loops back to the provider for a final answer. Queue both responses:
 
@@ -140,7 +140,7 @@ public function test_agent_uses_tools(): void
 }
 ```
 
-#### Assertions <a href="#assertions" id="assertions"></a>
+### Assertions
 
 `FakeAIProvider` includes built-in assertions you can use in your tests:
 
@@ -168,7 +168,7 @@ $provider->assertSent(fn (RequestRecord $record): bool =>
 );
 ```
 
-#### Inspecting Requests <a href="#inspecting-requests" id="inspecting-requests"></a>
+### Inspecting Requests
 
 For more advanced checks, access the raw recorded requests:
 
@@ -183,11 +183,11 @@ $records[0]->structuredClass; // The output class (structured calls only)
 $records[0]->structuredSchema; // The JSON schema (structured calls only)
 ```
 
-### RAG <a href="#rag" id="rag"></a>
+## RAG
 
 RAG agents depend on an embeddings provider and a vector store in addition to the AI provider. Neuron provides `FakeEmbeddingsProvider` and `FakeVectorStore` to replace both in tests.
 
-**FakeEmbeddingsProvider**
+#### FakeEmbeddingsProvider
 
 Generates deterministic embeddings without calling any external API. Drop it in wherever you need an embeddings provider:
 
@@ -197,7 +197,7 @@ use NeuronAI\Testing\FakeEmbeddingsProvider;
 $embeddings = new FakeEmbeddingsProvider();
 ```
 
-**FakeVectorStore**
+#### FakeVectorStore
 
 Returns predetermined documents from `similaritySearch()` regardless of the embedding passed in. Pass the documents you want returned to the constructor:
 
@@ -211,7 +211,7 @@ $vectorStore = new FakeVectorStore([
 ]);
 ```
 
-**RAG Chat**
+#### RAG Chat
 
 ```php
 public function test_rag_answers_from_documents(): void
@@ -237,7 +237,7 @@ public function test_rag_answers_from_documents(): void
 }
 ```
 
-**Adding Documents**
+#### Adding Documents
 
 Test that your indexing pipeline correctly embeds and stores documents:
 
@@ -263,7 +263,7 @@ public function test_documents_are_embedded_and_stored(): void
 }
 ```
 
-**RAG Assertions**
+#### RAG Assertions
 
 ```php
 // FakeEmbeddingsProvider

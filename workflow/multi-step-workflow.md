@@ -12,6 +12,20 @@ Multiple steps are created by defining custom events that can be emitted by node
 
 We define two custom events, `FirstEvent` and `SecondEvent`. These classes can have any names and properties, but must implement `Event`:
 
+{% tabs %}
+{% tab title="Unix" %}
+```bash
+./vendor/bin/neuron make:event App\\Neuron\\FirstEvent
+```
+{% endtab %}
+
+{% tab title="Windows" %}
+```powershell
+.\vendor\bin\neuron make:event App\Neuron\FirstEvent
+```
+{% endtab %}
+{% endtabs %}
+
 ```php
 namespace App\Neuron;
 
@@ -28,42 +42,38 @@ class SecondEvent implements Event
 
 ### Defining the workflow
 
-Now we define the workflow itself. We do this by defining the input and output types on each node.
+Now we define the workflow itself. We do this by defining the input and output types on each node. Here is the minimal implementation of the nodes for the purpose of this demo.
+
+<figure><img src="../.gitbook/assets/workflow-multi-steps.png" alt=""><figcaption></figcaption></figure>
+
+#### InitialNode
 
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
 ./vendor/bin/neuron make:node App\\Neuron\\InitialNode
-
-./vendor/bin/neuron make:node App\\Neuron\\NodeOne
-
-./vendor/bin/neuron make:node App\\Neuron\\NodeTwo
 ```
 {% endtab %}
 
 {% tab title="Windows" %}
 ```powershell
 .\vendor\bin\neuron make:node App\Neuron\InitialNode
-
-.\vendor\bin\neuron make:node App\Neuron\NodeOne
-
-.\vendor\bin\neuron make:node App\Neuron\NodeTwo
 ```
 {% endtab %}
 {% endtabs %}
-
-Here is the minimal implementation for the purpose of this demo:
 
 ```php
 namespace App\Neuron;
 
 use NeuronAI\Workflow\Node;
 use NeuronAI\Workflow\StartEvent;
-use NeuronAI\Workflow\StopEvent;
+use App\Neuron\FirstEvent;
 
-// Gets the StartEvent and returns FirstEvent
 class InitialNode extends Node
 {
+    /**
+     * Gets the "StartEvent" and returns "FirstEvent"
+     */
     public function __invoke(StartEvent $event, WorkflowState $state): FirstEvent
     {
         echo "\n- Handling StartEvent";
@@ -71,10 +81,30 @@ class InitialNode extends Node
         return new FirstEvent("InitialNode complete");
     }
 }
+```
 
-// Takes FirstEvent as input and returns SecondEvent
+#### NodeOne
+
+{% tabs %}
+{% tab title="Unix" %}
+```bash
+./vendor/bin/neuron make:node App\\Neuron\\NodeOne
+```
+{% endtab %}
+
+{% tab title="Windows" %}
+```powershell
+.\vendor\bin\neuron make:node App\Neuron\NodeOne
+```
+{% endtab %}
+{% endtabs %}
+
+```php
 class NodeOne extends Node
 {
+    /**
+     * Takes "FirstEvent" as input and returns "SecondEvent"
+     */
     public function __invoke(FirstEvent $event, WorkflowState $state): SecondEvent
     {
         echo "\n- ".$event->firstMsg;
@@ -82,10 +112,30 @@ class NodeOne extends Node
         return new SecondEvent("NodeOne complete");
     }
 }
+```
 
-// Takes SecondEvent as input and returns StopEvent
+#### NodeTwo
+
+{% tabs %}
+{% tab title="Unix" %}
+```bash
+./vendor/bin/neuron make:node App\\Neuron\\NodeTwo
+```
+{% endtab %}
+
+{% tab title="Windows" %}
+```powershell
+.\vendor\bin\neuron make:node App\Neuron\NodeTwo
+```
+{% endtab %}
+{% endtabs %}
+
+```php
 class NodeTwo extends Node
 {
+    /**
+     * Takes "SecondEvent" as input and returns "StopEvent"
+     */
     public function __invoke(SecondEvent $event, WorkflowState $state): StopEvent
     {
         echo "\n- ".$event->secondMsg;
@@ -108,12 +158,12 @@ $handler = Workflow::make()
         new NodeOne(),
         new NodeTwo(),
     ])
-    ->start();
+    ->init();
 
 /*
  * Run the workflow
  */
-$handler->getResult();
+$handler->run();
 ```
 
 The full output will be:
@@ -124,8 +174,6 @@ The full output will be:
 - NodeOne complete
 - NodeTwo complete
 ```
-
-<figure><img src="../.gitbook/assets/workflow-multi-steps.png" alt=""><figcaption></figcaption></figure>
 
 Of course there is still not much point to a workflow if you just run through it from beginning to end! Let's do some branching and looping.
 
@@ -140,3 +188,5 @@ After you sign up at the link above, make sure to set the `INSPECTOR_INGESTION_K
 INSPECTOR_INGESTION_KEY=nwse877auxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 {% endcode %}
+
+<figure><img src="../.gitbook/assets/inspector.png" alt=""><figcaption></figcaption></figure>

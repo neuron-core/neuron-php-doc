@@ -19,7 +19,11 @@ class ProgressEvent implements Event
 }
 ```
 
-We'll take our example MyWorkflow with multiple nodes from the previous tutorial and modify the nodes  to stream updates instead of echoing output directly:
+We'll take our example MyWorkflow with multiple nodes from the previous tutorial and modify the nodes  to stream upadtes instead of echoing output directly.
+
+{% hint style="warning" %}
+**Notice**: To stream events from node you need to add `\Generator` as additional return type of the `__invoke` method.
+{% endhint %}
 
 ```php
 namespace App\Neuron;
@@ -63,10 +67,6 @@ class NodeTwo extends Node
 }
 ```
 
-{% hint style="warning" %}
-To stream events from node you need to add `\Generator` as additional return type of the `__invoke` method.
-{% endhint %}
-
 To actually get this output, we need to start the workflow and listen for the events, like this:
 
 ```php
@@ -76,15 +76,17 @@ $handler = Workflow::make()
         new NodeOne(),
         new NodeTwo(),
     ])
-    ->start();
+    ->init();
 
-foreach ($handler->streamEvents() as $event) {
+$stream = $handler->events();
+
+foreach ($stream as $event) {
     if ($event instanceof ProgressEvent) {
         echo "\n- ".$event->message;
     }
 }
 
-$finalState = $handler->getResult();
+$finalState = $stream->getResult();
 
 // It will print "Streaming end"
 echo "\n- ".$finalState->get('message');
@@ -102,7 +104,7 @@ The full output will be:
 
 ### Stream Agent Output
 
-Running Agents inside nodes is one of the most common use case working with workflow. You may be interested in directly stream the agent output to the client to give real time feedback of the underlying generation. Workflow allows you to do this by simply streaming the agent's output from within the node.
+Running Agents inside nodes is one of the most common use case working with workflow. You may be interested in directly stream an internal agent output to the client to give real time feedback of the underlying generation. You can do it by simply streaming the agent's output from within the node.
 
 ```php
 class InitialNode extends Node
@@ -110,11 +112,9 @@ class InitialNode extends Node
     public function __invoke(StartEvent $event, WorkflowState $state): \Generator|FirstEvent
     {
         // Run an agent with streaming
-        $stream = Agent::make()->stream(new UserMessage($state->get('prompt')));
-
-        foreach ($stream as $text) {
-            yield new GenerationProgressEvent($text);
-        }
+        yield from Agent::make()
+            ->stream(new UserMessage($state->get('prompt')))
+            ->events();
         
         return new FirstEvent("InitialNode complete");
     }
@@ -124,19 +124,12 @@ class InitialNode extends Node
 To get this output you can listen for workflow events as usual:
 
 ```php
-$handler = Workflow::make()
-    ->addNodes([
-        new InitialNode(),
-        new NodeOne(),
-        new NodeTwo(),
-    ])
-    ->start();
+$handler = MyWorkflow::make()->init();
 
-foreach ($handler->streamEvents() as $event) {
-    echo match(getClass($event)) {
-        ProgressEvent::class => "\n- ".$event->message,
-        GenerationProgressEvent::class => $event->text,
-        default => ''
+foreach ($handler->events() as $event) {
+    echo match($event::class) {
+        TextChunk::class => "\n- ".$event->content,
+        ...
     }
 }
 ```

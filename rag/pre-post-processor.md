@@ -242,7 +242,7 @@ class MyChatBot extends RAG
 
 ### LocalAI Reranker
 
-[LocalAI](https://localai.io/) is an all-in-one complete AI stack. You can run large language models locally on your hardware. It provides an OpenAI compatible API for LLMs, so you can use it with the [OpenAILike](../the-basics/ai-provider.md#openailike) provider.
+[LocalAI](https://localai.io/) is an all-in-one complete AI stack. You can run large language models locally on your hardware. It provides an OpenAI compatible API for LLMs, so you can use it with the [OpenAILike](../providers/ai-provider.md#openailike) provider.
 
 ```php
 namespace App\Neuron;
@@ -260,7 +260,7 @@ class MyChatBot extends RAG
                 key: 'LOCALAI_KEY',
                 model: 'LOCALAI_MODEL',
                 topN: 3,
-                host: 'LOCALAI_HOST' // "http://localhost:8080" by default
+                host: 'LOCALAI_HOST' // "https://localhost:8080" by default
             ),
         ];
     }
@@ -269,7 +269,7 @@ class MyChatBot extends RAG
 
 ## Monitoring
 
-Neuron built-in observability features automatically trace the execution of each post processor, so you'll be able to monitor interactions with external services in your [Inspector](https://inspector.dev/) account. Learn more in the [monitoring section](../the-basics/observability.md).
+Neuron built-in observability features automatically trace the execution of each post processor, so you'll be able to monitor interactions with external services in your [Inspector](https://inspector.dev/) account. Learn more in the [monitoring section](../agent/observability.md).
 
 <figure><img src="../.gitbook/assets/neuron-reranker-observability.png" alt=""><figcaption></figcaption></figure>
 

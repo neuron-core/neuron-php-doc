@@ -4,21 +4,19 @@ description: Learn what Neuron is and what you can do with it.
 
 # Introduction
 
-{% hint style="warning" %}
-### Neuron v3 scheduled for the end of February.
-
-Start with it or read the upgrade guide to update your project.&#x20;
-
-[**Upgrade guide**](https://docs.neuron-ai.dev/neuron-v3/overview/upgrade)
-{% endhint %}
-
 ### What is Neuron
 
-Neuron is a PHP framework designed to turn your "what if" into reality. We believe that building agentic applications should be as flexible as your own logic.
-
-By handling the heavy lifting of orchestration, data loading, and debugging, Neuron clears the path for you to focus on the creative soul of your project. From the first line of code to a fully orchestrated multi-agent system, you have the freedom to build AI entities that think and act exactly how you envision them.
+Neuron is a PHP framework for developing agentic applications. By handling the heavy lifting of orchestration, data loading, and debugging, Neuron clears the path for you to focus on the creative soul of your project. From the first line of code to a fully orchestrated multi-agent system, you have the freedom to build AI entities that think and act exactly how you envision them.
 
 We provide tools for the entire agentic application development lifecycle, from LLM interfaces, to data loading, to multi-agent orchestration, to monitoring and debugging. In addition, we provide [tutorials and other educational content](overview/fast-learning-by-video.md) to help you get started using AI Agents in your projects.
+
+{% hint style="success" %}
+### Are you a content creator?
+
+Join the Neuron v3 Content Partnership. Create high-authority technical content and collaborate with us to share your educational resources with our growing global community.
+
+[**Learn more**](https://github.com/neuron-core/neuron-ai/discussions/465)
+{% endhint %}
 
 <figure><img src=".gitbook/assets/neuron-ai-architecture.png" alt=""><figcaption><p>Neuron architecture</p></figcaption></figure>
 
@@ -26,7 +24,7 @@ Neuron is the perfect AI architecture for your project.
 
 ### Laravel
 
-Neuron offers a well defined encapsulation pattern, allowing you to work on your AI components in a dedicated namespace. You can enjoy the exact same experience of the other ecosystem packages you already love, like Filament, Nova, Horizon, Pennant, etc.
+Neuron offers a well defined encapsulation pattern, allowing you to work on your AI components in a dedicated namespace. You can enjoy the exact same experience of the other ecosystem packages you already love, like Filament, Nova, Horizon, Volt, etc.
 
 <a href="https://github.com/neuron-core/laravel-travel-agent" class="button primary" data-icon="github">Example project</a>
 
@@ -82,14 +80,14 @@ Error handling and retry mechanisms are built into the framework, ensuring your 
 
 ### Support For Multiple Providers
 
-Neuron uses a common interface for large language models (`AIProviderInterface`) as well as for the other components, such as [embedding](rag/embeddings-provider.md), [vector stores](rag/vector-store.md), [toolkits](the-basics/tools.md#toolkits-composable-agent-capabilities), etc. The modular architecture allows you to swap components as needed, whether you're changing language model providers, adjusting memory backends, or scaling across multiple servers.
+Neuron uses a common interface for large language models (`AIProviderInterface`) as well as for the other components, such as [embedding](rag/embeddings-provider.md), [vector stores](rag/vector-store.md), [toolkits](agent/tools.md#toolkits-composable-agent-capabilities), etc. The modular architecture allows you to swap components as needed, whether you're changing language model providers, adjusting memory backends, or scaling across multiple servers.
 
 {% tabs %}
 {% tab title="Anthropic" %}
 ```php
 namespace App\Neuron;
 
-use NeuronAI\Agent;
+use NeuronAI\Agent\Agent;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\Anthropic\Anthropic;
@@ -105,7 +103,10 @@ class MyAgent extends Agent
     }
 }
 
-$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+$message = MyAgent::make()
+    ->chat(new UserMessage("Hi!"))
+    ->getMessage();
+
 echo $message->getContent();
 // Hi, how can I help you today?
 ```
@@ -115,7 +116,7 @@ echo $message->getContent();
 ```php
 namespace App\Neuron;
 
-use NeuronAI\Agent;
+use NeuronAI\Agent\Agent;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\Ollama\Ollama;
@@ -131,7 +132,10 @@ class MyAgent extends Agent
     }
 }
 
-$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+$message = MyAgent::make()
+    ->chat(new UserMessage("Hi!"))
+    ->getMessage();
+
 echo $message->getContent();
 // Hi, how can I help you today?
 ```
@@ -141,7 +145,7 @@ echo $message->getContent();
 ```php
 namespace App\Neuron;
 
-use NeuronAI\Agent;
+use NeuronAI\Agent\Agent;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\OpenAI\OpenAI;
@@ -157,7 +161,10 @@ class MyAgent extends Agent
     }
 }
 
-$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+$message = MyAgent::make()
+    ->chat(new UserMessage("Hi!"))
+    ->getMessage();
+
 echo $message->getContent();
 // Hi, how can I help you today?
 ```
@@ -167,7 +174,7 @@ echo $message->getContent();
 ```php
 namespace App\Neuron;
 
-use NeuronAI\Agent;
+use NeuronAI\Agent\Agent;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\Gemini\Gemini;
@@ -183,7 +190,10 @@ class MyAgent extends Agent
     }
 }
 
-$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+$message = MyAgent::make()
+    ->chat(new UserMessage("Hi!"))
+    ->getMessage();
+
 echo $message->getContent();
 // Hi, how can I help you today?
 ```
@@ -193,7 +203,7 @@ echo $message->getContent();
 ```php
 namespace App\Neuron;
 
-use NeuronAI\Agent;
+use NeuronAI\Agent\Agent;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\Gemini\Mistral;
@@ -209,14 +219,17 @@ class MyAgent extends Agent
     }
 }
 
-$message = MyAgent::make()->chat(new UserMessage("Hi!"));
+$message = MyAgent::make()
+    ->chat(new UserMessage("Hi!"))
+    ->getMessage();
+
 echo $message->getContent();
 // Hi, how can I help you today?
 ```
 {% endtab %}
 {% endtabs %}
 
-Check out all the supported providers in the [AI Provider](the-basics/ai-provider.md) section.
+Check out all the supported providers in the [AI Provider](providers/ai-provider.md) section.
 
 ## Create AI Agents In Laravel -  Video Tutorial
 
@@ -246,7 +259,7 @@ Modern PHP offers robust object-oriented programming features, strong typing cap
 
 ### The Multi-Agent Problem&#x20;
 
-Building AI applications quickly becomes complex when multiple agents need to collaborate. Managing state between agents, handling failures gracefully,  and maintaining conversation context across different AI services creates intricate dependency chains. Without proper orchestration, developers often resort to brittle conditional logic, manual state management, and sequential processing that doesn't scale. The challenge isn't just technical—it's architectural. How do you design systems where agents can work together, share information, and recover from failures while maintaining clear, debuggable code?
+Building AI applications quickly becomes complex when multiple agents need to collaborate. Managing state between agents, handling failures gracefully,  and maintaining conversation context across different AI services creates intricate dependency chains. Without proper orchestration, developers often resort to brittle conditional logic, manual state management, and sequential processing that doesn't scale. How do you design systems where agents can work together, share information, and recover from failures while maintaining clear, debuggable code?
 
 <a href="/broken/pages/LwiA5oss8HSjzdefFNvg" class="button secondary" data-icon="arrow-progress">Neuron Workflow</a>
 
@@ -283,20 +296,20 @@ We’re using [Discussions](https://github.com/inspector-apm/neuron-ai/discussio
 
 Neuron is part of the Inspector ecosystem as a trustable platform to create reliable and scalable AI driven solutions.&#x20;
 
-Trace and evaluate your agents execution flow to help you maintain production grade implementations with confidence. Check out the [**monitoring integrations**](the-basics/observability.md).
+Trace and evaluate your agents execution flow to help you maintain production grade implementations with confidence. Check out the [**monitoring integrations**](agent/observability.md).
 
 ## Core components
 
-* [**Agent**](the-basics/agent.md)
-* [**AI Provider**](the-basics/ai-provider.md)
-* [**Toolkit**](the-basics/tools.md#toolkits-composable-agent-capabilities)
+* [**Agent**](/broken/pages/xwWOrSCVWeoy5tAkKilK)
+* [**AI Provider**](providers/ai-provider.md)
+* [**Toolkit**](agent/tools.md#toolkits-composable-agent-capabilities)
 * [**RAG**](/broken/pages/YfKZq0KNcn61OqRWibRv)
 * [**Embeddings Provider**](rag/embeddings-provider.md)
 * [**Data Loader**](rag/data-loader.md)
 * [**Vector Store**](rag/vector-store.md)
-* [**Chat History**](the-basics/chat-history-and-memory.md)
-* [**MCP connector**](the-basics/mcp-connector.md)
-* [**Monitoring & Debugging**](the-basics/observability.md)
+* [**Chat History**](agent/chat-history-and-memory.md)
+* [**MCP connector**](agent/mcp-connector.md)
+* [**Monitoring & Debugging**](agent/observability.md)
 * [**Pre/Post Processors**](rag/pre-post-processor.md)
 * [**Workflow**](/broken/pages/LwiA5oss8HSjzdefFNvg)
 

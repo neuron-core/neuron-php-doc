@@ -3,26 +3,31 @@
 ## Overview
 
 * [Introduction](README.md)
-  * [Upgrade To v2 From v1](overview/readme/upgrade-to-v2-from-v1.md)
-  * [Repository Migration](overview/readme/repository-migration.md)
-* [Fast Learning by Video](overview/fast-learning-by-video.md)
+* [Installation](overview/getting-started.md)
+* [Upgrade](overview/upgrade.md)
+* [Video Tutorials](overview/fast-learning-by-video.md)
 * [Agentic Development](overview/agentic-development.md)
 
-## The Basics
+## Agent
 
-* [Installation](the-basics/getting-started.md)
-* [Agent](the-basics/agent.md)
-* [AI Provider](the-basics/ai-provider.md)
-* [Tools & Toolkits](the-basics/tools.md)
-* [MCP](the-basics/mcp-connector.md)
-* [Chat History](the-basics/chat-history-and-memory.md)
-* [Streaming](the-basics/streaming.md)
-* [Structured Output](the-basics/structured-output.md)
-* [Attachments (Documents & Images)](the-basics/attachments-documents-and-images.md)
-* [Async](the-basics/asynchronous-processing.md)
-* [Monitoring & Debugging](the-basics/observability.md)
-* [Error Handling](the-basics/error-handling.md)
-* [Evaluation](the-basics/evaluation.md)
+* [Agent](agent/agent.md)
+* [Messages](agent/messages.md)
+* [Tools & Toolkits](agent/tools.md)
+* [Chat History](agent/chat-history-and-memory.md)
+* [Streaming](agent/streaming.md)
+* [Structured Output](agent/structured-output.md)
+* [MCP](agent/mcp-connector.md)
+* [Middleware](agent/middleware.md)
+* [Async](agent/async.md)
+* [Monitoring & Debugging](agent/observability.md)
+* [Error Handling](agent/error-handling.md)
+* [Evaluation](agent/evaluation.md)
+
+## Providers
+
+* [AI Provider](providers/ai-provider.md)
+* [Audio](providers/audio.md)
+* [Image](providers/image.md)
 
 ## RAG
 
@@ -40,9 +45,10 @@
 * [Multi Step Workflow](workflow/multi-step-workflow.md)
 * [Loops & Branches](workflow/loops-and-branches.md)
 * [Managing the State](workflow/managing-the-state.md)
-* [Human In The Loop](workflow/human-in-the-loop.md)
+* [Interruption](workflow/human-in-the-loop.md)
 * [Persistence](workflow/persistence.md)
 * [Streaming](workflow/streaming.md)
+* [Middleware](workflow/middleware.md)
 * [Examples](workflow/examples.md)
 
 ## Resources

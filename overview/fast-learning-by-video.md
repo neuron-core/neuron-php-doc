@@ -5,9 +5,9 @@ description: >-
   real-world use cases.
 ---
 
-# Fast Learning by Video
+# Video Tutorials
 
-## Video Tutorials
+## Video
 
 {% embed url="https://www.youtube.com/watch?v=oSA1bP_j41w" %}
 
@@ -21,7 +21,9 @@ description: >-
 
 {% embed url="https://www.youtube.com/watch?v=q6GqgPMUJFY" %}
 
-## Agent Development
+## Articles
+
+### Agent Development
 
 [PHP, the Dark Horse No One Saw Coming In AI Agents development](https://inspector.dev/php-the-dark-horse-no-one-saw-coming-in-ai-agents-development/)
 
@@ -33,7 +35,7 @@ description: >-
 
 [Create AI Agents In PHP Powered By Google Gemini LLMs](https://inspector.dev/create-ai-agents-in-php-powered-by-google-gemini-llms/)
 
-## RAG (Retrieval Augmented Generation)
+### RAG (Retrieval Augmented Generation)
 
 [How to Create a RAG Agent with Neuron ADK for PHP](https://inspector.dev/how-to-create-a-rag-agent-with-neuron-adk-for-php/)
 
@@ -41,7 +43,7 @@ description: >-
 
 [Improve PHP AI Agents output quality with Rerankers](https://inspector.dev/improve-php-ai-agents-output-quality-with-rerankers/)
 
-## Tools & Toolkits
+### Tools & Toolkits
 
 [Introducing Toolkits: Composable AI Agent Capabilities In PHP](https://inspector.dev/introducing-toolkits-composable-ai-agent-capabilities-in-php/)
 
@@ -53,9 +55,15 @@ description: >-
 
 [AI Agents in PHP with MCP (Model Context Protocol)](https://inspector.dev/ai-agents-in-php-with-mcp-model-context-protocol/)
 
-## Workflow
+### Workflow
 
 [Introducing Neuron Workflow: The future of agentic PHP applications](https://inspector.dev/introducing-neuronai-workflow-the-future-of-agentic-php-applications/)
+
+[Deep Research Agent Implementation](https://inspector.dev/multi-agent-systems-in-php-a-practical-deep-research-implementation/)
+
+[Laravel Travel Agent](https://inspector.dev/building-multi-agent-systems-in-laravel-a-practical-demo/)
+
+[Managing Human-in-the-Loop With Checkpoints](https://inspector.dev/managing-human-in-the-loop-with-checkpoints-neuron-workflow/)
 
 ## E-Book
 

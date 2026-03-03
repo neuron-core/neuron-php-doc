@@ -6,7 +6,7 @@ description: Implement custom retrieval strategies
 
 ### Introduction
 
-The RAG module has a separate retrieval component that allows you to implement different strategies to accomplish context retrieval from external data sources. By default RAG uses `SimilarityRetrieval` that simply query the vector store to retrieve documents similar to the input message:
+The RAG module has a separate retrieval component that allows you to implement different strategies to accomplish context retrieval from external data sources. By default, RAG uses `SimilarityRetrieval` that simply queries the vector store to retrieve documents:
 
 ```php
 namespace App\Neuron;
@@ -16,7 +16,6 @@ use NeuronAI\RAG\Embeddings\EmbeddingsProviderInterface;
 use NeuronAI\RAG\RAG;
 use NeuronAI\RAG\RAG\Retrieval\RetrievalInterface;
 use NeuronAI\RAG\RAG\Retrieval\SimilarityRetrieval;
-use NeuronAI\RAG\VectorStore\FileVectorStore;
 use NeuronAI\RAG\VectorStore\VectorStoreInterface;
 
 class WorkoutTipsAgent extends RAG

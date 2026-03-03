@@ -8,7 +8,7 @@ To create a loop, simply return the entry event of a previous node as the exit e
 
 Take a look at the example below. The `NodeOne` can have two events as return type, `FirstEvent` and `SecondEvent`. If the node returns FirstEvent it will cause another execution of the same node because FirstEvent is handled by itself, creating a loop.
 
-If the node returns SecondEvent it will finally move forward the execution to another node.&#x20;
+If the node returns `SecondEvent` it will finally move forward the execution to another node.&#x20;
 
 ```php
 class NodeOne extends Node
@@ -40,8 +40,8 @@ $state = Workflow::make()
         new NodeOne(),
         new NodeTwo()
     ])
-    ->start()
-    ->getResult();
+    ->init()
+    ->run();
 
 /*
 - Handling StartEvent
@@ -117,8 +117,8 @@ $state = Workflow::make()
         new B1Node(),
         new B2Node(),
     ])
-    ->start()
-    ->getResult();
+    ->init()
+    ->run();
 ```
 
 <figure><img src="../.gitbook/assets/workflow-branches.png" alt=""><figcaption></figcaption></figure>

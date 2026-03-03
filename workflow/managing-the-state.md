@@ -14,13 +14,13 @@ You can also provide an initial state to workflow to feed in input values.
 
 ```php
 // 1. Provide an initial state as workflow input to feed in some data
-$workflow = Workflow::make(new WorkflowState(['query' => 'Hi!']))
+$workflow = Workflow::make(state: new WorkflowState(['query' => 'Hi!']))
         ->addNode(new InitialNode())
         ->addNode(...)
         ->addNode(...);
 
 // 2. Execute the workflow and get the final state
-$finalState = $workflow->start()->getReturn();
+$finalState = $workflow->init()->run();
 
 // 3. Use the final state data
 echo $finalState->get('message');
@@ -49,22 +49,13 @@ class InitialNode extends Node
         return new StopEvent();
     }
 }
-
-// Execute the workflow and get the final state
-$finalState = Workflow::make()
-    ->addNode(new InitialNode())
-    ->start()
-    ->getReturn();
-    
-// It will print "Hello World!"
-echo $finalState->get('message');
 ```
 
 ### Typed State
 
 The default `WorkflowState` class is just a proxy to an internal array to carry data during workflow execution. It might be useful to create a custom state class to define strictly typed properties for better code completion, validation, and debugging.
 
-Create a `CustomState` class:
+Create a `CustomState` class to introduce custom typed properties:
 
 ```php
 use App\Models\User;
@@ -110,8 +101,8 @@ Finally, inject the `CustomState` into the workflow:
 $state = new CustomState();
 $state->setUser($user);
 
-$workflow = MyWorkflow::make($state);
+$workflow = MyWorkflow::make(state: $state);
 
-$finalState = $workflow->start()->getResult();
+$finalState = $workflow->init()->run();
 echo $finalState->getUser()->email;
 ```
