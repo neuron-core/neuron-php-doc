@@ -567,7 +567,28 @@ Currently only [OpenAIResponses](../providers/ai-provider.md#openairesponses), [
 
 The philosophy behind Neuron's toolkit system emerged from a fundamental observation during AI Agent Development: while individual tools provide specific capabilities, real-world AI agents often require coordinated sets of related functionalities.&#x20;
 
-Rather than forcing developers to manually assemble collections of tools for common use cases, Neuron introduces toolkits as an abstraction layer that transforms how we think about agent capability composition.
+Rather than forcing developers to manually assemble collections of tools for common use cases, Neuron introduces toolkits as an abstraction layer that transforms how we think about agent capability composition. Here is an example of how you can add a toolkit to an agent:
+
+```php
+<?php
+
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Tools\Calculator\CalculatorToolkit;
+
+class MyAgent extends Agent
+{
+    ...
+	
+    protected function tools(): array
+    {
+        return [
+            CalculatorToolkit::make(),
+        ];
+    }
+}
+```
 
 The traditional approach requires instantiating each tool individually. Imagine you want to build agents that need mathematical reasoning – addition, subtraction, multiplication, division, and exponentiation tools must all be declared separately in the agent's tool configuration. This granular approach quickly becomes unwieldy when agents require comprehensive functionality sets.&#x20;
 
@@ -603,34 +624,13 @@ class CalculatorToolkit extends AbstractToolkit
 
 The `AbstractToolkit` base class establishes a consistent interface that all toolkits inherit, ensuring predictable behavior across the framework.
 
-#### Guidelines
+**Guidelines**
 
 The `guidelines()` method serves a particularly important function in agent development – it provides contextual information that helps the underlying language model understand not just what tools are available, but how they should be used together. In the case of the `CalculatorToolkit`, the guidelines explicitly suggest that complex mathematical expressions can be solved through step-by-step operations, guiding the agent toward effective problem-solving strategies.
 
-#### Provide Tools
+**Provide**
 
-The `provide()` method returns the array of tools included in the toolkit by default. When a toolkit is attached to an agent, the individual tools become available exactly as if they had been added separately, but without the cognitive overhead of managing multiple tool declarations. Here is how you can add it to your agent:
-
-```php
-<?php
-
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Tools\Calculator\CalculatorToolkit;
-
-class MyAgent extends Agent
-{
-    ...
-	
-    protected function tools(): array
-    {
-        return [
-            CalculatorToolkit::make(),
-        ];
-    }
-}
-```
+The `provide()` method returns the array of tools included in the toolkit by default. When a toolkit is attached to an agent, the individual tools become available exactly as if they had been added separately, but without the cognitive overhead of managing multiple tool declarations.&#x20;
 
 ### Filters
 

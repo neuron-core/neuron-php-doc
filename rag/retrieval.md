@@ -61,6 +61,54 @@ interface RetrievalInterface
 
 If you are implementing custom workflow you can use retrieval as a standalone component to dynamically retrieve context data for use in your agentic systems.
 
+### Retrieval as a Tool
+
+Neuron provides you with a built-in `RetrievalTool` tool that enables AI agents to perform context retrieval from vector stores if the model think it needs to retrieve more context to answer the current user question. It's built on top of the RetrievalInterface interface that the LLM can invoke to search for documents similar to a given query, making it possible to build agents with on-demand RAG (Retrieval Augmented Generation)&#x20;capabilities instead of the authomatic context injection provided by the RAG component.
+
+Here is an example using the built-in `SimilarityRetrieval`:
+
+```php
+use NeuronAI\Tools\Toolkits\RetrievalTool;
+use NeuronAI\RAG\Retrieval\SimilarityRetrieval;
+
+class AgenticRAG extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {...}
+    
+    protected function instructions(): string
+    {...}
+    
+    protected function tools(): array
+    {
+        return [
+            RetrievalTool::make(
+                new SimilarityRetrieval(
+                    $this->vectorStore(), 
+                    $this->embeddings()
+                )
+            ),
+        ];
+    }
+    
+    protected function vectorStore(): VectorStoreInterface
+    {
+        return new FileVectorStore(__DIR__);
+    }
+    
+    protected function embeddings(): EmbeddingsProviderInterface
+    {
+        return new OllamaEmbeddingsProvider(
+            model: 'OLLAMA_EMBEDDINGS_MODEL'
+        );
+    }
+}
+```
+
+As you can notice in this example we don't extend RAG but the basic Agent instead. In this implementation we let the model decide if it's the case to search an external source to answer the user question.
+
+You can always use all the tool and agent methods to customize description, instructions, and prompts in general to make the model behave according to your use case.
+
 ### RAPTOR Retrieval Module
 
 Most retrieval-augmented models work by breaking down documents into small chunks and retrieving only the most relevant ones. However, this approach has some limitations:
