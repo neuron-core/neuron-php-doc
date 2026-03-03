@@ -912,7 +912,26 @@ class MyAgent extends Agent
 
 ### FileSystem
 
-This toolkit makes the agent able to interact with the local filesystem. Below the tools included:
+This toolkit makes the agent able to interact with the local filesystem.
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Tools\Toolkits\FileSystem\FileSystemToolkit;
+
+class MyAgent extends Agent
+{
+    ...
+    
+    protected function tools(): array
+    {
+        return [
+            FileSystemToolkit::make(),
+        ];
+    }
+}
+```
 
 <table data-header-hidden><thead><tr><th width="256"></th><th></th></tr></thead><tbody><tr><td>describe_directory_content</td><td>NeuronAI\Tools\Toolkits\FileSystem\DescribeDirectoryContentTool</td></tr><tr><td>read_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\ReadFileTool</td></tr><tr><td>grep_file_content</td><td>NeuronAI\Tools\Toolkits\FileSystem\GrepFileContentTool</td></tr><tr><td>glob_path</td><td>NeuronAI\Tools\Toolkits\FileSystem\GlobPathTool</td></tr><tr><td>preview_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\PreviewFileTool</td></tr><tr><td>parse_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\ParseFileTool</td></tr></tbody></table>
 
