@@ -112,7 +112,7 @@ Or refer to the full [workflow documentation](../workflow/human-in-the-loop.md).
 
 The example above it's a classic on/off approval flow. If a tool is listed in the `ToolApproval` middleware the agent will interrupt the execution, otherwise the tool will be executed as usual.&#x20;
 
-The middleware also accepts a callback associated to tools, in order to define your custom approval condition. The callback receives the tool's input arguments (array) and returns true if the tool requires approval, or false to skip the interruption and run the tool as it is.
+The middleware also accepts a callback associated to tools, in order to define your custom approval condition. The callback receives the tool's instance and returns `true` if the tool requires approval, or `false` to skip the interruption and run the tool as it is.
 
 ```php
 class MyAgent extends Agent
@@ -139,8 +139,8 @@ class MyAgent extends Agent
                 new ToolApproval(
                     tools: [
                         // Enable tool approval based on custom rules
-                        BuyTicketTool::class => function (array $args): bool {
-                            return $args['amount'] > 100;
+                        BuyTicketTool::class => function (ToolInterface $tool): bool {
+                            return $tool->getInput('amount') > 100;
                         }
                     ]
                 )
