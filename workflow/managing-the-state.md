@@ -4,7 +4,7 @@ description: Learn how to pass data around the workflow
 
 # Managing the State
 
-Generally speaking, the purpose of a workflow is to get an input state, make able the nodes to manipulate this state during execution, and return the state as final value. Based on this architecture the state has two main roles that we will see in detail in this guide.
+Generally speaking, the purpose of a workflow is to get an initial state as an input, make able the nodes to manipulate this state during execution, and return the final state when the workflow completes.
 
 ### Workflow Input/Output
 
@@ -51,11 +51,11 @@ class InitialNode extends Node
 }
 ```
 
-### Typed State
+### Custom State
 
-The default `WorkflowState` class is just a proxy to an internal array to carry data during workflow execution. It might be useful to create a custom state class to define strictly typed properties for better code completion, validation, and debugging.
+The default `WorkflowState` class is a bag to carry data during workflow execution. It might be useful to create a custom state class to define strictly typed properties for better code completion in your nodes, data validation, and general debugging.
 
-Create a `CustomState` class to introduce custom typed properties:
+Create a `CustomState` class to introduce custom properties:
 
 ```php
 use App\Models\User;
@@ -95,7 +95,7 @@ class ExampleNode extends Node
 }
 ```
 
-Finally, inject the `CustomState` into the workflow:
+Inject the `CustomState` on the workflow creation:
 
 ```php
 $state = new CustomState();
