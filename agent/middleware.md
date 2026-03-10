@@ -4,7 +4,7 @@ description: Interact with the agent execution flow to customize its behaviour.
 
 # Middleware
 
-Middleware is a feature of the basic Workflow component, it's not specific to agents. This means you are free to attach custom middleware to Agent, RAG, and Workflows to hook into their execution cycle.&#x20;
+Middleware is a feature of the basic Workflow component. So you can attach custom middleware also to Agent and RAG to hook into their execution cycle.
 
 ### The Agent Workflow
 
