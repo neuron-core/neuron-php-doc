@@ -159,8 +159,9 @@ This middleware is designed to wrap the node where the agent actually call the L
 ```php
 use NeuronAI\Agent\Agent;
 use NeuronAI\Agent\Middleware\Summarization;
-use NeuronAI\Workflow\Middleware\WorkflowMiddleware;
-use NeuronAI\Workflow\NodeInterface;
+use NeuronAI\Agent\Nodes\ChatNode;
+use NeuronAI\Agent\Nodes\StreamingNode;
+use NeuronAI\Agent\Nodes\StructuredOutputNode;
 
 class MyAgent extends Agent
 {
