@@ -15,7 +15,7 @@ We define two custom events, `FirstEvent` and `SecondEvent`. These classes can h
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-./vendor/bin/neuron make:event App\\Neuron\\FirstEvent
+vendor/bin/neuron make:event App\\Neuron\\FirstEvent
 ```
 {% endtab %}
 
@@ -51,7 +51,7 @@ Now we define the workflow itself. We do this by defining the input and output t
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-./vendor/bin/neuron make:node App\\Neuron\\InitialNode
+vendor/bin/neuron make:node App\\Neuron\\InitialNode
 ```
 {% endtab %}
 
@@ -88,7 +88,7 @@ class InitialNode extends Node
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-./vendor/bin/neuron make:node App\\Neuron\\NodeOne
+vendor/bin/neuron make:node App\\Neuron\\NodeOne
 ```
 {% endtab %}
 
@@ -119,7 +119,7 @@ class NodeOne extends Node
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-./vendor/bin/neuron make:node App\\Neuron\\NodeTwo
+vendor/bin/neuron make:node App\\Neuron\\NodeTwo
 ```
 {% endtab %}
 

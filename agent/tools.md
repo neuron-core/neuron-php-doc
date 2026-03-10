@@ -103,7 +103,7 @@ To create a new Tool execute the console command below:
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-./vendor/bin/neuron make:tool App\\Neuron\\GetTranscriptionTool
+vendor/bin/neuron make:tool App\\Neuron\\GetTranscriptionTool
 ```
 {% endtab %}
 

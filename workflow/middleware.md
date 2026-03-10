@@ -23,7 +23,7 @@ You can use the command below to create a middleware  class:
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-./vendor/bin/neuron make:middleware CustomMiddleware
+vendor/bin/neuron make:middleware CustomMiddleware
 ```
 {% endtab %}
 

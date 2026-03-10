@@ -78,7 +78,7 @@ First, let's create the RAG class:
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-./vendor/bin/neuron make:rag App\\Neuron\\MyChatBot
+vendor/bin/neuron make:rag App\\Neuron\\MyChatBot
 ```
 {% endtab %}
 
