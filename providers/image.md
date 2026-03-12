@@ -8,7 +8,7 @@ Usually pure AI Audio services don't support full agentic abilities like tools a
 
 These component can be helpful for automating image generation based on textual prompts.
 
-## Nano Banana
+## Nano Banana (Google)
 
 Google Gemini API provides a full multimodality experience, so you can just change the default model in your Gemini provider to generate images from prompts. Neuron also supports iteration on generated images with multi-turn conversations thanks to its multimodal message layer and chat history management.
 
@@ -41,11 +41,11 @@ $message = MyAgent::make()
 // Retrieve the image part of the message (it's in base64 format)
 $imageBase64 = $message->getImage()->getContent();
 
-// Save the audio file
+// Save the image
 file_put_contents(__DIR__.'/assets/cover.png', base64_decode($imageBase64));
 ```
 
-## OpenAIImage
+## OpenAI Image
 
 ### As an Agent provider
 
@@ -76,7 +76,7 @@ $message = MyAgent::make()
 // Retrieve the image part of the message (it's in base64 format)
 $imageBase64 = $message->getImage()->getContent();
 
-// Save the audio file
+// Save the image
 file_put_contents(__DIR__.'/assets/cover.png', base64_decode($imageBase64));
 ```
 
@@ -96,6 +96,56 @@ $message = $provider->chat(new UserMessage("Generate an image of a venue hosting
 // Retrieve the image part of the message (it's in base64 format)
 $imageBase64 = $message->getImage()->getContent();
 
-// Save the audio file
+// Save the image
 file_put_contents(__DIR__.'/assets/cover.png', base64_decode($imageBase64));
+```
+
+## ZAI Image
+
+### As an Agent Provider
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent\Agent;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Providers\ZAI\Image\ZAIImage;
+
+class MyAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        return new ZAIImage(
+            key: 'ZAI_API_KEY',
+            model: 'glm-image',
+        );
+    }
+}
+
+// Run the agent
+$message = MyAgent::make()
+    ->chat(new UserMessage("Generate an image of a venue hosting the best PHP conference!"))
+    ->getMessage();
+
+// Print the URL of the image
+echo $message->getImage()->getContent();
+
+```
+
+### Direct Use
+
+```php
+use NeuronAI\Providers\ZAI\Image\ZAIImage;
+
+$provider = new ZAIImage(
+    key: 'ZAI_API_KEY',
+    model: 'glm-image',
+);
+
+// Generate speech from text
+$message = $provider->chat(new UserMessage("Generate an image of a venue hosting the best PHP conference!"));
+
+// Print the URL of the image
+echo $message->getImage()->getContent();
 ```
