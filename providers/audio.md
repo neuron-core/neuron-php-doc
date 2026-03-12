@@ -114,13 +114,13 @@ echo $message->getContent();
 use NeuronAI\Providers\ElevenLabs\ElevenLabsTextToSpeech;
 
 $provider = new ElevenLabsTextToSpeech(
-    key: 'OPENAI_API_KEY',
-    model: 'gpt-4o-mini-tts',
+    key: 'ELEVENLABS_API_KEY',
+    model: 'eleven_multilingual_v2',
     voice: 'alloy',
 );
 
 // Generate speech from text
-$message = $provider->chat(new UserMessage("Hi, I'm the creator of Neuron AI framework!"));
+$message = $provider->chat(new UserMessage("Hi, I'm Valerio from Italy!"));
 
 // Retrieve the audio part of the message (it's in base64 format)
 $audioBase64 = $message->getAudio();
@@ -132,11 +132,34 @@ file_put_contents(__DIR__.'/asserts/speech.mp3', base64_decode($audioBase64));
 ### Speach-To-Text
 
 ```php
-use NeuronAI\Providers\OpenAI\Audio\ElevenLabsSpeechToText;
+use NeuronAI\Providers\ElevenLabs\ElevenLabsSpeechToText;
 
 $provider = new ElevenLabsSpeechToText(
-    key: 'OPENAI_API_KEY',
-    model: 'gpt-4o-transcribe',
+    key: 'ELEVENLABS_API_KEY',
+    model: 'scribe_v2',
+);
+
+// Transcript the audio
+$message = $provider->chat(
+    new UserMessage(
+        new AudioContent(__DIR__ . '/assets/intro.mp3', SourceType::URL)
+    )
+);
+
+// Print the text gathered from the audio file
+echo $message->getContent();
+```
+
+## ZAI
+
+### Speech-To-Text
+
+```php
+use NeuronAI\Providers\ZAI\Audio\ZAITranscription;
+
+$provider = new ZAITranscription(
+    key: 'ZAI_API_KEY',
+    model: 'glm-asr-2512',
 );
 
 // Transcript the audio
