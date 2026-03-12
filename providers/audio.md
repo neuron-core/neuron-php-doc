@@ -94,7 +94,7 @@ $provider = new OpenAISpeechToText(
     model: 'gpt-4o-transcribe',
 );
 
-// Transcript the audio
+// Transcribe the audio
 $message = $provider->chat(
     new UserMessage([
         new TextContent('This audio is about a math lesson. Take care of the technical words.'),
@@ -139,7 +139,7 @@ $provider = new ElevenLabsSpeechToText(
     model: 'scribe_v2',
 );
 
-// Transcript the audio
+// Transcribe the audio
 $message = $provider->chat(
     new UserMessage(
         new AudioContent(__DIR__ . '/assets/intro.mp3', SourceType::URL)
@@ -162,7 +162,7 @@ $provider = new ZAITranscription(
     model: 'glm-asr-2512',
 );
 
-// Transcript the audio
+// Transcribe the audio
 $message = $provider->chat(
     new UserMessage(
         new AudioContent(__DIR__ . '/assets/intro.mp3', SourceType::URL)
