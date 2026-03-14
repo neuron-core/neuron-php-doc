@@ -47,7 +47,7 @@ Once installed, the skill will be available to Claude Code automatically. The sk
 
 #### Cursor  <a href="#cursor" id="cursor"></a>
 
-In [Cursor](https://cursor.sh/), you can add the skill directory to your project's documentation sources via **Cursor Settings > Features > Docs**. Point it to the `dist/skills/webawesome/` directory in your `node_modules` folder.
+In [Cursor](https://cursor.sh/), you can add the skill directory to your project's documentation sources via **Cursor Settings > Features > Docs**. Point it to the `vendor/neuron-core/neuron-ai/skills` .
 
 #### Other AI Tools  <a href="#other-ai-tools" id="other-ai-tools"></a>
 
