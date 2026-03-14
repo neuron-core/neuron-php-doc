@@ -37,7 +37,7 @@ How you reference the skill depends on which AI tool you're using.
 
 #### **Claude**
 
-If you're using [Claude Code](https://claude.ai/code), you can install the Web Awesome skill locally using the [skills CLI](https://skills.sh/):
+If you're using [Claude Code](https://claude.ai/code), you can install the Neuron AI skills locally using the [skills CLI](https://skills.sh/):
 
 ```bash
 npx skills add ./vendor/neuron-core/neuron-ai/skills
