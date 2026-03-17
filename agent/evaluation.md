@@ -92,7 +92,7 @@ In the `run` method you can execute your agentic entities with the example input
 
 ### Defining The Dataset
 
-You can use anything you want as dataset. There are no predefined format. The evaluator class simply allows you to load a list of test cases to run the evaluators against them. You have two dataset reader.
+You can use anything you want as dataset. There are no predefined format. The evaluator class simply allows you to load a list of test cases and run the evaluators against them. You have two dataset reader.
 
 #### ArrayDataset
 
