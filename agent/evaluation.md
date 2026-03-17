@@ -127,7 +127,7 @@ class AgentEvaluator extends BaseEvaluator
 }
 ```
 
-You are also free to implement your own loader implementing `NeuronAI\Evaluation\Contracts\DatasetInterface`.
+You can eventually implement a custom dataset loader implementing `NeuronAI\Evaluation\Contracts\DatasetInterface`.
 
 ### Running Evaluations
 
