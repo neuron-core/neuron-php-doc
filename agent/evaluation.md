@@ -90,9 +90,9 @@ The logic is quite straightforward. The evaluator first load the dataset, and th
 
 In the `run` method you can execute your agentic entities with the example input and return the output. The output is then passed to the `evaluate` method where you can performs assetions comparing the output with a reference value or any other logic you want.
 
-### Defining The Dataset
+### Defining The Dataset Loader
 
-You can use anything you want as dataset. There are no predefined format. The evaluator class simply allows you to load a list of test cases and run the evaluators against them. You have two dataset reader.
+You can use anything you want as dataset. There are no predefined format. The evaluator class simply allows you to load a list of test cases and run the evaluators against them. You have two dataset loaders.
 
 #### ArrayDataset
 
@@ -127,10 +127,22 @@ class AgentEvaluator extends BaseEvaluator
 }
 ```
 
+You are also free to implement your own loader implementing `NeuronAI\Evaluation\Contracts\DatasetInterface`.
+
 ### Running Evaluations
 
 If you have properly configured your composer file you can use the Neuron CLI to launch the evaluators:
 
+{% tabs %}
+{% tab title="Unix" %}
 ```bash
-./vendor/bin/neuron evaluations --path=evaluators
+vendor/bin/neuron evaluations --path=evaluators
 ```
+{% endtab %}
+
+{% tab title="Windows" %}
+```powershell
+.\vendor\bin\neuron evaluations --path=evaluators
+```
+{% endtab %}
+{% endtabs %}
