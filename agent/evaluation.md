@@ -27,10 +27,6 @@ Next create the `evaluators` directory in your project root folder. Keeping test
 
 Use the command below to create the `AgentEvaluator` class into the evaluators folder:
 
-```bash
-vendor/bin/neuron make:evaluator App\\Evaluators\\AgentEvaluator
-```
-
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
@@ -44,6 +40,8 @@ vendor/bin/neuron make:evaluator App\\Evaluators\\AgentEvaluator
 ```
 {% endtab %}
 {% endtabs %}
+
+The class being created will have the following structure:
 
 ```php
 namespace App\Evaluators;
