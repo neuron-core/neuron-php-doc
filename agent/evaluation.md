@@ -53,11 +53,17 @@ use NeuronAI\Evaluation\Dataset\JsonDataset;
 
 class AgentEvaluator extends BaseEvaluator
 {
+    /**
+     * 1. Get the dataset to evaluate against
+     */
     public function getDataset(): DatasetInterface
     {
         return new JsonDataset(__DIR__ . '/datasets/dataset.json');
     }
 
+    /**
+     * 2. Run the agent logic being tested
+     */
     public function run(array $datasetItem): mixed
     {
         $response = MyAgent::make()->chat(
@@ -67,6 +73,9 @@ class AgentEvaluator extends BaseEvaluator
         return $response->getContent();
     }
 
+    /**
+     * 3. Evaluate the output against expected results, with assertions
+     */
     public function evaluate(mixed $output, array $datasetItem): void
     {
         $this->assert(
