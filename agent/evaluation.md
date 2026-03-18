@@ -14,10 +14,10 @@ Like unit tests, it could be better to collect evaluators for your AI system int
 
 ```json
 "autoload-dev": {
-  "psr-4": {
-    ...,
-    "App\\Evaluators\\": "evaluators/"
-  }
+    "psr-4": {
+        ...,
+        "App\\Evaluators\\": "evaluators/"
+    }
 },
 ```
 
@@ -149,7 +149,7 @@ vendor/bin/neuron evaluations --path=evaluators
 
 ### Output Interfaces
 
-The evaluation module uses a PHP configuration file to control how evaluation results are output. The config system supports multiple output drivers, enabling results to be sent to console, files, databases, or external APIs simultaneously.
+The evaluation module uses a PHP configuration file to control how evaluation results are displayed. The config system supports multiple output drivers, enabling results to be sent to console, files, databases, or external APIs simultaneously.
 
 #### **Config File**
 
