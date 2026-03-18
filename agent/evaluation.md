@@ -23,20 +23,20 @@ Like unit tests, it could be better to collect evaluators for your AI system int
 
 Next create the `evaluators` directory in your project root folder. Keeping test code separate from production code creates a clear boundary between what gets deployed to production and what exists purely for development and quality assurance.
 
-### Creating Evaluator
+### Creating Evaluators
 
 Use the command below to create the `AgentEvaluator` class into the evaluators folder:
 
 {% tabs %}
 {% tab title="Unix" %}
 ```bash
-vendor/bin/neuron make:evaluator App\\Evaluators\\AgentEvaluator
+vendor/bin/neuron make:evaluator App\\Neuron\\Evaluators\\AgentEvaluator
 ```
 {% endtab %}
 
 {% tab title="Windows" %}
 ```powershell
-.\vendor\bin\neuron make:evaluators App\Evaluators\AgentEvaluator
+.\vendor\bin\neuron make:evaluators App\Neuron\Evaluators\AgentEvaluator
 ```
 {% endtab %}
 {% endtabs %}
@@ -44,7 +44,7 @@ vendor/bin/neuron make:evaluator App\\Evaluators\\AgentEvaluator
 The class being created will have the following structure:
 
 ```php
-namespace App\Evaluators;
+namespace App\Neuron\Evaluators;
 
 use NeuronAI\Evaluation\Assertions\StringContains;
 use NeuronAI\Evaluation\BaseEvaluator;
@@ -146,3 +146,89 @@ vendor/bin/neuron evaluations --path=evaluators
 ```
 {% endtab %}
 {% endtabs %}
+
+### Output Interfaces
+
+The evaluation module uses a PHP configuration file to control how evaluation results are output. The config system supports multiple output drivers, enabling results to be sent to console, files, databases, or external APIs simultaneously.
+
+#### **Config File**
+
+Create the `evaluation.php` file in your project root:
+
+```php
+<?php
+
+use NeuronAI\Evaluation\OutputDrivers\ConsoleDriver;
+use NeuronAI\Evaluation\OutputDrivers\JsonDriver;
+
+return [
+    'output' => [
+        // Output results in the console
+        ConsoleDriver::class => ['verbose' => true],
+
+        // Save results in a json file
+        JsonDriver::class => ['path' => 'evaluation-results.json'],
+    ],
+];
+```
+
+You can declare an array of options for each output class. This configurations will be passed as arguments to the constructor of the output class implementation.
+
+**If no config file exists**, the system defaults to `ConsoleOutputDriver` with standard output.
+
+#### Creating Custom Output
+
+Implement `EvaluationOutputInterface` to create custom output drivers:
+
+```php
+namespace App\Neuron\Evaluations;
+
+use NeuronAI\Evaluation\Contracts\EvaluationOutputInterface;
+use NeuronAI\Evaluation\Runner\EvaluatorSummary;
+
+class DatabaseOutput implements EvaluationOutputInterface
+{
+    public function __construct(
+        private readonly \PDO $pdo,
+        private readonly string $table = 'evaluations'
+    ) {}
+
+    public function output(EvaluatorSummary $summary): void
+    {
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO {$this->table} (passed, failed, success_rate, total_time, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())"
+        );
+        $stmt->execute([
+            $summary->getPassedCount(),
+            $summary->getFailedCount(),
+            $summary->getSuccessRate(),
+            $summary->getTotalExecutionTime(),
+        ]);
+    }
+}
+```
+
+Once you have created your output class you can register it in the configuration file, to be used the next time you run the evaluations.
+
+```php
+<?php
+
+use NeuronAI\Evaluation\OutputDrivers\ConsoleDriver;
+use NeuronAI\Evaluation\OutputDrivers\JsonDriver;
+
+return [
+    'output' => [
+        // Output results in the console
+        ConsoleDriver::class => ['verbose' => true],
+
+        // Save results in a json file
+        //JsonDriver::class => ['path' => 'evaluation-results.json'],
+        
+        // Save results in the database
+        DatabaseOutput::class => [
+            'pdo' => new \PDO(...),
+            'table' => 'evaluations',
+        ]
+    ],
+];
+```
