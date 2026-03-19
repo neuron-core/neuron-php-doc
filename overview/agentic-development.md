@@ -24,6 +24,12 @@ vendor/neuron-core/neuron-ai/skills/
             └── SKILL.md
         └── neuron-rag-specialist/
             └── SKILL.md
+        └── neuron-structured-output/
+            └── SKILL.md
+        └── neuron-tool-creator/
+            └── SKILL.md
+        └── neuron-test-engineer/
+            └── SKILL.md
         └── neuron-tool-creator/
             └── SKILL.md
         └── neuron-workflow-architect/
