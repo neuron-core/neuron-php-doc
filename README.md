@@ -227,6 +227,37 @@ echo $message->getContent();
 // Hi, how can I help you today?
 ```
 {% endtab %}
+
+{% tab title="ZAI" %}
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent\Agent;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Providers\ZAI\ZAI;
+
+class MyAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        return new ZAI(
+            key: 'ZAI_API_KEY',
+            model: 'glm-5',
+            parameters: [], // Add custom params (temperature, logprobs, etc)
+        );
+    }
+}
+
+$message = MyAgent::make()
+    ->chat(new UserMessage("Hi!"))
+    ->getMessage();
+
+echo $message->getContent();
+// Hi, how can I help you today?
+```
+{% endtab %}
+
 {% endtabs %}
 
 Check out all the supported providers in the [AI Provider](providers/ai-provider.md) section.
