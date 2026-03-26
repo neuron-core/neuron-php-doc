@@ -36,6 +36,26 @@ echo $message->getContent();
 // Hi, how can I help you today?
 ```
 
+#### Anthropic Prompt Cache
+
+Anthropic provider expose a dedicated method `systemPromptBlocks()` to leverage system prompt cache. Instead of using the `instructions()` method in the Agent class, you can pass prompts definition directly to the provider instance with cache type definition.
+
+```php
+class MyAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        return new Anthropic(
+            key: 'ANTHROPIC_KEY',
+            model: 'ANTHROPIC_MODEL'
+        )->systemPromptBlocks([
+            ['type' => 'text', 'text' => 'Static instructions...', 'cache_control' => ['type' => 'ephemeral']],
+            ['type' => 'text', 'text' => 'Dynamic context...']
+        ]);
+    }
+}
+```
+
 ### OpenAIResponses
 
 This component uses the most recent OpenAI responses API:
