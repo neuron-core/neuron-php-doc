@@ -234,3 +234,129 @@ return [
     ],
 ];
 ```
+
+### Available Assertions
+
+We provide a set of built-in assertion for the most common use case. You can also implement your own assertion to design custom scoring systems. Check the next section.
+
+**StringContains**
+
+```php
+$this->assert(new StringContains('positive'), $output);
+```
+
+**StringContainsAll**
+
+Check if the output contains all keywords:
+
+```php
+$this->assert(new StringContainsAll(['hello', 'world']), $output);
+```
+
+**StringContainsAny**
+
+Check if the output contains any of the keywords:
+
+```php
+$this->assert(new StringContainsAny(['success', 'completed']), $output);
+```
+
+**StringStartsWith**
+
+Check if the output starts with a prefix:
+
+```php
+$this->assert(new StringStartsWith('Hello'), $output);
+```
+
+**StringEndsWith**
+
+Check if the output ends with a suffix:
+
+```php
+$this->assert(new StringEndsWith('!'), $output);
+```
+
+**StringLengthBetween**
+
+Check if the string length is within range:
+
+```php
+$this->assert(new StringLengthBetween(10, 100), $output);
+```
+
+**StringDistance**
+
+Check string similarity using Levenshtein distance:
+
+```php
+$this->assert(new StringDistance(
+    reference: 'expected text',
+    threshold: 0.5, // Minimum similarity score
+    maxDistance: 50 // Maximum allowed edits
+), $output);
+```
+
+**StringSimilarity**
+
+Check string similarity using embeddings:
+
+```php
+use NeuronAI\Evaluation\Assertions\StringSimilarity;
+use NeuronAI\RAG\Embeddings\OpenAI\OpenAIEmbeddings;
+
+$this->assert(new StringSimilarity(
+    reference: 'The quick brown fox',
+    embeddingsProvider: new OpenAIEmbeddings(key: 'YOUR_KEY'),
+    threshold: 0.6
+), $output);
+```
+
+**MatchesRegex**
+
+Match against regular expression:
+
+```php
+$this->assert(new MatchesRegex('/^\d{3}-\d{2}-\d{4}$/'), $output);
+```
+
+**IsValidJson**
+
+Check if the output is valid JSON:
+
+```php
+$this->assert(new IsValidJson(), $output);
+```
+
+### Creating Custom Assertions
+
+```php
+use NeuronAI\Evaluation\Assertions\AbstractAssertion;
+use NeuronAI\Evaluation\AssertionResult;
+
+class GreaterThanAssertion extends AbstractAssertion
+{
+    public function __construct(
+        private readonly float $threshold
+    ) {}
+
+    public function evaluate(mixed $actual): AssertionResult
+    {
+        if (!is_numeric($actual)) {
+            return AssertionResult::fail(
+                0.0,
+                'Expected numeric value, got ' . gettype($actual),
+            );
+        }
+
+        if ($actual > $this->threshold) {
+            return AssertionResult::pass(1.0);
+        }
+
+        return AssertionResult::fail(
+            0.0,
+            "Expected {$actual} to be greater than {$this->threshold}",
+        );
+    }
+}
+```

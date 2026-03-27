@@ -21,7 +21,6 @@
 * [Async](agent/async.md)
 * [Monitoring & Debugging](agent/observability.md)
 * [Error Handling](agent/error-handling.md)
-* [Evaluation](agent/evaluation.md)
 
 ## Providers
 
@@ -53,6 +52,7 @@
 
 ## Resources
 
+* [Evaluation](resources/evaluation.md)
 * [Testing](resources/testing.md)
 * [GitHub](https://github.com/neuron-core)
 * [NeuronHub](https://neuronhub.dev/)
