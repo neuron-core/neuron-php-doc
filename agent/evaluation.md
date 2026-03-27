@@ -6,7 +6,9 @@ description: Evaluating the output of your agentic system
 
 This guide covers approaches to evaluating agents. Effective evaluation is essential for measuring agent performance, tracking improvements, and ensuring your agents meet quality standards.
 
-When building AI agents, evaluating the consistency of their output is crucial during this process. It's important to consider various qualitative and quantitative factors, including response syntax, task completion, success, and inaccuracies or hallucinations. In evaluations, it's also important to consider comparing different agent configurations to optimize for specific desired outcomes. Given the dynamic and non-deterministic nature of LLMs, it's also important to have rigorous and frequent evaluations to ensure a consistent baseline for tracking improvements or regressions.
+When building AI agents, evaluating the consistency of their output is crucial, not only for the maintenance of the agent, but also to evaluate different architectures or prompting approach on the initial design phase.&#x20;
+
+It's important to consider various qualitative and quantitative factors, including response syntax, task completion, success, and inaccuracies or hallucinations. In evaluations, it's also important to consider comparing different agent configurations to optimize for specific desired outcomes. Given the dynamic and non-deterministic nature of LLMs, it's also important to have rigorous and frequent evaluations to ensure a consistent baseline for tracking improvements or regressions.
 
 ### Configuring your application
 
@@ -21,7 +23,7 @@ Like unit tests, it could be better to collect evaluators for your AI system int
 },
 ```
 
-Next create the `evaluators` directory in your project root folder. Keeping test code separate from production code creates a clear boundary between what gets deployed to production and what exists purely for development and quality assurance.
+Next create the `evaluators` directory in your project root folder. Keeping evaluation code separate from production code creates a clear boundary between what gets deployed to production and what exists purely for development and quality assurance.
 
 ### Creating Evaluators
 
