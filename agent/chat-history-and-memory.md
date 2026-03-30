@@ -150,7 +150,7 @@ class MyAgent extends Agent
     protected function chatHistory(): ChatHistoryInterface
     {
         return new InMemoryChatHistory(
-            contextWindow: 50000
+            contextWindow: 150000
         );
     }
 }
@@ -177,7 +177,7 @@ class MyAgent extends Agent
         return new FileChatHistory(
             directory: '/home/app/storage/neuron',
             key: 'THREAD_ID',
-            contextWindow: 50000
+            contextWindow: 150000
         );
     }
 }
@@ -224,7 +224,7 @@ class MyAgent extends Agent
             thread_id: 'THREAD_ID',
             pdo: new \PDO("mysql:host=localhost;dbname=DB_NAME;charset=utf8mb4", "DB_USER", "DB_PASS"),
             table: 'chat_hisotry',
-            contextWindow: 50000
+            contextWindow: 150000
         );
     }
 }
@@ -252,7 +252,7 @@ class MyAgent extends Agent
             thread_id: 'CHAT_THREAD_ID',
             pdo: \DB::connection()->getPdo(),
             table: 'chat_hisotry',
-            contextWindow: 50000
+            contextWindow: 150000
         );
     }
 }
@@ -282,7 +282,7 @@ class MyAgent extends Agent
             thread_id: 'CHAT_THREAD_ID',
             pdo: $this->connection->getNativeConnection(),
             table: 'chat_hisotry',
-            contextWindow: 50000
+            contextWindow: 150000
         );
     }
 }
@@ -351,7 +351,7 @@ class MyAgent extends Agent
         return new EloquentChatHistory(
             thread_id: 'THREAD_ID',
             modelClass: ChatMessage::class,
-            contextWindow: 100000
+            contextWindow: 150000
         );
     }
 }
