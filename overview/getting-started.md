@@ -40,7 +40,7 @@ You can easily create your first agent with command below:
 namespace App\Neuron;
 
 use NeuronAI\Agent\Agent;
-use NeuronAI\SystemPrompt;
+use NeuronAI\Agent\SystemPrompt;
 use NeuronAI\Providers\Anthropic\Anthropic;
 
 class MyAgent extends Agent
