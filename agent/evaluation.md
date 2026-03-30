@@ -2,7 +2,7 @@
 description: Evaluating the output of your agentic system
 ---
 
-# Evaluation
+# Evals
 
 This guide covers approaches to evaluating agents. Effective evaluation is essential for measuring agent performance, tracking improvements, and ensuring your agents meet quality standards.
 
@@ -92,7 +92,7 @@ The logic is quite straightforward. The evaluator first load the dataset, and th
 
 In the `run` method you can execute your agentic entities with the example input and return the output. The output is then passed to the `evaluate` method where you can performs assetions comparing the output with a reference value or any other logic you want.
 
-### Defining The Dataset Loader
+### Dataset Loader
 
 You can use anything you want as dataset. There are no predefined format. The evaluator class simply allows you to load a list of test cases and run the evaluators against them. You have two dataset loaders.
 
@@ -149,7 +149,7 @@ vendor/bin/neuron evaluations --path=evaluators
 {% endtab %}
 {% endtabs %}
 
-### Available Assertions
+### Assertions
 
 We provide a set of built-in assertion for the most common use case. You can also implement your own assertion to design custom scoring systems. Check the next section.
 
@@ -367,7 +367,7 @@ class GreaterThanAssertion extends AbstractAssertion
 }
 ```
 
-### Output Interfaces
+### Output
 
 The evaluation module uses a PHP configuration file to control how evaluation results are displayed. The config system supports multiple output drivers, enabling results to be sent to console, files, databases, or external APIs simultaneously.
 
