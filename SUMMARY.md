@@ -21,7 +21,7 @@
 * [Async](agent/async.md)
 * [Monitoring & Debugging](agent/observability.md)
 * [Error Handling](agent/error-handling.md)
-* [Evaluation](agent/evaluation.md)
+* [Evals](agent/evaluation.md)
 * [Testing](agent/testing.md)
 
 ## Providers
