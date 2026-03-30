@@ -49,7 +49,7 @@ It's important to send past messages back to LLM to keep the context of the conv
 
 Chat history automatically truncates the list of messages to never exceed the context window avoiding unexpected errors. You may want to consider implementing more sophisticated context management strategies, like [summarization](middleware.md#summarization).
 
-While cutting, the chat history tries to minimize the context loss. The internal trimmer can identify a cutting point slightly less aggressive than the initially identified. So, to make sure the agent conversation stays in the limit, **you should configure the context window in the agent chat history with a margin of 10% from the actual limit of the underlying model**.
+While cutting, the chat history tries to minimize the context loss. The internal trimmer can identify a cutting point slightly less aggressive than the initially identified. So, to make sure the agent conversation stays in the limit, **you should configure the context window in the agent chat history with a margin of 5%-10% from the actual limit of the underlying model**.
 
 If your model works with a 200K context window, you should instantiate your chat history with 190K for example.
 
