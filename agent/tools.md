@@ -1343,7 +1343,7 @@ Total time: Max(Time(A), Time(B), Time(C))
 
 ### Enable parallel execution
 
-Set `parallelToolCalls()` to true in your Agent or RAG. The framework will inject the dedicated `ParallelToolNode` instead of the standard `ToolNode` in the workflow.
+Set `parallelToolCalls(true)` in your Agent or RAG. The framework will inject the dedicated node `ParallelToolNode` instead of the standard `ToolNode` in the workflow.
 
 ```php
 class DemoAgent extends Agent
