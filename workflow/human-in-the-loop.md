@@ -1,5 +1,5 @@
 ---
-description: The key breakthrough is that interruption isn't a bug – it's a feature.
+description: The key breakthrough is that interruption isn't a bug, it's a feature.
 ---
 
 # Interruption
