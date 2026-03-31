@@ -1343,15 +1343,17 @@ Total time: Max(Time(A), Time(B), Time(C))
 
 ### Enable parallel execution
 
-Just attach the `ParallelToolCalls` trait to your Agent or RAG agent:
+Set `parallelToolCalls()` to true in Agent or RAG:
 
 ```php
-use NeuronAI\Tools\ParallelToolCalls;
-
 class DemoAgent extends Agent
 {
-    use ParallelToolCalls;
-
+    public function __construct()
+    {
+        parent::__construct();
+        $this->parallelToolCalls(true);
+    }
+    
     protected function provider(): AIProviderInterface
     {
         ...
@@ -1368,14 +1370,14 @@ class DemoAgent extends Agent
 
 ### Requirements
 
-To use this trait you need to install the `spatie/fork` package. For more information check out the GitHub repository: [https://github.com/spatie/fork](https://github.com/spatie/fork)
+To use this feature you need to install the `spatie/fork` package. For more information check out the GitHub repository: [https://github.com/spatie/fork](https://github.com/spatie/fork)
 
-```
+```shellscript
 composer require spatie/fork
 ```
 
 {% hint style="warning" %}
-#### Limitations
+### Limitations
 
 This implementation requires the `pcntl` extension which is installed in many Unix and Mac systems by default.
 
