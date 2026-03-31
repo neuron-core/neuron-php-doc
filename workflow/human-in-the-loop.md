@@ -24,6 +24,14 @@ Here's how it works:
 
 **External Feedback Integration**: The edited interruption request is injected into the interrupted node to be continue its execution receiving the human feedback.
 
+### Video Introduction
+
+We know that Interruption flow is a quite advanced feature. Even with all the documentation below it may not be easy to grasp all aspects of this architecture. We're happy to link you below to an introductory video made by our community member [Amitav Roy](https://www.linkedin.com/in/royamitav/).
+
+It might give you some additional information that, combined with the documentation, can help you understand how to implement your use cases.
+
+{% embed url="https://www.youtube.com/watch?v=jjEBjTRDLZE" %}
+
 ### How it works
 
 When you call for an interruption, the Workflow doesn't simply stop, it preserves its entire state, and waits for guidance before proceeding. This allows you to creates a hybrid intelligence system where AI handles the computational heavy lifting while humans contribute to strategic oversight, and decision-making.
