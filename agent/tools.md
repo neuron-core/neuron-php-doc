@@ -1388,3 +1388,35 @@ This implementation requires the `pcntl` extension which is installed in many Un
 If the `pcntl` extension is not present in the system running the agent (e.g. Windows machines) the trait automatically fallbacks to the standard tool calls execution. This can be helpful if you have a missmatch between your local development environment and the production environment. You can develop locally with `pcntl` disabled, then deploy to production environments where it may be enabled—**without modifying a single line of code**. The agent adapts automatically to whatever execution environment it finds itself in.
 {% endhint %}
 
+### Error Handler
+
+Now the question is how to handle Tool errors. There are a couple of options, to fit different scenarios and needs.
+
+The `ToolNode` accepts an `$errorHandler` argument [(code)](https://github.com/neuron-core/neuron-ai/blob/3.x/src/Agent/Nodes/ToolNode.php#L37). It's a callback that receives the exception being thrown by the tool, and the instance of the failing tool.
+
+It allows you to implement a custom logic in case of tool error (General tool exceptions, or `ToolRunsExceededException`). **If you return a value it will be returned to the model as the result of the tool.** By default the ToolNode re-raise execution errors.
+
+**Fluent definition:**
+
+```php
+$agent = Agent::make()
+    ->toolErrorHandler(
+        fn(Throwable $e, ToolInterface $tool): string => "Error: {$e->getMessage()}"
+    );
+```
+
+**Extending the Agent**&#x20;
+
+You can also implement `resolveToolErrorHandler()` directly to define the callback to run.
+
+```php
+class MyAgent extends Agent
+{
+    ...
+
+    protected function resolveToolErrorHandler(): ?callable
+    {
+        return fn(Throwable $e, ToolInterface $tool): string => "Error: {$e->getMessage()}";
+    }
+}
+```
