@@ -1388,7 +1388,7 @@ This implementation requires the `pcntl` extension which is installed in many Un
 If the `pcntl` extension is not present in the system running the agent (e.g. Windows machines) the trait automatically fallbacks to the standard tool calls execution. This can be helpful if you have a missmatch between your local development environment and the production environment. You can develop locally with `pcntl` disabled, then deploy to production environments where it may be enabled—**without modifying a single line of code**. The agent adapts automatically to whatever execution environment it finds itself in.
 {% endhint %}
 
-### Error Handler
+## Error Handler
 
 Now the question is how to handle Tool errors. There are a couple of options, to fit different scenarios and needs.
 
