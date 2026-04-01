@@ -4,13 +4,19 @@ description: Learn about the Workflow features through real code examples
 
 # Examples
 
+## AIForm - Conversational Data Collection
+
+AIForm is a component for collecting structured data through multi-turn natural language conversations. It uses an AI agent to progressively gather information defined by a structured output class, validating each piece of data along the way.
+
+The form maintains conversation history, tracks collected fields, missing fields, and validation errors across multiple turns.
+
+<a href="https://github.com/neuron-core/ai-form" class="button secondary" data-icon="github">Check out the GitHub repository</a>
+
 ## Deep Research Agent
 
 This project is inspired by Open Deep Research, which uses LangGraph for implementation. Other implementations exist also for llamaindex, and others. Our version leverages Neuron to create a powerful, modular workflow for research and analysis.
 
 Neuron Open Deep Research provides a structured approach to generating comprehensive research reports on any topic using large language models, with a focus on modularity, extensibility, and real-time results.
-
-<figure><img src="../.gitbook/assets/deep-research-agent.png" alt=""><figcaption><p><a href="https://github.com/neuron-core/deep-research-agent">https://github.com/neuron-core/deep-research-agent</a></p></figcaption></figure>
 
 ### Architecture
 
@@ -35,8 +41,6 @@ Stack Used:
 
 * Neuron Workflow for multi-agent orchestration.
 * [SerpAPI](https://serpapi.com/) for finding hotels, flights and places to visit comprehensive research reports on any topic using large language models, with a focus on modularity, extensibility, and real-time results.
-
-<figure><img src="../.gitbook/assets/travel-planner-agent.jpeg" alt=""><figcaption><p><a href="https://github.com/neuron-core/travel-planner-agent">https://github.com/neuron-core/travel-planner-agent</a></p></figcaption></figure>
 
 ### Architecture
 
