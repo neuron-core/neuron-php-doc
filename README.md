@@ -40,29 +40,21 @@ All Neuron components belong to its own interface, so you can easily define depe
 
 Neuron's architecture prioritizes the fundamentals that experienced engineers expect from production-grade software.&#x20;
 
-***
-
 #### Strong Typing System
 
 The framework leverages PHP 8's mature type system throughout its codebase, with every method signature, property, and return value explicitly typed. The entire framework passes PHPStan 100% type coverage.
-
-***
-
-#### IDE Friendly
-
-The strongly-typed approach means your IDE can provide accurate autocompletion for agent configurations, tool parameters, and response handling. Method signatures include detailed PHPDoc annotations that provide context beyond type hints when needed, explaining parameter expectations and return value structures.
-
-***
-
-This foundation allows faster debugging cycles, easy integration patterns with frameworks like Symfony or Laravel. We assume you're building systems that need to be maintained, extended, and understood by teams rather than individual experiments.
 
 #### Carefully Crafted Architecture
 
 Whether you're working within a Laravel application, a Symfony project, a WordPress plugin, or a custom MVC framework, Neuron integrates seamlessly with your existing codebase without refactoring or disrupting established environments.
 
-Neuron uses standard PSR interfaces where appropriate and maintains minimal external dependencies, avoiding conflits across different PHP environments and framework versions. This design choice prevents the common problem where introducing a new library increase the risks of getting stuck due to incompatible versions of dependencies.
+Neuron uses opinionated interfaces where appropriate and maintains minimal external dependencies, avoiding conflits across different PHP environments and framework versions.&#x20;
 
 For teams working across multiple projects, this approach provides consistency. The same Neuron patterns and implementations work regardless of whether you're building a new microservice in pure PHP, extending a WordPress site, or adding features to an enterprise Symfony and Laravel application. Knowledge transfer between projects becomes seamless, and developers can leverage their Neuron expertise across their entire PHP portfolio.
+
+#### AI Assistant Friendly
+
+When working with AI coding assistants like Claude Code, Opencode, Cursor, or other similar tools, you can connect the Neuron AI documentation as an MCP server or use the [Neuron SKILLS](overview/agentic-development.md) to give the AI deep context about our components. This leads to more accurate code suggestions, better understanding of component APIs, and fewer hallucinations when generating Neuron code.
 
 #### Community Driven
 
