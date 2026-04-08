@@ -133,6 +133,29 @@ class MyRAG extends RAG
 }
 ```
 
+### Cohere
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\RAG\Embeddings\EmbeddingsProviderInterface;
+use NeuronAI\RAG\Embeddings\CohereEmbeddingsProvider;
+use NeuronAI\RAG\RAG;
+
+class MyRAG extends RAG
+{
+    ...
+    
+    protected function embeddings(): EmbeddingsProviderInterface
+    {
+        return new CohereEmbeddingsProvider(
+            key: 'COHERE_API_KEY',
+            model: 'COHERE_EMBEDDINGS_MODEL' // embed-v4.0
+        );
+    }
+}
+```
+
 ### Aws Bedrock
 
 ```php
