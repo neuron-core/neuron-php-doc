@@ -301,8 +301,8 @@ Schema::create('chat_messages', function (Blueprint $table) {
      $table->id();
      $table->string('thread_id')->index();
      $table->string('role');
-     $table->json('content');
-     $table->json('meta')->nullable();
+     $table->string('content');
+     $table->string('meta')->nullable();
      $table->timestamps();
 
      $table->index(['thread_id', 'id']); // For efficient ordering and trimming
