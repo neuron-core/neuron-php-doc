@@ -274,7 +274,9 @@ use NeuronAI\Providers\AIProviderInterface;
 class MyAgent extends Agent
 {
     public function __construct(protected Connection $connection)
-    {}
+    {
+        parent::__construct();
+    }
     
     protected function chatHistory(): ChatHistoryInterface
     {
