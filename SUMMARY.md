@@ -50,7 +50,7 @@
 * [Persistence](workflow/persistence.md)
 * [Streaming](workflow/streaming.md)
 * [Middleware](workflow/middleware.md)
-* [Examples](workflow/examples.md)
+* [Tips & Tricks](workflow/examples.md)
 
 ## Resources
 

@@ -1,10 +1,48 @@
 ---
-description: Learn about the Workflow features through real code examples
+description: >-
+  Overcome bottlenecks, and learn about the Workflow features through real code
+  examples
 ---
 
-# Examples
+# Tips & Tricks
 
-## AIForm - Conversational Data Collection
+### Too many nodes?
+
+When you work with many nodes, loops, or branches, nodes are always registered in the workflow as a flat list. Having too many nodes can make it difficult to visually follow the execution flow and focus on a certain part of the workflow for changes or new development.
+
+Instead of a flat 20-node array, break it into logical sections:
+
+```php
+ class MyWorkflow extends Workflow
+ {
+     ... 
+    protected function nodes(): array
+    {
+        return [
+            ...$this->classificationProcess(),
+            ...$this->analysis(),
+            ...$this->postProcessing(),
+        ];
+    }
+    
+    /**
+     * Initial classification process
+     */
+    protected function classificationProcess(): array
+    {
+        return [
+            // Nodes here...
+        ];
+    }
+}
+```
+
+The spread operator (...) keeps the runtime behavior identical. It's still a flat array. But now the\
+`nodes()` method reads like a table of contents, and each group is self-documenting.
+
+## Example Projects
+
+### AIForm - Conversational Data Collection
 
 AIForm is a component for collecting structured data through multi-turn natural language conversations. It uses an AI agent to progressively gather information defined by a structured output class, validating each piece of data along the way.
 
@@ -12,13 +50,13 @@ The form maintains conversation history, tracks collected fields, missing fields
 
 <a href="https://github.com/neuron-core/ai-form" class="button secondary" data-icon="github">Check out the GitHub repository</a>
 
-## Deep Research Agent
+### Deep Research Agent
 
 This project is inspired by Open Deep Research, which uses LangGraph for implementation. Other implementations exist also for llamaindex, and others. Our version leverages Neuron to create a powerful, modular workflow for research and analysis.
 
 Neuron Open Deep Research provides a structured approach to generating comprehensive research reports on any topic using large language models, with a focus on modularity, extensibility, and real-time results.
 
-### Architecture
+#### Architecture
 
 **DeepResearchAgent**: Orchestrates the overall report generation process
 
@@ -33,7 +71,7 @@ Neuron Open Deep Research provides a structured approach to generating comprehen
 
 <a href="https://github.com/neuron-core/deep-research-agent" class="button secondary" data-icon="github">Check out the GitHub repository</a>
 
-## Travel Planner Agent
+### Travel Planner Agent
 
 This project demonstrates how to create a tour planner using Neuron PHP framework for agentic applications.
 
@@ -42,7 +80,7 @@ Stack Used:
 * Neuron Workflow for multi-agent orchestration.
 * [SerpAPI](https://serpapi.com/) for finding hotels, flights and places to visit comprehensive research reports on any topic using large language models, with a focus on modularity, extensibility, and real-time results.
 
-### Architecture
+#### Architecture
 
 **TravelPlannerAgent**: Orchestrates the overall itinerary generation process
 
@@ -57,7 +95,7 @@ Stack Used:
 
 <a href="https://github.com/neuron-core/travel-planner-agent" class="button secondary" data-icon="github">Check out the GitHub Repository</a>
 
-## Laravel Travel Agent
+### Laravel Travel Agent
 
 This project demonstrates how to integrate multi-agent workflows in a Laravel application using Neuron PHP AI framework.&#x20;
 
@@ -69,7 +107,7 @@ Stack Used:
 
 <figure><img src="../.gitbook/assets/laravel-travel-planner-ai-agent.png" alt=""><figcaption></figcaption></figure>
 
-### How to use this project
+#### How to use this project
 
 Download the project on your machine and open your terminal in the project directory. First, install the composer dependencies:
 
