@@ -40,10 +40,6 @@ All Neuron components belong to its own interface, so you can easily define depe
 
 Neuron's architecture prioritizes the fundamentals that experienced engineers expect from production-grade software.&#x20;
 
-#### Strong Typing System
-
-The framework leverages PHP 8's mature type system throughout its codebase, with every method signature, property, and return value explicitly typed. The entire framework passes PHPStan 100% type coverage.
-
 #### Carefully Crafted Architecture
 
 Whether you're working within a Laravel application, a Symfony project, a WordPress plugin, or a custom MVC framework, Neuron integrates seamlessly with your existing codebase without refactoring or disrupting established environments.
@@ -58,7 +54,7 @@ When working with AI coding assistants like Claude Code, Opencode, Cursor, or ot
 
 #### Community Driven
 
-These design principles create a unified ecosystem for AI development across all PHP communities. Rather than fragmenting innovation across framework-specific solutions, Neuron enables collaboration between Laravel developers, Symfony contributors, WordPress plugin authors, and custom framework maintainers. When improvements are made to Neuron's core capabilities, they benefit every PHP developer.
+These design principles create a unified ecosystem for AI development across all PHP communities. Rather than fragmenting innovation across framework-specific solutions, Neuron enables collaboration between developers of all environments, Laravel fellows, Symfony developers, WordPress plugin authors, and custom framework maintainers. When improvements are made to Neuron's core capabilities, they benefit every PHP developer.
 
 Neuron's universal approach attracts contributors from across the PHP ecosystem, leading to more robust implementations, broader testing across different environments, and faster development of new features. This collaborative approach also means better support for newcomers, as experienced developers from various PHP backgrounds can provide guidance and assistance.
 
@@ -66,13 +62,13 @@ Neuron's universal approach attracts contributors from across the PHP ecosystem,
 
 Integrating AI Agents into your application you’re not working only with functions and deterministic code, you program your agent also influencing probability distributions. Same input ≠ output. That means reproducibility, versioning, and debugging become real problems.
 
-The [Inspector](https://inspector.dev/) team designed Neuron with built-in monitoring & debugging features, so you can monitor AI agents were running, helping you deploy production-grade implementations with confidence.
-
-Error handling and retry mechanisms are built into the framework, ensuring your agents can gracefully handle failures, rate limits, and other common issues in production environments.&#x20;
+The [Inspector](https://inspector.dev/) team designed Neuron with a built-in evaluation module, monitoring & debugging features, so you can keep AI agents under control were running, helping you deploy production-grade implementations with confidence.
 
 ### Support For Multiple Providers
 
-Neuron uses a common interface for large language models (`AIProviderInterface`) as well as for the other components, such as [embedding](rag/embeddings-provider.md), [vector stores](rag/vector-store.md), [toolkits](agent/tools.md#toolkits-composable-agent-capabilities), etc. The modular architecture allows you to swap components as needed, whether you're changing language model providers, adjusting memory backends, or scaling across multiple servers.
+Neuron uses a common interface for large language models (`AIProviderInterface`) as well as for the other components, such as [embedding](rag/embeddings-provider.md), [vector stores](rag/vector-store.md), [toolkits](agent/tools.md#toolkits-composable-agent-capabilities), etc. The modular architecture allows you to swap components as needed, whether you're changing LLM provider, adjusting memory backends, or scaling across multiple servers.
+
+Here are a couple of examples:
 
 {% tabs %}
 {% tab title="Anthropic" %}
