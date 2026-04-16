@@ -10,7 +10,7 @@ Streaming enables you to show users chunks of response text as they arrive rathe
 
 ### Agent
 
-To stream the AI response you should use the `stream()` method on the agent, instead of `chat()`. This method prepares the agent workflow to use the `StreamingNode` instead of `ChatNode`.&#x20;
+To stream the AI response you should use the `stream()` method on the agent, instead of `chat()`. This method prepares the agent workflow to use the `StreamingNode` instead of `ChatNode`.
 
 Calling the `events()` method on the returning agent handler you get a PHP generator that can be used to consume the streamiong as an iterable object.
 
@@ -30,7 +30,7 @@ foreach ($handler->events() as $chunk) {
 
 ### Streaming chunks
 
-When you process the streamed response of the agent you can expect to receive three types of chunk objects:&#x20;
+When you process the streamed response of the agent you can expect to receive three types of chunk objects:
 
 * `TextChunk`: represents a piece of text
 * `ReasoningChunk`: contains chunks of the reasoning summary of the model (only available for reasoning models)
@@ -39,7 +39,7 @@ When you process the streamed response of the agent you can expect to receive th
 
 These objects are a layer of abstraction between the underlying messages flow inside the agent to perform a task and the data needed on the client side to stay informed on what's going on behind the scenes.
 
-The stream composition depends by your agent implementation. If the agent has no tools attached there is no chance to receive a `ToolCallChunk` or `ToolResultChunk` instance, so you can iterate the output stream expecting only  text and reasoning chunks.
+The stream composition depends by your agent implementation. If the agent has no tools attached there is no chance to receive a `ToolCallChunk` or `ToolResultChunk` instance, so you can iterate the output stream expecting only text and reasoning chunks.
 
 ### Streaming & Tools
 
@@ -134,12 +134,11 @@ Stream adapters act as translators between Neuron's internal streaming events (t
 
 You can also plug in adapters to send streamed data to an external transport layer like [Pusher](https://pusher.com/), if you want to stream contents to the UI from agent executed in the background.
 
-This architecture allows you to seamlessly integrate Neuron agents with various frontend frameworks without modifying your core agent logic. Adapters handle protocol-specific concerns such as message \
-lifecycle events, event formatting, and ID tracking, while maintaining consistent streaming behavior across all providers (Anthropic, OpenAI, Gemini, Ollama, etc.). The system is highly extensible, you can create custom adapters by extending `SSEAdapter` to implement streaming data transofrmations, or directly implement the `StreamAdapterInterface` for custom needs.
+This architecture allows you to seamlessly integrate Neuron agents with various frontend frameworks without modifying your core agent logic. Adapters handle protocol-specific concerns such as message lifecycle events, event formatting, and ID tracking, while maintaining consistent streaming behavior across all providers (Anthropic, OpenAI, Gemini, Ollama, etc.). The system is highly extensible, you can create custom adapters by extending `SSEAdapter` to implement streaming data transofrmations, or directly implement the `StreamAdapterInterface` for custom needs.
 
 <figure><img src="../.gitbook/assets/streaming-adapter.png" alt=""><figcaption></figcaption></figure>
 
-You simply need to provide an adapter instance to the `events()` method of the agent handler used to stream the LLM response.&#x20;
+You simply need to provide an adapter instance to the `events()` method of the agent handler used to stream the LLM response.
 
 ### Vercel AI SDK Adapter
 
