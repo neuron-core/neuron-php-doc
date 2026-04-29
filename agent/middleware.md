@@ -138,7 +138,7 @@ class MyAgent extends Agent
             ToolNode::class => [
                 new ToolApproval(
                     tools: [
-                        // Enable tool approval based on custom rules
+                        // Ask for approval if the amount is greather than 100
                         BuyTicketTool::class => function (array $args): bool {
                             return $args['amount'] > 100;
                         }
