@@ -139,8 +139,8 @@ class MyAgent extends Agent
                 new ToolApproval(
                     tools: [
                         // Enable tool approval based on custom rules
-                        BuyTicketTool::class => function (ToolInterface $tool): bool {
-                            return $tool->getInput('amount') > 100;
+                        BuyTicketTool::class => function (array $args): bool {
+                            return $args['amount'] > 100;
                         }
                     ]
                 )
