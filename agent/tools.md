@@ -294,7 +294,7 @@ If the `visible` method get `false`, the tool will not be available during agent
 
 ### Tool Approval
 
-Neuron provides you with full support for the human in the loop pattern including tool approval. It's different from visbility because "approval" is a runtime gatekeeper. The agent has already been authorized to use the tool, it has formulated a plan, and it has generated the arguments. Now, the framework intercepts the call and pause waiting for the user's final decision.
+Neuron provides you with full support for the human in the loop pattern including tool approval. It's different from visbility because "approval" is a runtime gatekeeper. The framework intercepts the tool call and pause waiting for the user's final decision.
 
 You can plug this feature into your agent with our built-in [ToolApproval](tools.md#tool-properties) middleware.
 
