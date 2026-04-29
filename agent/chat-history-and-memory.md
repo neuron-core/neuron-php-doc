@@ -223,7 +223,7 @@ class MyAgent extends Agent
         return new SQLChatHistory(
             thread_id: 'THREAD_ID',
             pdo: new \PDO("mysql:host=localhost;dbname=DB_NAME;charset=utf8mb4", "DB_USER", "DB_PASS"),
-            table: 'chat_hisotry',
+            table: 'chat_history',
             contextWindow: 150000
         );
     }
@@ -251,7 +251,7 @@ class MyAgent extends Agent
         return new SQLChatHistory(
             thread_id: 'CHAT_THREAD_ID',
             pdo: \DB::connection()->getPdo(),
-            table: 'chat_hisotry',
+            table: 'chat_history',
             contextWindow: 150000
         );
     }
@@ -283,14 +283,14 @@ class MyAgent extends Agent
         return new SQLChatHistory(
             thread_id: 'CHAT_THREAD_ID',
             pdo: $this->connection->getNativeConnection(),
-            table: 'chat_hisotry',
+            table: 'chat_history',
             contextWindow: 150000
         );
     }
 }
 ```
 
-### EloquentChatHisotry
+### EloquentChatHistory
 
 You should create your own Eloquent model and pass the class string as the constructor argument. The model can have custom relations, scopes, attributes, etc. but the basic structure must be based on this migration script:
 
