@@ -269,11 +269,11 @@ The checkpoint method accepts two arguments:
 
 When the node is executed, the checkpoint method saves the result of the Closure in case of an interruption. When the node is executed again after the interruption, it can reach the interruption point with the exact same state of the previous run to get the external feedback.
 
-### Consume The Feedback
+### Consume The Interruption Feedback
 
 You can also consume the external feedback somewhere in your code other than where you call the `interrupt()` method.
 
-The `consumeInterruptFeedabck()` method allows you get the value of the external feedback or null if the node is simply running and not awakening:
+The `consumeResumeRequest()` method allows you get the value of the external feedback or null if the node is simply running and not awakening:
 
 ```php
 <?php
@@ -287,9 +287,10 @@ class InterruptionNode extends Node
 {
     public function __invoke(InputEvent $event, WorkflowState $state): OutputEvent
     {
-        // Interrupt the workflow and wait for the feedback.
-        $feedback = $this->consumeInterruptFeedback();
+        // Ask for the final resume request
+        $feedback = $this->consumeResumeRequest();
     
+        // If the request has not thare yet jump to the interruption
         if ($feedback !== null && $feedback->getAction('review_id')->isApproved()) {
             $state->set('is_sufficient', true);
             $state->set('user_feedback', $feedback->getAction('review_id')->feedback);
