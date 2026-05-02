@@ -267,15 +267,15 @@ class DescriptionGenerationNode extends Node
 {
     public function __invoke(TextProcessEvent $event, WorkflowState $state): StopEvent
     {
-				$input = new UserMessage('Describe this image');
-				$input->addContent(
-					new ImageContent(...)
-				);
-			
-				$response = AsyncAgent::make()
-					->chat($input)
-					->getMessage()
-		
+        $input = new UserMessage('Describe this image');
+        $input->addContent(
+        	new ImageContent(...)
+        );
+        
+        $response = AsyncAgent::make()
+        	->chat($input)
+        	->getMessage()
+        
         return new StopEvent(result: $response);
     }
 }
