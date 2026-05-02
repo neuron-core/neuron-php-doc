@@ -136,9 +136,9 @@ class DocumentProcessing extends Node
 {
     public function __invoke(StartEvent $event, WorkflowState $state): ParallelEvent
     {
-		    // Node logic here...
+        // Node logic here...
 	
-		    // Finally return a ParallelEvent
+        // Finally return a ParallelEvent
         return new ParallelEvent([
             'text' => new TextProcessEvent(),
             'image' => new ImageProcessEvent(),
