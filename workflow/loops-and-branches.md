@@ -243,7 +243,7 @@ composer require amphp/amp
 ```php
 class MyAgent extends Workflow 
 {
-		/**
+    /**
      * Use the AsyncExecutor
      */
     protected function executor(): WorkflowExecutorInterface
