@@ -136,7 +136,7 @@ Explore [**Data Loaders**](data-loader.md) to learn how to populate the vector s
 
 ### Talk to the chat bot
 
-Imagine having previously populated the vector store with the knowledge base you want to connect to the RAG agent, and now you want to ask questions. Check out [**Data Loaders**](data-loader.md) to laern about RAG data population.
+Imagine having previously populated the vector store with the knowledge base you want to connect to the RAG agent, and now you want to ask questions. Check out [**Data Loaders**](data-loader.md) to learn about RAG data population.
 
 To start the execution of a RAG you call the `chat()`  method:
 
