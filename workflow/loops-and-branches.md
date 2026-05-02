@@ -234,7 +234,7 @@ The only way to send result back to the main workflow is adding result data to t
 
 ### AsyncExecutor
 
-You need to install Amp to use this component:
+We also provide an implementation of the internal workflow executor that allows you to run multiple branches concurrently. To use the `AsyncExecutor` you need to install the [Amp](https://github.com/amphp/amp) package:
 
 ```bash
 composer require amphp/amp
