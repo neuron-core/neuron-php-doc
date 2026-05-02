@@ -193,9 +193,9 @@ class AddWatermarkNode extends Node
 {
     public function __invoke(TextProcessEvent $event, WorkflowState $state): StopEvent
     {
-		    // Node code here...
+        // Node code here...
 		
-				// Returning StopEvent the branch ends
+        // Returning StopEvent the branch ends
         return new StopEvent(result: 'Hello World!');
     }
 }
