@@ -228,9 +228,9 @@ As usual the merge node can stop the workflow, or return other events moving the
 
 ### Branch State Isolation
 
-Branches will receive a copy of the Workflow state, so they can start with the same Workflow information, but every change will affect only the branch state. They are completely isolated.
+One detail worth noting: **each branch gets an isolated copy of the workflow state**. They start with the same snapshot, but mutations inside a branch don't propagate to sibling branches or to the main workflow. The only way to pass data back is through the `StopEvent` result.&#x20;
 
-The only way to send result back to the main workflow is adding result data to the `StopEvent`.
+This is intentional, it avoids a whole class of concurrency bugs where branches step on each other's state.
 
 ### AsyncExecutor
 
