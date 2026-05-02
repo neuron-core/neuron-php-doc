@@ -250,11 +250,11 @@ class MyAgent extends Workflow
     {
         return new AsyncExecutor();
     }
-	
-		protected function nodes(): array
-		{
-			return [...];
-		}
+
+    protected function nodes(): array
+    {
+        return [...];
+    }
 }
 ```
 
@@ -269,13 +269,13 @@ class DescriptionGenerationNode extends Node
     {
         $input = new UserMessage('Describe this image');
         $input->addContent(
-        	new ImageContent(...)
+            new ImageContent(...)
         );
-        
+
         $response = AsyncAgent::make()
-        	->chat($input)
-        	->getMessage()
-        
+            ->chat($input)
+            ->getMessage();
+
         return new StopEvent(result: $response);
     }
 }
