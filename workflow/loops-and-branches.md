@@ -175,8 +175,8 @@ class MyWorkflow extends Workflow
 			new AddWatermarkNode(),
 			
 			new MergeNode(),
-		]
-	);
+		];
+	};
 }
 ```
 
