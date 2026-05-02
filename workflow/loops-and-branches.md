@@ -121,11 +121,11 @@ $state = Workflow::make()
     ->run();
 ```
 
-<figure><img src="../.gitbook/assets/workflow-branches.png" alt=""><figcaption></figcaption></figure>
-
 You can of course combine branches and loops in any order to fulfill the needs of your application.
 
 ## Parallel Branches
+
+<figure><img src="../.gitbook/assets/parallel-branch.png" alt=""><figcaption></figcaption></figure>
 
 When you want to call the execution of multiple branches in parallel, you need to return the special event `ParallelEvent`  from your node.
 
