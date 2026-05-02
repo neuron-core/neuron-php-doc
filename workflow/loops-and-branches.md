@@ -176,7 +176,7 @@ class MyWorkflow extends Workflow
 			
 			new MergeNode(),
 		];
-	};
+	}
 }
 ```
 
