@@ -203,7 +203,7 @@ class AddWatermarkNode extends Node
 
 Notice: StopEvent can also carry some results.
 
-### Handle the final result
+### Get the branches result
 
 The `ParallelEvent` returned by the `DocumentProcessing` node is basically waiting the end of branches execution before being forwarded to the next node.
 
