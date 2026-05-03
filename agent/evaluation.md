@@ -4,11 +4,11 @@ description: Evaluating the output of your agentic system
 
 # Evals
 
-This guide covers approaches to evaluating agents. Effective evaluation is essential for measuring agent performance, tracking improvements, and ensuring your agents meet quality standards.
+This guide covers approaches to evaluating agents. Effective evaluation is essential for measuring agent performance, tracking improvements, and ensuring your agentic system meet quality standards.
 
-When building AI agents, evaluating the consistency of their output is crucial, not only for the maintenance of the agent, but also to evaluate different architectures or prompting approach on the initial design phase.&#x20;
+When building AI applications, evaluating the consistency of their output is crucial, not only for the maintenance of the agent, but also to evaluate different architectures or prompting approach on the initial design phase.&#x20;
 
-It's important to consider various qualitative and quantitative factors, including response syntax, task completion, success, and inaccuracies or hallucinations. In evaluations, it's also important to consider comparing different agent configurations to optimize for specific desired outcomes. Given the dynamic and non-deterministic nature of LLMs, it's also important to have rigorous and frequent evaluations to ensure a consistent baseline for tracking improvements or regressions.
+It's important to consider various qualitative and quantitative factors, including response syntax, task completion, success, and inaccuracies or hallucinations. In evaluations, it's also important to consider comparing different configurations to optimize for specific desired outcomes. Given the dynamic and non-deterministic nature of LLMs, it's also important to have rigorous and frequent evaluations to ensure a consistent baseline for tracking improvements or regressions.
 
 ### Configuring your application
 
