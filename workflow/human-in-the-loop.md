@@ -177,7 +177,7 @@ try {
     return $workflow->init()->run();
 } catch (WorkflowInterrupt $interrupt) {
     $request = $interrupt->getRequest();
-    $resumeToken = $interrupt->getResumeToken();
+    $workflowId = $interrupt->getWorkflowId();
     
     /*
     * You can store the request as a json object
@@ -185,7 +185,7 @@ try {
     */
     $pdo->prepare("INSERT INTO interruption_requests (resume_token, request) VALUES (?, ?)");
     $pdo->execute([
-        $resumeToken,
+        $workflowId,
         json_encode($request),
     ]);
 }
@@ -196,7 +196,7 @@ Use the information in the `$request` object to guide the human in providing a f
 ```php
 $workflow = new WorkflowAgent(
     new FilePersistence(__DIR__),
-    $resumeToken // <- Use the resume token you got during interrutpion
+    $workflowId // <- Use the resume token you got during interrutpion
 );
 
 $request = ContentReviewInterrupt::fromArray($data);

@@ -24,7 +24,7 @@ Neuron is the perfect AI architecture for your project.
 
 ### Laravel
 
-Neuron offers a well defined encapsulation pattern, allowing you to work on your AI components in a dedicated namespace. You can enjoy the exact same experience of the other ecosystem packages you already love, like Filament, Nova, Horizon, Volt, etc.
+Neuron offers a well defined encapsulation pattern, allowing you to work on your AI components in a dedicated namespace. You can enjoy the exact same experience of the other ecosystem packages you already love, like Filament, Nova, Horizon, etc.
 
 <a href="https://github.com/neuron-core/laravel-travel-agent" class="button primary" data-icon="github">Example project</a>
 
