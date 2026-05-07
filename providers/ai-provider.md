@@ -525,7 +525,36 @@ echo $message->getContent();
 // Hi, how can I help you today?
 ```
 
-### Custom Http Client Options
+### Alibaba DashScope
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent\Agent;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Providers\Alibaba\DashScopeOpenAI;
+
+class MyAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        return new DashScopeOpenAI(
+            key: 'DS_API_KEY',
+            model: 'wan2.6-t2i',
+        );
+    }
+}
+
+$message = MyAgent::make()
+    ->chat(new UserMessage("Hi!"))
+    ->getMessage();
+
+echo $message->getContent();
+// Hi, how can I help you today?
+```
+
+## Custom Http Client
 
 Providers use an HTTP client to communicate with the remote service. You can customize the configuration of the HTTP client explicitly passing an instance with custom constructor parameters, like timeout, custom headers, etc.
 
