@@ -65,7 +65,7 @@ MariaDB supports VECTOR column type starting from version 11.7. To make this com
 
 ```sql
 CREATE TABLE IF NOT EXISTS rag_documents (
-    id BIGINT PRIMARY KEY,
+    id UUID NOT NULL PRIMARY KEY,
     content TEXT,
     sourceType VARCHAR(255),
     sourceName VARCHAR(255),
@@ -189,7 +189,7 @@ class MyChatBot extends RAG
     {
         return new WeaviateVectorStore(
             collection: 'WEAVIATE_COLLECTION_NAME',
-            host: 'http://localhost:8080',
+            host: 'http://localhost:8080', // Local or cloud URL
             key: 'WEAVIATE_KEY' // optional for local deployment
         );
     }
