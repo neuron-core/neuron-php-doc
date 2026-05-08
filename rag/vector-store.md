@@ -59,6 +59,44 @@ class MyChatBot extends RAG
 }
 ```
 
+### MariaDB
+
+MariaDB supports VECTOR column type starting from version 11.7. To make this component works you need to create the table to store documents and related vectors. Here is the SQL script you can use to do so:
+
+```sql
+CREATE TABLE IF NOT EXISTS rag_documents (
+    id BIGINT PRIMARY KEY,
+    content TEXT,
+    sourceType VARCHAR(255),
+    sourceName VARCHAR(255),
+    metadata JSON,
+    embedding VECTOR(1536) NOT NULL,
+    VECTOR INDEX (embedding)
+)
+```
+
+Here is how to use the component in your RAG:
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\RAG\RAG;
+use NeuronAI\RAG\VectorStore\MariaDBVectorStore;
+use NeuronAI\RAG\VectorStore\VectorStoreInterface;
+
+class MyChatBot extends RAG
+{
+    ...
+
+    protected function vectorStore(): VectorStoreInterface
+    {
+        return new MariaDBVectorStore(
+            new \PDO(...), // Or get the PDO instance from the ORM
+        );
+    }
+}
+```
+
 ### Pinecone
 
 Pinecone makes it easy to provide long-term memory for high-performance AI applications. It’s a managed, cloud-native vector database with a simple API and no infrastructure hassles. Pinecone serves fresh, filtered query results with low latency at the scale of billions of vectors.
@@ -133,6 +171,30 @@ $response = MyRAG::make()
 ```
 
 Take a look at the Pinecone official documentation to better understand the metadata filters: [https://docs.pinecone.io/reference/api/2025-04/data-plane/query#body-filter](https://docs.pinecone.io/reference/api/2025-04/data-plane/query#body-filter)
+
+### Weaviate
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\RAG\RAG;
+use NeuronAI\RAG\VectorStore\WeaviateVectorStore;
+use NeuronAI\RAG\VectorStore\VectorStoreInterface;
+
+class MyChatBot extends RAG
+{
+    ...
+
+    protected function vectorStore(): VectorStoreInterface
+    {
+        return new WeaviateVectorStore(
+            collection: 'WEAVIATE_COLLECTION_NAME',
+            host: 'http://localhost:8080',
+            key: 'WEAVIATE_KEY' // optional for local deployment
+        );
+    }
+}
+```
 
 ### Elasticsearch
 
