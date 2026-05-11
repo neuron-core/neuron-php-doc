@@ -96,9 +96,10 @@ $message->addContent(
 
 // Get all text blocks concatenated
 echo $message->getContent();
-// Hi
-// My name is John
-// Remeber to answer as you are a professinal concierge.
+// Hi my name is John. Remeber to answer as you are a professinal concierge.
+
+// Or get the array of text content blocks
+$blocks = $message->getTextBlocks();
 ```
 
 As you can notice the final message will be a composition of multiple blocks.
