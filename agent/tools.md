@@ -358,7 +358,8 @@ class MyTool extends Tool
                 name: 'arg',
                 type: PropertyType::STRING,
                 description: 'Describe the value you expect',
-                required: true
+                required: true,
+                nullable: false
             )
         ];
     }
