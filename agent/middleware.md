@@ -188,3 +188,51 @@ class MyAgent extends Agent
 ```
 
 `maxTokens` and `messagesToKeep` work together to define the threshold beyond which the summary must be performed. In the example above, if the context reach 30K tokens, there must be at least 10 messages in the chat history for the summary to start. Adding new messages to the chat history will eventually cross both thresholds triggering the summarization.
+
+### Tool Search
+
+By default every time the provider is invoked all tools are loaded and transmitted to the backend LLM. A serious production agent connected to email, calendar, drive, CRM, and and multiple MCP servers can easily reach hundreds of tools, each carrying its name, description, parameter schema, and usage hints.
+
+This burns thousands of tokens on every turn, but the more painful issue is quality: when a model sees too many tools at once, descriptions blur together, similar-sounding tools compete for attention, and the agent starts making subtly wrong choices, mixing up parameters or hallucinating arguments because it is trying to keep too many signatures in working memory at the same time.
+
+Tool search reframes the tool catalog as something the agent queries on demand rather than something it carries on every request.
+
+To do so Neuron provides you with the global middleware `ToolSearchMiddleware` that you can attach to your agent:
+
+```php
+class MyAgent extends Agennt
+{
+    ...
+    
+    /**
+     * Define the global middleware.
+     */
+    protected function globalMiddleware(): array
+    {
+        return [
+            new ToolSearchMiddleware([
+                MyCustomTool::make(),
+                ...CalculatorToolkit::make()->tools()
+                ...MCPConnector::make([...])->tools()
+            ]),
+        ];
+    }
+    
+    /**
+     * Provide tools to the agent.
+     */
+    protected function tools(): array
+    {
+        return [
+            // A list of core tools that the model always has available
+            TavilySearchTool::make(...),
+        ];
+    }
+}
+```
+
+The middleware automatically injects the `ToolSearch` tool in the default tool list available to the model on every request, and keep the list of tools you provide in an internal array.
+
+The agent starts a turn with a minimal tool set, usually just `ToolSearch` itself plus whatever core tools you always want available, and when it needs a capability it does not currently have, it calls `ToolSearch` with a natural language query that returns a ranked list of tool descriptors with their full schemas. At this point a middleware sitting between the agent and the next inference call inspects the search result, extracts the tool identifiers, looks them up in the underlying registry, and adds their full definitions to the tools array that will be sent on the next request to the model.
+
+From the model's perspective the next turn simply arrives with a richer tool list, and it can invoke any of those newly surfaced tools directly with proper schema validation, exactly as if they had been there from the start.
