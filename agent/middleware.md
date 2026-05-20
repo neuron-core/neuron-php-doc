@@ -219,7 +219,7 @@ class MyAgent extends Agennt
     }
     
     /**
-     * Provide tools to the agent.
+     * Provide core tools to the agent.
      */
     protected function tools(): array
     {
