@@ -191,13 +191,13 @@ class MyAgent extends Agent
 
 ### Tool Search
 
-By default every time the provider is invoked all tools are loaded and transmitted to the backend LLM. A serious production agent connected to email, calendar, drive, CRM, and and multiple MCP servers can easily reach hundreds of tools, each carrying its name, description, parameter schema, and usage hints.
+By default every time the provider is invoked all tools are loaded and transmitted to the backend LLM. A complex production agent connected to email, calendar, drive, CRM, and and multiple MCP servers can easily reach hundreds of tools, each carrying its name, description, parameter schema, and usage hints.
 
 This burns thousands of tokens on every turn, but the more painful issue is quality: when a model sees too many tools at once, descriptions blur together, similar-sounding tools compete for attention, and the agent starts making subtly wrong choices, mixing up parameters or hallucinating arguments because it is trying to keep too many signatures in working memory at the same time.
 
 Tool search reframes the tool catalog as something the agent queries on demand rather than something it carries on every request.
 
-To do so Neuron provides you with the global middleware `ToolSearchMiddleware` that you can attach to your agent:
+You can use the global middleware `ToolSearchMiddleware` to activate dynamic tool selection on your agent:
 
 ```php
 class MyAgent extends Agennt

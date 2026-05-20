@@ -312,6 +312,26 @@ new ToolApproval(
 [middleware.md](middleware.md)
 {% endcontent-ref %}
 
+### Tool Search
+
+By default every time the provider is invoked all tools are loaded and transmitted to the backend LLM. A complex production agent connected to email, calendar, drive, CRM, and and multiple MCP servers can easily reach hundreds of tools, each carrying its name, description, parameter schema, and usage hints.
+
+Tool search reframes the tool catalog as something the agent queries on demand rather than something it carries on every request.
+
+You can use the global middleware `ToolSearchMiddleware` to activate dynamic tool selection on your agent:
+
+```php
+new ToolSearchMiddleware([
+    MyCustomTool::make(),
+    ...CalculatorToolkit::make()->tools()
+    ...MCPConnector::make([...])->tools()
+])
+```
+
+{% content-ref url="middleware.md" %}
+[middleware.md](middleware.md)
+{% endcontent-ref %}
+
 ### Monitoring & Debugging
 
 Neuron automatically manages the tool loop for you, based on what the LLM decided to call.
