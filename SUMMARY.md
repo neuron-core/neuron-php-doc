@@ -50,9 +50,9 @@
 * [Persistence](workflow/persistence.md)
 * [Streaming](workflow/streaming.md)
 * [Middleware](workflow/middleware.md)
-* [Tips & Tricks](workflow/examples.md)
 
 ## Resources
 
+* [Tips & Tricks](resources/examples.md)
 * [GitHub](https://github.com/neuron-core)
 * [NeuronHub](https://neuronhub.dev/)
