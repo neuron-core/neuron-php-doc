@@ -312,7 +312,7 @@ new ToolApproval(
 [middleware.md](middleware.md)
 {% endcontent-ref %}
 
-### Tool Search
+### Dynamic Tool Search
 
 By default every time the provider is invoked all tools are loaded and transmitted to the backend LLM. A complex production agent connected to email, calendar, drive, CRM, and and multiple MCP servers can easily reach hundreds of tools, each carrying its name, description, parameter schema, and usage hints.
 
