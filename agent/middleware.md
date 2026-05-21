@@ -231,6 +231,8 @@ class MyAgent extends Agennt
 }
 ```
 
+{% embed url="https://www.youtube.com/watch?v=qYmidHAXEYM" %}
+
 The middleware automatically injects the `ToolSearch` tool in the default tool list available to the model on every request, and keep the list of tools you provide in an internal array.
 
 The agent starts a turn with a minimal tool set, usually just `ToolSearch` itself plus whatever core tools you always want available, and when it needs a capability it does not currently have, it calls `ToolSearch` with a natural language query that returns a ranked list of tool descriptors with their full schemas. At this point a middleware sitting between the agent and the next inference call inspects the search result, extracts the tool identifiers, looks them up in the underlying registry, and adds their full definitions to the tools array that will be sent on the next request to the model.
