@@ -23,6 +23,8 @@ description: >-
 
 {% embed url="https://www.youtube.com/watch?v=q6GqgPMUJFY" %}
 
+{% embed url="https://www.youtube.com/watch?v=LhoOQD2Jlc8" %}
+
 ## Articles
 
 ### Agent Development
