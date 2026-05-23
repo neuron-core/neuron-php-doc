@@ -14,13 +14,13 @@ We provide tools for the entire agentic application development lifecycle, from 
 
 ### Getting started in 3 steps
 
-Install Neuron in you project:
+**Install** Neuron in you project:
 
 ```shellscript
 composer require neuron-core/neuron-ai
 ```
 
-Create an agent extending the `Agent` class:
+**Create** an agent extending the `Agent` class:
 
 ```php
 namespace App\Neuron;
@@ -41,7 +41,7 @@ class MyAgent extends Agent
 }
 ```
 
-Talk with the agent:
+**Talk** with the agent:
 
 ```php
 use NeuronAI\Chat\Messages\UserMessage;
@@ -249,9 +249,11 @@ echo $message->getContent();
 
 Check out all the supported providers in the [AI Provider](providers/ai-provider.md) section.
 
-## Create AI Agents In Laravel -  Video Tutorial
+## Video Tutorials
 
 {% embed url="https://www.youtube.com/watch?v=oSA1bP_j41w" %}
+
+More resources here: [Video Tutorials](overview/fast-learning-by-video.md#video)
 
 ## What is an AI Agent
 
