@@ -12,7 +12,7 @@ We provide tools for the entire agentic application development lifecycle, from 
 
 <figure><img src=".gitbook/assets/neuron-ai-architecture.png" alt=""><figcaption><p>Neuron architecture</p></figcaption></figure>
 
-### Getting started in 3 steps
+### Getting Started In 3 Steps
 
 **Install** Neuron in you project:
 
