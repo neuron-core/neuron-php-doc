@@ -320,21 +320,6 @@ Neuron is part of the Inspector ecosystem as a trustable platform to create reli
 
 Trace and evaluate your agents execution flow to help you maintain production grade implementations with confidence. Check out the [**monitoring integrations**](agent/observability.md).
 
-## Core components
-
-* [**Agent**](/broken/pages/xwWOrSCVWeoy5tAkKilK)
-* [**AI Provider**](providers/ai-provider.md)
-* [**Toolkit**](agent/tools.md#toolkits-composable-agent-capabilities)
-* [**RAG**](/broken/pages/YfKZq0KNcn61OqRWibRv)
-* [**Embeddings Provider**](rag/embeddings-provider.md)
-* [**Data Loader**](rag/data-loader.md)
-* [**Vector Store**](rag/vector-store.md)
-* [**Chat History**](agent/chat-history-and-memory.md)
-* [**MCP connector**](agent/mcp-connector.md)
-* [**Monitoring & Debugging**](agent/observability.md)
-* [**Pre/Post Processors**](rag/pre-post-processor.md)
-* [**Workflow**](/broken/pages/LwiA5oss8HSjzdefFNvg)
-
 ## Keep In Touch
 
 * Website & Newsletter: [https://neuron-ai.dev](https://neuron-ai.dev/)
