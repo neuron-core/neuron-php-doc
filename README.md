@@ -323,7 +323,7 @@ Trace and evaluate your agents execution flow to help you maintain production gr
 ## Keep In Touch
 
 * Website & Newsletter: [https://neuron-ai.dev](https://neuron-ai.dev/)
-* Repository: [https://github.com/inspector-apm/neuron-ai](https://github.com/inspector-apm/neuron-ai)
+* Repository: [https://github.com/neuron-core/neuron-ai](https://github.com/inspector-apm/neuron-ai)
 * Inspector: [https://inspector.dev](https://inspector.dev)
 * E-Book: [https://www.amazon.it/dp/B0F1YX8KJB](https://www.amazon.it/dp/B0F1YX8KJB)
 * Linkedin: [https://www.linkedin.com/company/neuron-ai-php-framework](https://www.linkedin.com/company/neuron-ai-php-framework)
