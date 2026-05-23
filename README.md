@@ -10,27 +10,57 @@ Neuron is a PHP framework for developing agentic applications. By handling the h
 
 We provide tools for the entire agentic application development lifecycle, from LLM interfaces, to data loading, to multi-agent orchestration, to monitoring and debugging. In addition, we provide [tutorials and other educational content](overview/fast-learning-by-video.md) to help you get started using AI Agents in your projects.
 
-{% hint style="success" %}
-### Are you a content creator?
-
-Join the Neuron v3 Content Partnership. Create high-authority technical content and collaborate with us to share your educational resources with our growing global community.
-
-[**Learn more**](https://github.com/neuron-core/neuron-ai/discussions/465)
-{% endhint %}
-
 <figure><img src=".gitbook/assets/neuron-ai-architecture.png" alt=""><figcaption><p>Neuron architecture</p></figcaption></figure>
 
-Neuron is the perfect AI architecture for your project.
+### Getting started in 3 steps
 
-### Laravel
+Install Neuron in you project:
+
+```shellscript
+composer require neuron-core/neuron-ai
+```
+
+Create an agent extending the `Agent` class:
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent\Agent;
+use NeuronAI\Providers\Anthropic\Anthropic;
+
+class MyAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        // return an AI provider (Anthropic, OpenAI, Ollama, Gemini, etc.)
+        return new Anthropic(
+            key: 'ANTHROPIC_API_KEY',
+            model: 'ANTHROPIC_MODEL',
+        );
+    }
+}
+```
+
+Talk with the agent:
+
+```php
+use NeuronAI\Chat\Messages\UserMessage;
+
+$message = MyAgent::make()
+    ->chat(new UserMessage("Hi, who are you?"))
+    ->getMessage();
+
+echo $message->getContent();
+// I'm a friendly AI Agent built with Neuron AI framework, how can I help you today?
+```
+
+### Demo with Laravel
 
 Neuron offers a well defined encapsulation pattern, allowing you to work on your AI components in a dedicated namespace. You can enjoy the exact same experience of the other ecosystem packages you already love, like Filament, Nova, Horizon, etc.
 
-<a href="https://github.com/neuron-core/laravel-travel-agent" class="button primary" data-icon="github">Example project</a>
+<a href="https://www.youtube.com/watch?v=oSA1bP_j41w" class="button primary" data-icon="youtube">Watch the demo</a>
 
-<a href="https://www.youtube.com/watch?v=oSA1bP_j41w" class="button primary" data-icon="youtube">Watch a demo</a>
-
-### Symfony
+### Demo with Symfony
 
 All Neuron components belong to its own interface, so you can easily define dependencies and automate objects creation using the Symfony service container. Watch how it works in a real project.
 
