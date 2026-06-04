@@ -59,6 +59,39 @@ class MyChatBot extends RAG
 }
 ```
 
+### PHPVector
+
+PHPVector adapter on top of [`ezimuel/phpvector`](https://github.com/ezimuel/PHPVector). It is a pure-PHP vector database implementing **HNSW** (Hierarchical Navigable Small World) for approximate nearest-neighbour search and **BM25** for full-text retrieval. Both engines can be combined into a single **hybrid search** pipeline.
+
+You can install the component with composer:
+
+```shellscript
+composer require neuron-core/php-vector
+```
+
+Use it in a RAG context:
+
+```php
+namespace APp\Neuron;
+
+use NeuronAI\RAG\RAG;
+use NeuronAI\PHPVector\PHPVector;
+use NeuronAI\RAG\VectorStore\VectorStoreInterface;
+
+class MyRAG extends RAG
+{
+    ...
+
+    protected function vectorStore(): VectorStoreInterface
+    {
+        return new PHPVector(
+            path: '/var/data/mydb',
+            topK: 5,
+        );
+    }
+}
+```
+
 ### MariaDB
 
 MariaDB supports VECTOR column type starting from version 11.7. To make this component works you need to create the table to store documents and related vectors. Here is the SQL script you can use to do so:
@@ -75,7 +108,7 @@ CREATE TABLE IF NOT EXISTS rag_documents (
 )
 ```
 
-Here is how to use the component in your RAG:
+Use it in a RAG context:
 
 ```php
 namespace App\Neuron;
