@@ -8,7 +8,7 @@ description: >-
 
 We currently offer first-party support for the following vector store:
 
-### Memory Vector Store
+### Memory
 
 This is an implementation of a volatile vector store that keeps your embeddings into the machine memory for the current session. It's useful when you don't need to store the generated embeddings for long term use, but just during current interaction sessions (or for local use).
 
@@ -30,7 +30,7 @@ class MyChatBot extends RAG
 }
 ```
 
-### File Vector Store
+### File
 
 File storage could be useful for low volume use case or local and staging environments. Embedded documents will be stored in the file system and processed during similarity search.
 
