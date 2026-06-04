@@ -72,7 +72,7 @@ composer require neuron-core/php-vector
 Use it in a RAG context:
 
 ```php
-namespace APp\Neuron;
+namespace App\Neuron;
 
 use NeuronAI\RAG\RAG;
 use NeuronAI\PHPVector\PHPVector;
