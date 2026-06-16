@@ -554,6 +554,52 @@ echo $message->getContent();
 // Hi, how can I help you today?
 ```
 
+## Routing
+
+Not every prompt needs your most expensive model. With our official [neuron-core/router](https://github.com/neuron-core/router) package you can route inference calls to different providers or models, transparently to the agent itself.
+
+First install the package:
+
+```shellscript
+composer require neuron-core/router
+```
+
+Now use the `RouterProvider` class as any other provider in your agent class:
+
+```php
+use NeuronAI\Router\RouterProvider;
+use NeuronAI\Router\Rules\MethodRule;
+use NeuronAI\Providers\Anthropic\Anthropic;
+use NeuronAI\Providers\OpenAI\OpenAI;
+
+class MyAgent extens Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        return RouterProvider::make()
+            ->addProvider('anthropic', new Anthropic(
+                key: 'ANTHROPIC_API_KEY',
+                model: 'claude-sonnet-4-20250514',
+            ))
+            ->addProvider('openai', new OpenAI(
+                key: 'OPENAI_API_KEY',
+                model: 'gpt-4o',
+            ))
+            ->setRule(
+                new RoundRobinRule(['anthropic', 'openai'])
+            );
+    }
+
+    protected function instructions(): string
+    {...}
+
+    protected function tools(): array
+    {...}
+}
+```
+
+In the example above we use the `RoundRobinRule` making the router act as a load balancer between the attached AI providers. The package ships with several built-in rules including an LLM classifier to route calls to the appropriate model based on the promp difficulty score: [https://github.com/neuron-core/router#difficultyrule](https://github.com/neuron-core/router#difficultyrule)
+
 ## Custom Http Client
 
 Providers use an HTTP client to communicate with the remote service. You can customize the configuration of the HTTP client explicitly passing an instance with custom constructor parameters, like timeout, custom headers, etc.
