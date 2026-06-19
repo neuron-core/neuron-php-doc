@@ -179,14 +179,6 @@ Of course there is still not much point to a workflow if you just run through it
 
 ### Monitoring & Debugging
 
-Before moving into the Workflow creation process, we recommend having the monitoring system in place. It could make the learning curve of how Workflow works much easier. The best way to monitoring Workflow is with [Inspector](https://inspector.dev/).
+Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
 
-After you sign up at the link above, make sure to set the `INSPECTOR_INGESTION_KEY` variable in the application environment file to monitoring Workflow execution:
-
-{% code title=".env" %}
-```
-INSPECTOR_INGESTION_KEY=nwse877auxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-{% endcode %}
-
-<figure><img src="../.gitbook/assets/inspector.png" alt=""><figcaption></figcaption></figure>
+{% embed url="https://docs.inspector.dev/guides/neuron-ai" %}

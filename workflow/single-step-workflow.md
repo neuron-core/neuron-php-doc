@@ -147,12 +147,6 @@ Event types are validated at compile time, so you will get an error message if f
 
 ### Monitoring & Debugging
 
-Before start creating Workflows, we recommend having the monitoring system in place. It could make the learning curve of how the system works much more easier. The best way to monitoring a Workflow is with [Inspector](https://inspector.dev/).
+Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
 
-After you sign up at the link above, make sure to set the `INSPECTOR_INGESTION_KEY` variable in the application environment file to monitoring Workflow execution:
-
-{% code title=".env" %}
-```
-INSPECTOR_INGESTION_KEY=nwse877auxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-{% endcode %}
+{% embed url="https://docs.inspector.dev/guides/neuron-ai" %}

@@ -59,15 +59,9 @@ You just need to take care of the first step "Process external data", and Neuron
 
 ## Monitoring & Debugging
 
-Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls, external data sources, tools, and more. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
+Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
 
-After you sign up at the link above, make sure to set the `INSPECTOR_INGESTION_KEY` variable in the application environment file to start monitoring:
-
-{% code title=".env" %}
-```
-INSPECTOR_INGESTION_KEY=nwse877auxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-{% endcode %}
+{% embed url="https://docs.inspector.dev/guides/neuron-ai" %}
 
 ## Create a RAG Agent
 

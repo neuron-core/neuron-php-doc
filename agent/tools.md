@@ -338,13 +338,7 @@ Neuron automatically manages the tool loop for you, based on what the LLM decide
 
 To watch inside this workflow you should connect your Agent to the [Inspector monitoring dashboard](https://inspector.dev/) in order to see the tool call execution flow in real-time.
 
-After you sign up at the link above, make sure to set the `INSPECTOR_INGESTION_KEY` variable in the application environment file to start monitoring:
-
-{% code title=".env" %}
-```
-INSPECTOR_INGESTION_KEY=nwse877auxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-{% endcode %}
+{% embed url="https://docs.inspector.dev/guides/neuron-ai" %}
 
 <figure><img src="../.gitbook/assets/tools-2.png" alt=""><figcaption></figcaption></figure>
 

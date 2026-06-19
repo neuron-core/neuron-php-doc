@@ -125,19 +125,9 @@ class MyAgent extends Agent
 
 ## Monitoring & Debugging
 
-To stay updated about your Agent decision making process, you can connect the [Inspector monitoring dashboard](https://inspector.dev/) to monitor tool selection and execution in real-time.
+Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
 
-After you sign up at the link above, make sure to set the `INSPECTOR_INGESTION_KEY` variable in the application environment file to start monitoring:
-
-{% code title=".env" %}
-```
-INSPECTOR_INGESTION_KEY=nwse877auxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-{% endcode %}
-
-When your agent runs you will be able to explore the execution timeline in the dashboard.
-
-<figure><img src="../.gitbook/assets/mcp-tool-call.png" alt=""><figcaption></figcaption></figure>
+{% embed url="https://docs.inspector.dev/guides/neuron-ai" %}
 
 ## Filter the list of tools
 
