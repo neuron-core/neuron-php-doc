@@ -14,13 +14,13 @@ We provide tools for the entire agentic application development lifecycle, from 
 
 ### Getting Started In 3 Steps
 
-**Install** Neuron in you project:
+**1) Install** Neuron in you project:
 
 ```shellscript
 composer require neuron-core/neuron-ai
 ```
 
-**Create** an agent extending the `Agent` class:
+**2) Create** an agent extending the `Agent` class:
 
 ```php
 namespace App\Neuron;
@@ -41,7 +41,7 @@ class MyAgent extends Agent
 }
 ```
 
-**Talk** with the agent:
+**3) Talk** with the agent:
 
 ```php
 use NeuronAI\Chat\Messages\UserMessage;
