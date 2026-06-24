@@ -6,7 +6,7 @@
 * [Installation](overview/getting-started.md)
 * [Upgrade](overview/upgrade.md)
 * [Video Tutorials](overview/fast-learning-by-video.md)
-* [Agentic Development](overview/agentic-development.md)
+* [AI-Assisted Development](overview/agentic-development.md)
 
 ## Agent
 
