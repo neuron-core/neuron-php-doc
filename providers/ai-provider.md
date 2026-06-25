@@ -615,8 +615,8 @@ class MyAgent extends Agent
             url: 'OLLAMA_URL',
             model: 'OLLAMA_MODEL',
             httpClient: new GuzzleHttpClient(
+                customHeaders: [...],
                 timeout: 30,
-                customHeaders: [...]
             )
         );
     }
