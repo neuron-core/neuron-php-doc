@@ -39,7 +39,7 @@ $message = MyAgent::make()
     ->getMessage();
 
 // Retrieve the image part of the message (it's in base64 format)
-$imageBase64 = $message->getImage()->getContent();
+$imageBase64 = $message->getImage();
 
 // Save the image
 file_put_contents(__DIR__.'/assets/cover.png', base64_decode($imageBase64));
@@ -74,7 +74,7 @@ $message = MyAgent::make()
     ->getMessage();
 
 // Retrieve the image part of the message (it's in base64 format)
-$imageBase64 = $message->getImage()->getContent();
+$imageBase64 = $message->getImage();
 
 // Save the image
 file_put_contents(__DIR__.'/assets/cover.png', base64_decode($imageBase64));
@@ -94,7 +94,7 @@ $provider = new OpenAIImage(
 $message = $provider->chat(new UserMessage("Generate an image of a venue hosting the best PHP conference!"));
 
 // Retrieve the image part of the message (it's in base64 format)
-$imageBase64 = $message->getImage()->getContent();
+$imageBase64 = $message->getImage();
 
 // Save the image
 file_put_contents(__DIR__.'/assets/cover.png', base64_decode($imageBase64));
@@ -129,7 +129,7 @@ $message = MyAgent::make()
     ->getMessage();
 
 // Print the URL of the image
-echo $message->getImage()->getContent();
+echo $message->getImage();
 
 ```
 
@@ -147,5 +147,5 @@ $provider = new ZAIImage(
 $message = $provider->chat(new UserMessage("Generate an image of a venue hosting the best PHP conference!"));
 
 // Print the URL of the image
-echo $message->getImage()->getContent();
+echo $message->getImage();
 ```
