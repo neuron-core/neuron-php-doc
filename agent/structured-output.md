@@ -89,7 +89,7 @@ echo $person->name.' like '.$person->preference;
 
 ### Control the output generation
 
-Neuron requires you to define two layers of rules to create the structured output class.&#x20;
+Neuron requires you to define two layers of rules to create the structured output class.
 
 The first is the `SchemaProperty` attribute that allows you to control the JSON schema sent to the LLM to understand the required data format.
 
@@ -164,7 +164,7 @@ class Person
 }
 ```
 
-In the `Address` definition we require only the street and zip code properties, and allow city to be empty.&#x20;
+In the `Address` definition we require only the street and zip code properties, and allow city to be empty.
 
 ```php
 <?php
@@ -285,7 +285,7 @@ class Report
 
 Since the LLM are not perfectly deterministic it's mandatory to have a retry mechanism in place if something is missing in the LLM response.
 
-By default Neuron extracts and validates the data from the LLM response and if there is one or more validation errors automatically retry the request just one more time informing the LLM about what went wrong and for what properties.&#x20;
+By default Neuron extracts and validates the data from the LLM response and if there is one or more validation errors automatically retry the request just one more time informing the LLM about what went wrong and for what properties.
 
 You can eventually customize the number of times the agent must retry to get a correct answer from the LLM:
 
@@ -583,7 +583,7 @@ namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\IpAddress;
 
-class Person
+class Spec
 {
     #[IpAddress]
     public string $ip;
@@ -592,18 +592,81 @@ class Person
 
 ### #\[ArrayOf]
 
-The property under validation must be an array that contains all of the given type of object. Notice that you also need to add the doc-block in order to make the agent able to instance the correct class. Use the full class namespace in the doc-block.
+The property under validation must be an array that contains all of the given type of object.
 
-<pre class="language-php"><code class="lang-php"><strong>namespace App\Neuron\Output;
-</strong>
+```php
+namespace App\Neuron\Output;
+
 use NeuronAI\StructuredOutput\Validation\Rules\ArrayOf;
 
-class Person
+class Post
 {
-    /**
-     * @var \App\Neuron\Output\Tag[]
-     */
     #[ArrayOf(Tag::class)]
     public array $tags;
 }
-</code></pre>
+```
+
+### #\[Regex]
+
+The property under validation must respect the given regular expression.
+
+```php
+namespace App\Neuron\Output;
+
+use NeuronAI\StructuredOutput\Validation\Rules\Regex;
+
+class Coupon
+{
+    #[Regex('/^[A-Z]{2}\d{4}$/')]
+    public string $code;
+}
+```
+
+## Custom Validation Rules
+
+Validation rules are PHP Attributes, so to create a new one you should extend the AbstractValidationRule of the framework and mark the class as a PHP Attribute:
+
+```php
+namespace App\Neuron\Output;
+
+use Attribute;
+use NeuronAI\StructuredOutput\Validation\Rules\AbstractValidationRule;
+
+#[Attribute(Attribute::TARGET_PROPERTY)]
+class MyFormatRule extends AbstractValidationRule
+{
+    public function __construct(protected string $format)
+    {
+    }
+
+    public function validate(string $name, mixed $value, array &$violations): void
+    {
+        if (!is_string($value)) {
+            $violations[] = $this->buildMessage($name, '{name} must be a string.');
+        } else if (!$this->respectFormat($this->format, $value)) {
+            $violations[] = $this->buildMessage(
+                $name,
+                '{name} must match the format {format}',
+                ['format' => $this->pattern]
+            );
+        }
+    }
+    
+    protected function respectFormat(string $value)
+    {
+        ...
+    }
+}
+```
+
+Now you can use the rule in your structured output class:
+
+```php
+namespace App\Neuron\Output;
+
+class Route
+{
+    #[MyFormatRule('apps/{id}/show')]
+    public string $path;
+}
+```
