@@ -556,7 +556,7 @@ echo $message->getContent();
 
 ## Routing
 
-Not every prompt needs your most expensive model. With our official [neuron-core/router](https://github.com/neuron-core/router) package you can route inference calls to different providers or models, transparently to the agent itself.
+Not every prompt needs your most expensive model. With our official [neuron-core/router](https://github.com/neuron-core/router) package you can route inference calls to different providers or models, transparently to the agent itself. The router also provides you with a fallback strategy to a second provider in case the primary fails due to a service down or exceeding usage limits.
 
 First install the package:
 
