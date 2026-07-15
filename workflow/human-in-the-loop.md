@@ -6,10 +6,10 @@ description: The key breakthrough is that interruption isn't a bug, it's a featu
 
 ### What it is
 
-Neuron's interruption pattern provides a built-in _human-in-the-loop_ mechanism that allows\
-workflows to pause execution and wait for external input before resuming.&#x20;
+Neuron's interruption pattern provides a built-in _human-in-the-loop_ mechanism that allows\
+workflows to pause execution and wait for external input before resuming.
 
-At its core,&#x20;interruptions are implemented through the abstract `InterruptRequest` class, a framework primitive that developers can extend to create custom interruption experiences tailored to their\
+At its core, interruptions are implemented through the abstract `InterruptRequest` class, a framework primitive that developers can extend to create custom interruption experiences tailored to their\
 application's specific needs. The framework includes an `ApprovalRequest` as a built-in implementation covering the most common use case of approving actions (such as tool calls), but the architecture is intentionally flexible: any workflow node or middleware can trigger an interruption, and the persistence layer ensures state is preserved across the pause/resume cycle, making it suitable for long-running processes that require human decision points at any stage.
 
 If the built-in `ApprovalRequest` doesn't fit with your use case, you are free to create your custom interrutpion request to create a specific UI experience.
@@ -77,7 +77,7 @@ class InterruptionNode extends Node
 }
 ```
 
-You can eventually implement your custom interruption request to pass the information you need for the human interaction. You will be able to catch this data later, outside of the workflow so you can inform the user for feedback.&#x20;
+You can eventually implement your custom interruption request to pass the information you need for the human interaction. You will be able to catch this data later, outside of the workflow so you can inform the user for feedback.
 
 When the Workflow will be resumed it will restart from the same node it was interrupted, and the `$feedback` variable will receive the human's response data.
 
@@ -156,15 +156,11 @@ class InterruptionNode extends Node
 
 ### Catching the interruption
 
-To be able to interrupt and resume a Workflow (also Agent and RAG) you need to provide a persistence layer and a workflow ID when creating the Workflow instance:
+To be able to interrupt and resume a Workflow (also Agent and RAG) you need to provide the persistence layer when creating the Workflow instance:
 
 ```php
-$workflow = new WorkflowAgent(
-    new FilePersistence(__DIR__)
-);
+$workflow = new WorkflowAgent(new FilePersistence(__DIR__));
 ```
-
-The `WORKFLOW_EXECUTION_ID` is the reference to save and load the state of a specific Workflow in case of an interruption.
 
 When a node call for an interruption the Workflow fires a special type of exception represented by the **`WorkflowInterrupt`** class. You can catch this exception to manage the interruption request.
 
@@ -191,12 +187,12 @@ try {
 }
 ```
 
-Use the information in the `$request` object to guide the human in providing a feedback. Once you finally have the user's feedback you can resume the workflow passing the interruption request to the `init()` method. Remeber to use the same `RESUME_TOKEN`  you got during interruption.
+Use the information in the `$request` object to guide the human in providing a feedback. Once you finally have the user's feedback you can resume the workflow passing the interruption request to the `init()` method. Remeber to use the same `workflowId` you got during interruption.
 
 ```php
 $workflow = new WorkflowAgent(
     new FilePersistence(__DIR__),
-    $workflowId // <- Use the resume token you got during interrutpion
+    $workflowId // <- Use the same ID you got during interrutpion
 );
 
 $request = ContentReviewInterrupt::fromArray($data);
@@ -208,7 +204,7 @@ $result = $workflow->init($request)->run();
 echo $result->get('content');
 ```
 
-You can take a look at the script below as an example of this process:&#x20;
+You can take a look at the script below as an example of this process:
 
 {% @github-files/github-code-block url="https://github.com/inspector-apm/neuron-ai/blob/main/examples/workflow/workflow-interrupt.php" %}
 
@@ -312,7 +308,7 @@ class InterruptionNode extends Node
 }
 ```
 
-This allows you to apply  condition at the beginning of the node based on the given feedback.
+This allows you to apply condition at the beginning of the node based on the given feedback.
 
 ### Conditional Interruption
 
