@@ -60,6 +60,8 @@ Neuron offers a well defined encapsulation pattern, allowing you to work on your
 
 <a href="https://www.youtube.com/watch?v=oSA1bP_j41w" class="button primary" data-icon="youtube">Watch the demo</a>
 
+<a href="https://github.com/neuron-core/neuron-ai" class="button primary" data-icon="laravel">Laravel Package</a>
+
 ### Demo with Symfony
 
 All Neuron components belong to its own interface, so you can easily define dependencies and automate objects creation using the Symfony service container. Watch how it works in a real project.
@@ -237,7 +239,7 @@ Neuron is built on a Workflow architecture that removes those compromises. The f
 
 ### A Vertical & Independent Ecosystem
 
-Neuron is also the only vertical ecosystem for agentic applications development in PHP. Around the framework there is a registry of extensions, tools, and technologies designed specifically for agentic applications, and a growing number of companies building on the same architecture instead of assembling their own from scattered parts.&#x20;
+Neuron is also the only vertical ecosystem for agentic applications development in PHP. Around the framework there is a registry of extensions, tools, and technologies designed specifically for agentic applications, and a growing number of companies building on the same architecture instead of assembling their own from scattered parts.
 
 For a software house, this is a place to be recognized as a specialist rather than one more team claiming AI experience. For a company that needs an agentic foundation it can commit to for years, it means standardizing on an architecture whose whole direction is this space, not a general-purpose library where agents are a side feature.
 
@@ -251,7 +253,7 @@ Neuron changes all that.
 
 This book serves as both an introduction to AI Agents concepts for developers and a comprehensive guide to Neuron framework.
 
-<a href="https://www.amazon.com/dp/B0F1YX8KJB" class="button secondary" data-icon="amazon">Get on Amazon</a>&#x20;
+<a href="https://www.amazon.com/dp/B0F1YX8KJB" class="button secondary" data-icon="amazon">Get on Amazon</a>
 
 <a href="https://play.google.com/store/books/details?pcampaignid=books_read_action&#x26;id=agJPEQAAQBAJ&#x26;pli=1" class="button secondary" data-icon="google">Get on GooglePlay</a>
 
@@ -272,7 +274,7 @@ We’re using [Discussions](https://github.com/inspector-apm/neuron-ai/discussio
 
 ### [**Inspector.dev**](https://inspector.dev)
 
-Neuron is part of the Inspector ecosystem as a trustable platform to create reliable and scalable AI driven solutions.&#x20;
+Neuron is part of the Inspector ecosystem as a trustable platform to create reliable and scalable AI driven solutions.
 
 Trace and evaluate your agents execution flow to help you maintain production grade implementations with confidence. Check out the [**monitoring integrations**](agent/observability.md).
 
