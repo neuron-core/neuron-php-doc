@@ -60,7 +60,7 @@ Neuron offers a well defined encapsulation pattern, allowing you to work on your
 
 <a href="https://www.youtube.com/watch?v=oSA1bP_j41w" class="button primary" data-icon="youtube">Watch the demo</a>
 
-<a href="https://github.com/neuron-core/neuron-ai" class="button primary" data-icon="laravel">Laravel Package</a>
+<a href="https://github.com/neuron-core/neuron-ai" class="button primary" data-icon="laravel">Official Laravel Package</a>
 
 ### Demo with Symfony
 
