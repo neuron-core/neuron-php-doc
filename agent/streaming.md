@@ -128,28 +128,6 @@ This architecture allows you to seamlessly integrate Neuron agents with various 
 
 You simply need to provide an adapter instance to the `events()` method of the agent handler used to stream the LLM response.
 
-### Vercel AI SDK Adapter
-
-Adapter for Vercel AI SDK Data Stream Protocol: [https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol](https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol)
-
-```php
-use NeuronAI\Chat\Messages\Stream\Adapters\VercelAIAdapter;
-
-// Instruct the agent
-$handler = MyAgent::make()
-    ->stream(
-        new UserMessage('What is the square root of 144?')
-    );
-
-// Provide the adapter instance to the events() method
-$stream = $handler->events(new VercelAIAdapter());
-
-// Process the response
-foreach ($stream as $line) {
-    echo $line;
-}
-```
-
 ### AG-UI Adapter
 
 Implements the streaming event-based protocol defined by AG-UI protocol for real-time agent-frontend interaction. Supports text messages, tool calls, reasoning, and lifecycle events.
@@ -167,6 +145,28 @@ $handler = MyAgent::make()
 
 // Provide the adapter instance to the events() method
 $stream = $handler->events(new AGUIAdapter());
+
+// Process the response
+foreach ($stream as $line) {
+    echo $line;
+}
+```
+
+### Vercel AI SDK Adapter
+
+Adapter for Vercel AI SDK Data Stream Protocol: [https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol](https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol)
+
+```php
+use NeuronAI\Chat\Messages\Stream\Adapters\VercelAIAdapter;
+
+// Instruct the agent
+$handler = MyAgent::make()
+    ->stream(
+        new UserMessage('What is the square root of 144?')
+    );
+
+// Provide the adapter instance to the events() method
+$stream = $handler->events(new VercelAIAdapter());
 
 // Process the response
 foreach ($stream as $line) {
