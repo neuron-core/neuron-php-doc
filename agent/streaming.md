@@ -152,6 +152,83 @@ foreach ($stream as $line) {
 }
 ```
 
+#### Connecting an AG-UI frontend
+
+An AG-UI client (like CopilotKit) does not just open a connection. It sends a POST request with a JSON body called `RunAgentInput`, containing the conversation and the identifiers of the current run:
+
+```json
+{
+  "threadId": "thread_123",
+  "runId": "run_456",
+  "messages": [
+    {
+      "id": "msg_1",
+      "role": "user",
+      "content": "What is the square root of 144?"
+    }
+  ],
+  "tools": [],
+  "state": {},
+  "context": [],
+  "forwardedProps": {}
+}
+```
+
+Your endpoint should read this payload, map the messages to Neuron message objects, and pass `threadId` and `runId` to the adapter constructor. The adapter echoes them back in the `RUN_STARTED` and `RUN_FINISHED` events, so the client can correlate the stream with the run it requested. If you omit them, the adapter generates its own identifiers (useful for testing, but a real AG-UI frontend expects its own IDs back).
+
+The adapter also provides the HTTP headers required by the SSE transport via the `getHeaders()` method. Remember to send them and to flush the output after each line, otherwise the stream can get stuck in PHP output buffers or proxies.
+
+Here is a complete endpoint example:
+
+```php
+use NeuronAI\Chat\Messages\Stream\Adapters\AGUIAdapter;
+use NeuronAI\Chat\Messages\UserMessage;
+
+// Parse the AG-UI RunAgentInput payload
+$input = json_decode(file_get_contents('php://input'), true);
+
+$messages = [];
+foreach ($input['messages'] as $message) {
+    if ($message['role'] === 'user') {
+        $messages[] = new UserMessage($message['content']);
+    }
+}
+
+// Echo the client's thread and run identifiers back in the stream
+$adapter = new AGUIAdapter(
+    threadId: $input['threadId'],
+    runId: $input['runId'],
+);
+
+// Send the SSE headers required by the protocol
+foreach ($adapter->getHeaders() as $name => $value) {
+    header("{$name}: {$value}");
+}
+
+$stream = MyAgent::make()->stream($messages)->events($adapter);
+
+foreach ($stream as $line) {
+    echo $line;
+    flush();
+}
+```
+
+#### Emitted events
+
+The adapter translates Neuron streaming chunks into the following AG-UI events:
+
+| Neuron chunk      | AG-UI events                                                                                                        |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Run lifecycle     | `RUN_STARTED`, `RUN_FINISHED`                                                                                       |
+| `TextChunk`       | `TEXT_MESSAGE_START`, `TEXT_MESSAGE_CONTENT`, `TEXT_MESSAGE_END`                                                    |
+| `ReasoningChunk`  | `REASONING_START`, `REASONING_MESSAGE_START`, `REASONING_MESSAGE_CONTENT`, `REASONING_MESSAGE_END`, `REASONING_END` |
+| `ToolCallChunk`   | `TOOL_CALL_START`, `TOOL_CALL_ARGS`, `TOOL_CALL_END`                                                                |
+| `ToolResultChunk` | `TOOL_CALL_RESULT`                                                                                                  |
+
+Tools attached to a Neuron agent are executed on the server. The client is informed of the ongoing execution through the `TOOL_CALL_*` events and receives the tool output in the `TOOL_CALL_RESULT` event, followed by the agent's final text message. The frontend-defined tools listed in the `tools` field of `RunAgentInput` (tools executed by the client) are not handled by the adapter.
+
+The adapter does not emit the AG-UI shared state events (`STATE_SNAPSHOT`, `STATE_DELTA`, `MESSAGES_SNAPSHOT`), so state synchronization features of AG-UI clients are not available through this adapter.
+
 ### Vercel AI SDK Adapter
 
 Adapter for Vercel AI SDK Data Stream Protocol: [https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol](https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol)
