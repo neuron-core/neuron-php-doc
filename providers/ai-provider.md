@@ -56,6 +56,31 @@ class MyAgent extends Agent
 }
 ```
 
+### Anthropic On Google Vertex
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent\Agent;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Providers\Anthropic\AnthropicVertex;
+
+class MyAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        return new AnthropicVertex(
+            pathJsonCredentials: 'GOOGLE_FILE_CREDENTIALS_PATH',
+            location: 'GOOGLE_LOCATION',
+            projectId: 'GOOGLE_PROJECT_ID',
+            model: 'ANTHROPIC_MODEL',
+            parameters: [], // Add custom params (temperature, logprobs, etc)
+        );
+    }
+}
+```
+
 ### OpenAIResponses
 
 This component uses the most recent OpenAI responses API:
@@ -249,7 +274,7 @@ echo $message->getContent();
 // Hi, how can I help you today?
 ```
 
-### Gemini Vertex AI
+### Gemini on Vertex
 
 To use this provider you need to install the goole auth composer package:
 
@@ -280,13 +305,6 @@ class MyAgent extends Agent
         );
     }
 }
-
-$message = MyAgent::make()
-    ->chat(new UserMessage("Hi!"))
-    ->getMessage();
-
-echo $message->getContent();
-// Hi, how can I help you today?
 ```
 
 ### Mistral
