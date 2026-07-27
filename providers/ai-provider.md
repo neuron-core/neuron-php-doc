@@ -58,6 +58,14 @@ class MyAgent extends Agent
 
 ### Anthropic On Google Vertex AI
 
+To use this provider you need to install the goole auth composer package:
+
+```shellscript
+composer require google/auth
+```
+
+Below the syntax to use `AnthropicVertex` in your agent.
+
 ```php
 namespace App\Neuron;
 
@@ -282,7 +290,7 @@ To use this provider you need to install the goole auth composer package:
 composer require google/auth
 ```
 
-Below you can find the syntax to use it in your agent.
+Below the syntax to use `GeminiVertex` in your agent.
 
 ```php
 namespace App\Neuron;
