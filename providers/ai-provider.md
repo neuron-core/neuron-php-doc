@@ -56,7 +56,7 @@ class MyAgent extends Agent
 }
 ```
 
-### Anthropic On Google Vertex
+### Anthropic On Google Vertex AI
 
 ```php
 namespace App\Neuron;
@@ -274,7 +274,7 @@ echo $message->getContent();
 // Hi, how can I help you today?
 ```
 
-### Gemini on Vertex
+### Gemini on Vertex AI
 
 To use this provider you need to install the goole auth composer package:
 
