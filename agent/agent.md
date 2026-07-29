@@ -6,7 +6,7 @@ description: Easily implement LLM interactions with built-in memory and tool usa
 
 ### Introduction
 
-You can create your agent by extending the `NeuronAI\Agent\Agent` class to inherit the main features of the framework and create fully functional agents.&#x20;
+You can create your agent by extending the `NeuronAI\Agent\Agent` class to inherit the main features of the framework and create fully functional agents.
 
 This class automatically manages some mechanisms for you such as memory, tools and function calls. We will go into more detail about these aspects in the following sections.
 
@@ -48,9 +48,7 @@ class YouTubeAgent extends Agent
     
     protected function instructions(): string
     {
-        return (string) new SystemPrompt(
-            background: ["You are a friendly AI Agent created with Neuron framework."],
-        );
+        return "You are a friendly AI Agent created with Neuron AI framework.";
     }
     
     /**
@@ -73,7 +71,7 @@ Many of the applications you build with Neuron will contain multiple steps with 
 
 The minimum implementation requires assigning an AI Provider that will be the language and reasoning engine of your agent.
 
-The only required method to implement is `provider()`  returning the instance of the provider you want to use. Let's assume it's Anthropic.
+The only required method to implement is `provider()` returning the instance of the provider you want to use. Let's assume it's Anthropic.
 
 ```php
 <?php
@@ -98,9 +96,7 @@ class YouTubeAgent extends Agent
     
     protected function instructions(): string
     {
-        return (string) new SystemPrompt(
-            background: ["You are a friendly AI Agent created with Neuron framework."],
-        );
+        return "You are a friendly AI Agent created with Neuron AI framework.";
     }
     
     /**
@@ -144,18 +140,13 @@ class YouTubeAgent extends Agent
     
     protected function instructions(): string
     {
-        return (string) new SystemPrompt(
-            background: ["You are an AI Agent specialized in writing YouTube video summaries."],
-            steps: [
-                "Get the url of a YouTube video, or ask the user to provide one.",
-                "Use the tools you have available to retrieve the transcription of the video.",
-                "Write the summary.",
-            ],
-            output: [
-                "Write a summary in a paragraph without using lists. Use just fluent text.",
-                "After the summary add a list of three sentences as the three most important take away from the video.",
-            ]
-        );
+        return <<<TEXT
+            You are an AI Agent specialized in writing YouTube video summaries.
+            Get the url of a YouTube video, or ask the user to provide one.
+            Use the tools you have available to retrieve the transcription of the video.
+            Write a summary in a paragraph without using lists. Use just fluent text.
+            After the summary add a list of three sentences as the three most important take away from the video.
+        TEXT;
     }
     
     /**
@@ -164,32 +155,6 @@ class YouTubeAgent extends Agent
     protected function tools(): array
     {
         return [];
-    }
-}
-```
-
-The `SystemPrompt` class is designed to take your base instructions and build a consistent prompt for the underlying model reducing the effort for prompt engineering. The properties has the following meaning:
-
-* **background**: Write about the role of the Agent. Think about the macro tasks it's intended to accomplish.
-* **steps**: Define the way you expect the Agent to behave. Multiple steps help the Agent to act consistently.
-* **output**: Define how you want the agent to respond. Be explicit on the format you expect.
-
-We highly recommend to use the `SystemPrompt` class to increase the quality of the results, in alternative you can just return a simple string:
-
-```php
-<?php
-
-namespace App\Neuron;
-
-use NeuronAI\Agent\Agent;
-
-class YouTubeAgent extends Agent
-{
-    ...
-    
-    protected function instructions(): string
-    {
-        return "You are an AI Agent specialized in writing YouTube video summaries.";
     }
 }
 ```
@@ -281,7 +246,7 @@ $agent = Agent::make()
         )
     )
     ->setInstructions(
-        (string) new SystemPrompt(...)
+        "New system instructions..."
     )
     ->addTool([...]);
     
