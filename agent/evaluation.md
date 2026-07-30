@@ -6,7 +6,7 @@ description: Evaluating the output of your agentic system
 
 This guide covers approaches to evaluating agents. Effective evaluation is essential for measuring agent performance, tracking improvements, and ensuring your agentic system meet quality standards.
 
-When building AI applications, evaluating the consistency of their output is crucial, not only for the maintenance of the agent, but also to evaluate different architectures or prompting approach on the initial design phase.&#x20;
+When building AI applications, evaluating the consistency of their output is crucial, not only for the maintenance of the agent, but also to evaluate different architectures or prompting approach on the initial design phase.
 
 It's important to consider various qualitative and quantitative factors, including response syntax, task completion, success, and inaccuracies or hallucinations. In evaluations, it's also important to consider comparing different configurations to optimize for specific desired outcomes. Given the dynamic and non-deterministic nature of LLMs, it's also important to have rigorous and frequent evaluations to ensure a consistent baseline for tracking improvements or regressions.
 
@@ -452,3 +452,50 @@ return [
     ],
 ];
 ```
+
+### Parallel Execution
+
+By default the evaluation command processes dataset items one at a time. Since most evaluators spend their time waiting on AI provider responses, you can drastically reduce the total run time by processing multiple dataset items in parallel with the `--concurrency` option:
+
+```bash
+vendor/bin/neuron evaluation path/to/evaluators --concurrency=3
+```
+
+### Parallel Evaluations
+
+By default the evaluation command processes dataset items one at a time. Since most evaluators spend their time waiting on AI provider responses, you can drastically reduce the total run time by processing multiple dataset items in parallel with the `--concurrency` option:
+
+```bash
+vendor/bin/neuron evaluation path/to/evaluators --concurrency=8
+```
+
+With `--concurrency=3`, up to 3 dataset items are evaluated at the same time, each in its own PHP child process. An evaluation that makes one 2-second LLM call per item over a 100-item dataset drops from \~200 seconds to \~66 seconds.
+
+#### Requirements
+
+Parallel execution relies on process forking, which requires:
+
+* The [pcntl](https://www.php.net/manual/en/book.pcntl.php) PHP extension (available on Linux and macOS — not on Windows)
+* The [spatie/fork](https://github.com/spatie/fork) package:
+
+```bash
+composer require --dev spatie/fork
+```
+
+If either is missing, the command prints a notice and automatically falls back to sequential execution, so the same command works in every environment.
+
+#### Choosing a concurrency level
+
+Every item in flight is an active request against your AI provider. Start with a moderate value (3–5) and increase it as long as you don't hit provider rate limits. If you see rate limit errors appearing as test failures, lower the value.
+
+#### How it works, and what to watch out for
+
+Each dataset item runs in a forked copy of your evaluator, and its result is sent back to the parent process. This has a few practical implications:
+
+* **Results are unaffected.** Items are evaluated independently, results keep their dataset order, and the final report is identical to a sequential run.
+* **State is not shared between items.** Each item sees the evaluator state as it was after `setUp()`. Side effects performed while handling one item (incrementing a property, appending to a file) are not visible to other items. If your evaluator relies on accumulating state across items, keep running it sequentially.
+* **Outputs must be serializable.** The value returned by `run()` crosses a process boundary via `serialize()`. If it can't be serialized (e.g. it contains a closure or an open connection), the assertion results are preserved but the output shown in reports is replaced with a placeholder string.
+
+#### Execution time reporting
+
+The reported total time is the real wall-clock duration of the run, while the average time per test reflects the actual duration of each individual item — so under parallel execution the average per test can be larger than the total divided by the number of tests.
