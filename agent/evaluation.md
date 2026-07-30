@@ -461,14 +461,6 @@ By default the evaluation command processes dataset items one at a time. Since m
 vendor/bin/neuron evaluation path/to/evaluators --concurrency=3
 ```
 
-### Parallel Evaluations
-
-By default the evaluation command processes dataset items one at a time. Since most evaluators spend their time waiting on AI provider responses, you can drastically reduce the total run time by processing multiple dataset items in parallel with the `--concurrency` option:
-
-```bash
-vendor/bin/neuron evaluation path/to/evaluators --concurrency=8
-```
-
 With `--concurrency=3`, up to 3 dataset items are evaluated at the same time, each in its own PHP child process. An evaluation that makes one 2-second LLM call per item over a 100-item dataset drops from \~200 seconds to \~66 seconds.
 
 #### Requirements
