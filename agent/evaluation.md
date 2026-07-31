@@ -491,3 +491,25 @@ Each dataset item runs in a forked copy of your evaluator, and its result is sen
 #### Execution time reporting
 
 The reported total time is the real wall-clock duration of the run, while the average time per test reflects the actual duration of each individual item — so under parallel execution the average per test can be larger than the total divided by the number of tests.
+
+### Custom bootstrap file
+
+By default, the `neuron` CLI only loads your project's Composer autoloader (`vendor/autoload.php`). That's enough when your classes are plain PHP resolvable by Composer, but often they aren't: an evaluator might read config through your framework's helpers, need environment variables loaded from `.env`, rely on constants, or require a service container to be initialized. In those cases the command would fail with "class not found" or missing-configuration errors, because the code that normally prepares that environment — your framework's bootstrap — never runs.
+
+The `--autoload-file` option solves this by letting you point the CLI to a PHP file to execute _before_ the command starts, in addition to the default Composer autoloader:
+
+```bash
+vendor/bin/neuron evaluation /path/to/evaluators --autoload-file=bootstrap.php
+```
+
+The file can do anything a normal bootstrap does — register additional autoloaders, load environment variables, define constants, or boot your framework. For example, to run evaluators that depend on a Laravel application:
+
+```php
+<?php
+// bootstrap.php
+
+require __DIR__.'/vendor/autoload.php';
+
+$app = require_once __DIR__.'/bootstrap/app.php';
+$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+```
