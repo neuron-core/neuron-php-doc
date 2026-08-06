@@ -231,7 +231,7 @@ More resources here: [Video Tutorials](overview/fast-learning-by-video.md#video)
 
 ### Why Neuron
 
-Your next application will be agentic. A growing share of new software is no longer a web application with AI features added along the way, but an application born agentic, where the agent is the architecture itself, driving how the system reasons, acts, and talks to its interface. Building this kind of application requires a specific set of foundations: event-driven workflows with checkpointing, human-in-the-loop interruption, multi-agent orchestration, streaming through agentic UI protocols like AG-UI and the Vercel AI SDK protocol, MCP, and asynchronous execution.
+Your next application will be agentic. A growing share of new software is no longer a web application with AI features added along the way, but an application born agentic, where the agent is the architecture itself, driving how the system reasons, acts, and talks to the user interface. Building this kind of application requires a specific set of foundations: event-driven workflows with checkpointing, human-in-the-loop, interruption, multi-agent orchestration, streaming, and agentic UI protocols like AG-UI and the Vercel AI SDK protocol, MCP, and asynchronous execution.
 
 In the PHP ecosystem, this set of foundations exists in one place. Each one is a chapter of this documentation: [Workflow](https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/workflow), [Human in the loop](agent/middleware.md#tool-approval-human-in-the-loop), [Streaming & UI protocols](agent/streaming.md#stream-adapters), [MCP](agent/mcp-connector.md), [Async](agent/async.md). You can compare it with any other option available to a PHP developer, and the comparison is the answer.
 
