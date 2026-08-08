@@ -19,7 +19,7 @@ Messages are the fundamental unit of context. They represent the input and outpu
 Messages are objects that contain:
 
 * **Role** - Identifies the message type (e.g. user, assistant)
-*  **Content Blocks** - Represents the actual content of the message (like text, images, audio, files, etc.)
+* **Content Blocks** - Represents the actual content of the message (like text, images, audio, files, etc.)
 * **Metadata** - Optional fields such as additional LLM response information.
 
 Here is an example of how to send a user message to the agent and get back the assistant message as response.
@@ -33,8 +33,6 @@ $response = MyAgent::make()
 
 echo $response->getContent();
 ```
-
-
 
 ## Content Blocks
 
@@ -124,9 +122,10 @@ foreach ($response->getContentBlocks() as $block) {
 
 ### Image
 
-For models that support multimodality you can attach images and other type of contents, like files, audio, and video.&#x20;
+For models that support multimodality you can attach images and other type of contents, like files, audio, and video.
 
 ```php
+use NeuronAI\Chat\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\ImageContent;
 
@@ -136,7 +135,7 @@ $message->addContent(
     new ImageContent(
         source: 'https://placehold.co/600x400/EEE/31343C',
         sourceType: SourceType::URL,
-        mediaType: 'image/png'
+        mediaType: MediaType::PNG
     )
 );
 
@@ -147,6 +146,7 @@ echo $response->getContent();
 ### File
 
 ```php
+use NeuronAI\Chat\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\FileContent;
 
@@ -156,7 +156,7 @@ $message->addContent(
     new FileContent(
         source: base64_encode(file_get_contents(__DIR__.'/invoice.pdf')),
         sourceType: SourceType::BASE64,
-        mediaType: 'application/pdf'
+        mediaType: MediaType::PDF
     )
 );
 
@@ -168,7 +168,7 @@ echo $response->getContent();
 
 Usually you can attach files to your message (images or documents) as URLs, or encoded in base64 format. Many provider allows you to upload files on their platform once, and reference these files with a simple ID on the message. This can unlock big saving in token consumption and can improve the model response time.
 
-After receiveing the file ID from the provider platofrm you can add a file block to your message with  `SourceType::ID`.
+After receiveing the file ID from the provider platofrm you can add a file block to your message with `SourceType::ID`.
 
 ```php
 // Reference a file ID previously uploaded on the provider platform
@@ -183,6 +183,7 @@ You can do the same with Image, or Video, etc, based on your provider specificat
 ### Audio
 
 ```php
+use NeuronAI\Chat\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\AudioContent;
 
@@ -192,7 +193,7 @@ $message->addContent(
     new FileContent(
         source: base64_encode(file_get_contents(__DIR__.'/music.mp3')),
         sourceType: SourceType::BASE64,
-        mediaType: 'audio/mpeg3'
+        mediaType: MediaType::MP3
     )
 );
 
@@ -203,6 +204,7 @@ echo $response ->getContent();
 ### Video
 
 ```php
+use NeuronAI\Chat\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\VideoContent;
 
@@ -212,7 +214,7 @@ $message->addContent(
     new VideoContent(
         source: base64_encode(file_get_contents(__DIR__.'/lesson_1.mp4')),
         sourceType: SourceType::BASE64,
-        mediaType: 'video/mp4'
+        mediaType: MediaType::MP$
     )
 );
 
