@@ -14,7 +14,9 @@ Neuron publishes an Agent Skill that provides AI tools with comprehensive inform
 
 ### Accessing Skills
 
+{% hint style="info" %}
 Type **`/neuron-*`** in your terminal.
+{% endhint %}
 
 The Agent Skill is available in the Neuron AI vendor folder at:
 
