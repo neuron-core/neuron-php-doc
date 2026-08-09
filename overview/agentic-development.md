@@ -2,7 +2,7 @@
 description: Connect the documentation to coding agents for AI Assisted Development
 ---
 
-# Agentic Development
+# AI-Assisted Development
 
 When working with AI coding assistants like Claude Code, Opencode, Cursor, or other similar tools, you can reference the Neuron AI documentation to give the AI deep context about our components. This leads to more accurate code suggestions, better understanding of component APIs, and fewer hallucinations when generating Neuron code.
 
@@ -13,6 +13,8 @@ The [Agent Skills specification](https://agentskills.io/) is a standard for prov
 Neuron publishes an Agent Skill that provides AI tools with comprehensive information about our components, including their APIs, usage patterns, interfaces, and more.
 
 ### Accessing Skills
+
+Type **`/neuron-*`** in your terminal.
 
 The Agent Skill is available in the Neuron AI vendor folder at:
 
@@ -53,11 +55,11 @@ npx skills add ./vendor/neuron-core/neuron-ai/skills
 
 Once installed, the skill will be available to Claude Code automatically. The skilla are installed as a symlink, so it will automatically stay up to date when you update Neuron via composer.
 
-#### Cursor  <a href="#cursor" id="cursor"></a>
+#### Cursor <a href="#cursor" id="cursor"></a>
 
 In [Cursor](https://cursor.sh/), you can add the skill directory to your project's documentation sources via **Cursor Settings > Features > Docs**. Point it to the `vendor/neuron-core/neuron-ai/skills` .
 
-#### Other AI Tools  <a href="#other-ai-tools" id="other-ai-tools"></a>
+#### Other AI Tools <a href="#other-ai-tools" id="other-ai-tools"></a>
 
 Most AI coding assistants that support the Agent Skills specification can use this skill. Check your tool's documentation for how to add custom skills or documentation sources.
 
