@@ -125,7 +125,7 @@ foreach ($response->getContentBlocks() as $block) {
 For models that support multimodality you can attach images and other type of contents, like files, audio, and video.
 
 ```php
-use NeuronAI\Chat\MediaType;
+use NeuronAI\Chat\Enum\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\ImageContent;
 
@@ -146,7 +146,7 @@ echo $response->getContent();
 ### File
 
 ```php
-use NeuronAI\Chat\MediaType;
+use NeuronAI\Chat\Enum\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\FileContent;
 
@@ -183,7 +183,7 @@ You can do the same with Image, or Video, etc, based on your provider specificat
 ### Audio
 
 ```php
-use NeuronAI\Chat\MediaType;
+use NeuronAI\Chat\Enum\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\AudioContent;
 
@@ -204,7 +204,7 @@ echo $response ->getContent();
 ### Video
 
 ```php
-use NeuronAI\Chat\MediaType;
+use NeuronAI\Chat\Enum\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\VideoContent;
 
