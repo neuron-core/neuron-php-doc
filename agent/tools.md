@@ -326,17 +326,9 @@ Tool search reframes the tool catalog as something the agent queries on demand r
 
 ### Monitoring & Debugging
 
-Neuron automatically manages the tool loop for you, based on what the LLM decided to call.
-
-To watch inside this workflow you should connect your Agent to the [Inspector monitoring dashboard](https://inspector.dev/) in order to see the tool call execution flow in real-time.
+To watch inside the tool loop you can connect your Agent to the [Inspector monitoring dashboard](https://inspector.dev/) in order to see the tool call execution flow in real-time.
 
 {% embed url="https://docs.inspector.dev/guides/neuron-ai" %}
-
-<figure><img src="../.gitbook/assets/tools-2.png" alt=""><figcaption></figcaption></figure>
-
-In the image below you can see all the details about the execution of the tool to retrieve the transcription of the video:
-
-<figure><img src="../.gitbook/assets/tools-3.png" alt=""><figcaption></figcaption></figure>
 
 ## Tool Properties
 
