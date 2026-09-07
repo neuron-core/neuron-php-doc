@@ -318,19 +318,11 @@ By default every time the provider is invoked all tools are loaded and transmitt
 
 Tool search reframes the tool catalog as something the agent queries on demand rather than something it carries on every request.
 
-You can use the global middleware `ToolSearchMiddleware` to activate dynamic tool selection on your agent:
-
-```php
-new ToolSearchMiddleware([
-    MyCustomTool::make(),
-    ...CalculatorToolkit::make()->tools()
-    ...MCPConnector::make([...])->tools()
-])
-```
-
 {% content-ref url="middleware.md" %}
 [middleware.md](middleware.md)
 {% endcontent-ref %}
+
+{% embed url="https://www.youtube.com/watch?v=qYmidHAXEYM" %}
 
 ### Monitoring & Debugging
 
