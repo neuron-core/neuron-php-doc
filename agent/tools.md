@@ -84,7 +84,7 @@ Let’s break down the code.
 
 We introduced the new method `tools()` into the Agent class. This method expects to return an array of Tool objects that the AI will be able to use if needed.
 
-In this example we return an array of just one tool, named `get_transcription`.&#x20;
+In this example we return an array of just one tool, named `get_transcription`.
 
 Notice that the `ToolProperty` we define should match with the signature of the function you use as a callable. The callable gets the `$video_url` arguments, and the name of the property is exactly "video\_url".
 
@@ -96,7 +96,7 @@ Neuron provides you with these clear and simple APIs and automates all the under
 
 ### Custom Tools
 
-Thanks to the Neuron modular architecture, Tools are components that implement  `ToolInterface` . You are free to create pre-packaged tool classes to make the agent able to perform sapecific actions, and release them as external composer packages or submit a PR to our repository to have them integrated into the core framework.
+Thanks to the Neuron modular architecture, Tools are components that implement `ToolInterface` . You are free to create pre-packaged tool classes to make the agent able to perform sapecific actions, and release them as external composer packages or submit a PR to our repository to have them integrated into the core framework.
 
 To create a new Tool execute the console command below:
 
@@ -312,7 +312,7 @@ new ToolApproval(
 [middleware.md](middleware.md)
 {% endcontent-ref %}
 
-### Dynamic Tool Search
+### Tool Search
 
 By default every time the provider is invoked all tools are loaded and transmitted to the backend LLM. A complex production agent connected to email, calendar, drive, CRM, and and multiple MCP servers can easily reach hundreds of tools, each carrying its name, description, parameter schema, and usage hints.
 
@@ -580,7 +580,7 @@ Currently only [OpenAIResponses](../providers/ai-provider.md#openairesponses), [
 
 ## Toolkits
 
-The philosophy behind Neuron's toolkit system emerged from a fundamental observation during AI Agent Development: while individual tools provide specific capabilities, real-world AI agents often require coordinated sets of related functionalities.&#x20;
+The philosophy behind Neuron's toolkit system emerged from a fundamental observation during AI Agent Development: while individual tools provide specific capabilities, real-world AI agents often require coordinated sets of related functionalities.
 
 Rather than forcing developers to manually assemble collections of tools for common use cases, Neuron introduces toolkits as an abstraction layer that transforms how we think about agent capability composition. Here is an example of how you can add a toolkit to an agent:
 
@@ -605,7 +605,7 @@ class MyAgent extends Agent
 }
 ```
 
-The traditional approach requires instantiating each tool individually. Imagine you want to build agents that need mathematical reasoning – addition, subtraction, multiplication, division, and exponentiation tools must all be declared separately in the agent's tool configuration. This granular approach quickly becomes unwieldy when agents require comprehensive functionality sets.&#x20;
+The traditional approach requires instantiating each tool individually. Imagine you want to build agents that need mathematical reasoning – addition, subtraction, multiplication, division, and exponentiation tools must all be declared separately in the agent's tool configuration. This granular approach quickly becomes unwieldy when agents require comprehensive functionality sets.
 
 Toolkits represent Neuron's solution to this complexity, packaging tools created around the same scope into a single, coherent interface that can be attached to any agent with a single line of code.
 
@@ -645,11 +645,11 @@ The `guidelines()` method serves a particularly important function in agent deve
 
 **Provide**
 
-The `provide()` method returns the array of tools included in the toolkit by default. When a toolkit is attached to an agent, the individual tools become available exactly as if they had been added separately, but without the cognitive overhead of managing multiple tool declarations.&#x20;
+The `provide()` method returns the array of tools included in the toolkit by default. When a toolkit is attached to an agent, the individual tools become available exactly as if they had been added separately, but without the cognitive overhead of managing multiple tool declarations.
 
 ### Filters
 
-During development of complex agents, I've frequently encountered scenarios where a toolkit provides mostly the right functionality but includes tools that could lead to undesired behavior in specific contexts, or just need to be restricted and configured individually.&#x20;
+During development of complex agents, I've frequently encountered scenarios where a toolkit provides mostly the right functionality but includes tools that could lead to undesired behavior in specific contexts, or just need to be restricted and configured individually.
 
 #### Exclude
 
@@ -673,7 +673,7 @@ class MyAgent extends Agent
 }
 ```
 
-The exclusion mechanism operates at the class level, using fully qualified class names to identify tools for removal.&#x20;
+The exclusion mechanism operates at the class level, using fully qualified class names to identify tools for removal.
 
 #### Only
 
@@ -786,7 +786,7 @@ These toolkits make your agent able to interact with your database. If you ask "
 
 All the tools in the MySQL and PostgreSQL toolkits require a [PDO](https://www.php.net/manual/en/class.pdo.php) instance as a constructor argument. If you are in a framework environment or you are already using an ORM in general, you can gather the underlying PDO instance from the ORM and pass it to the tools. You can learn more about this implementation strategy in this in-depth article: [https://inspector.dev/mysql-ai-toolkit-bringing-intelligence-to-your-database-layer-in-php/](https://inspector.dev/mysql-ai-toolkit-bringing-intelligence-to-your-database-layer-in-php/)
 
-The PDO instance is basically a connection to a specific database, so you could aslo think to create dedicated credentials for your agent. It could be helpful to control the level of access your agent has to the database.&#x20;
+The PDO instance is basically a connection to a specific database, so you could aslo think to create dedicated credentials for your agent. It could be helpful to control the level of access your agent has to the database.
 
 Anyway you have separate tools for reading and writing to the database. If you are not confident about your agent behaviour you may not provide the writing tool.
 
@@ -950,7 +950,7 @@ class MyAgent extends Agent
 
 <table data-header-hidden><thead><tr><th width="256"></th><th></th></tr></thead><tbody><tr><td>describe_directory_content</td><td>NeuronAI\Tools\Toolkits\FileSystem\DescribeDirectoryContentTool</td></tr><tr><td>read_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\ReadFileTool</td></tr><tr><td>grep_file_content</td><td>NeuronAI\Tools\Toolkits\FileSystem\GrepFileContentTool</td></tr><tr><td>glob_path</td><td>NeuronAI\Tools\Toolkits\FileSystem\GlobPathTool</td></tr><tr><td>preview_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\PreviewFileTool</td></tr><tr><td>parse_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\ParseFileTool</td></tr></tbody></table>
 
-### Tavily&#x20;
+### Tavily
 
 This toolkit enable your agent to performs web search, page content extraction, and crawling.
 
@@ -1061,7 +1061,7 @@ class MyAgent extends Agent
 }
 ```
 
-### Jina&#x20;
+### Jina
 
 This toolkit enable your agent to performs web search, and read the content of a specific URL.
 
@@ -1170,7 +1170,7 @@ The `user_id` arguments allows you to separate the long term memory in different
 
 #### Simple Email Service (SES)
 
-This tool allows the agent to send an email message to one or more recipients, send notifications, confirmations, reports, or any other email-based communication. The tool handles proper email&#x20;delivery, and basic error handling automatically.
+This tool allows the agent to send an email message to one or more recipients, send notifications, confirmations, reports, or any other email-based communication. The tool handles proper email delivery, and basic error handling automatically.
 
 In order ti use this tool the AWS sdk for PHP must be installed.
 
@@ -1205,7 +1205,7 @@ class MyAgent extends Agent
 
 ### Supadata YouTube
 
-This toolkit provides access to YouTube video transcriptions, metadata, channel information,\
+This toolkit provides access to YouTube video transcriptions, metadata, channel information,\
 and playlist data through Supadata.ai for content analysis and research purposes.
 
 ```php
@@ -1371,8 +1371,6 @@ This implementation requires the `pcntl` extension which is installed in many Un
 
 **pcntl only works in CLI processes, not in a web context.**
 
-
-
 If the `pcntl` extension is not present in the system running the agent (e.g. Windows machines) the trait automatically fallbacks to the standard tool calls execution. This can be helpful if you have a missmatch between your local development environment and the production environment. You can develop locally with `pcntl` disabled, then deploy to production environments where it may be enabled—**without modifying a single line of code**. The agent adapts automatically to whatever execution environment it finds itself in.
 {% endhint %}
 
@@ -1420,7 +1418,7 @@ $agent = Agent::make()
     );
 ```
 
-**Extending the Agent**&#x20;
+**Extending the Agent**
 
 You can also implement `resolveToolErrorHandler()` directly to define the callback to run.
 
