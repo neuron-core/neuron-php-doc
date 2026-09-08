@@ -66,7 +66,7 @@ PHPVector adapter on top of [`ezimuel/phpvector`](https://github.com/ezimuel/PHP
 You can install the component with composer:
 
 ```shellscript
-composer require neuron-core/php-vector
+composer require ezimuel/phpvector
 ```
 
 Use it in a RAG context:
