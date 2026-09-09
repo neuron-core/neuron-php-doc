@@ -210,7 +210,7 @@ echo $state->getMessage()->getContent();
 
 #### Tool Runs
 
-If the agent decide to use tools during the execution, the agent state keeps track iof thethe number of tool runs to stop the execution if the [maxRuns](tools.md#max-runs) limit is reached. You can access this map:
+If the agent decide to use tools during the execution, the agent state keeps track the number of tool runs to stop the execution if the [maxRuns](tools.md#max-runs) limit is reached. You can access this map:
 
 ```php
 $state = MyAgent::make()
