@@ -118,9 +118,7 @@ Many of the applications you build with Neuron will contain multiple steps with 
 
 Neuron's Stream Adapter system provides a flexible, protocol-agnostic way to help you easily integrate Neuron powered agents with your frontend stack.
 
-Stream adapters act as translators between Neuron's internal streaming events (text chunks, tool calls, reasoning steps) and specific frontend protocols like Vercel AI SDK or AG-UI.
-
-You can also plug in adapters to send streamed data to an external transport layer like [Pusher](https://pusher.com/), if you want to stream contents to the UI from agent executed in the background.
+Stream adapters translate Neuron's internal streaming events (text chunks, tool calls, reasoning steps) into specific frontend protocols events like AG-UI.
 
 This architecture allows you to seamlessly integrate Neuron agents with various frontend frameworks without modifying your core agent logic. Adapters handle protocol-specific concerns such as message lifecycle events, event formatting, and ID tracking, while maintaining consistent streaming behavior across all providers (Anthropic, OpenAI, Gemini, Ollama, etc.). The system is highly extensible, you can create custom adapters by extending `SSEAdapter` to implement streaming data transofrmations, or directly implement the `StreamAdapterInterface` for custom needs.
 
