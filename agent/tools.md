@@ -296,7 +296,7 @@ If the `visible` method get `false`, the tool will not be available during agent
 
 Neuron provides you with full support for the human in the loop pattern including tool approval. It's different from visbility because "approval" is a runtime gatekeeper. The framework intercepts the tool call and pause waiting for the user's final decision.
 
-You can plug this feature into your agent with our built-in [ToolApproval](tools.md#tool-properties) middleware.
+You can plug this feature into your agent with our built-in [ToolApproval](tools.md#tool-approval) middleware.
 
 ```php
 new ToolApproval(
