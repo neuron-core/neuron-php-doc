@@ -10,7 +10,7 @@ When working with AI coding assistants like Claude Code, Opencode, Cursor, or ot
 
 The [Agent Skills specification](https://agentskills.io/) is a standard for providing structured documentation to AI coding assistants. It helps AI tools understand your project's APIs, conventions, and best practices through a well-organized directory of markdown files.
 
-Neuron publishes an Agent Skill that provides AI tools with comprehensive information about our components, including their APIs, usage patterns, interfaces, and more.
+Neuron provides coding assistant with comprehensive information about components, including their APIs, usage patterns, interfaces, and more.
 
 ### How to install skills
 
