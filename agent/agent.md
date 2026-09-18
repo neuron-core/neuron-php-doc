@@ -171,20 +171,20 @@ $message = YouTubeAgent::make()
     ->getMessage();
     
 echo $message->getContent();
-// Hi, I'm a frindly AI agent specialized in summarizing YouTube videos!
+// Hi, I'm a friendly AI agent specialized in summarizing YouTube videos!
 // Can you give me the URL of a YouTube video you want a quick summary of?
 ```
 
 ### Agent State
 
-Since the Agent is an extension of the Workflow, instead of getting the last model response with the `getMessage()` method, you cvan just run the agent workflow, and get the raw agent state as return value. The agent state contains additional information that can help you inspect what happened during the agent execution.
+Since the Agent is an extension of the Workflow, instead of getting the last model response with the `getMessage()` method, you can just run the agent workflow, and get the raw agent state as return value. The agent state contains additional information that can help you inspect what happened during the agent execution.
 
 ```php
 $state = MyAgent::make()
     ->chat(new UserMessage("Who are you?"))
     ->run();
 
-// $state is an instance of NeuropnAI\Agent\AgentState class
+// $state is an instance of NeuronAI\Agent\AgentState class
 $state->getMessage();
 ```
 
