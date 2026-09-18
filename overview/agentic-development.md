@@ -12,13 +12,31 @@ The [Agent Skills specification](https://agentskills.io/) is a standard for prov
 
 Neuron publishes an Agent Skill that provides AI tools with comprehensive information about our components, including their APIs, usage patterns, interfaces, and more.
 
-### Accessing Skills
+### How to install skills
+
+How you reference the skill depends on which AI tool you're using. If you're using Claude Code, Codex, or similar you can install the Neuron AI skills locally using the [skills CLI](https://skills.sh/):
+
+```bash
+npx skills add ./vendor/neuron-core/neuron-ai/skills
+```
+
+Once installed, the skill will be available to Claude Code automatically. The skilla are installed as a symlink, so it will automatically stay up to date when you update Neuron via composer.
+
+#### Cursor <a href="#cursor" id="cursor"></a>
+
+In [Cursor](https://cursor.sh/), you can add the skill directory to your project's documentation sources via **Cursor Settings > Features > Docs**. Point it to the `vendor/neuron-core/neuron-ai/skills` .
+
+#### Other AI Tools <a href="#other-ai-tools" id="other-ai-tools"></a>
+
+Most AI coding assistants that support the Agent Skills specification can use this skill. Check your tool's documentation for how to add custom skills or documentation sources.
+
+### Using Skills
 
 {% hint style="info" %}
-Type **`/neuron-*`** in your terminal.
+Type **`/neuron-*`** in your prompt.
 {% endhint %}
 
-The Agent Skill is available in the Neuron AI vendor folder at:
+Available skills:
 
 ```bash
 vendor/neuron-core/neuron-ai/skills/
@@ -42,28 +60,6 @@ vendor/neuron-core/neuron-ai/skills/
             └── SKILL.md
 
 ```
-
-### How to install skills
-
-How you reference the skill depends on which AI tool you're using.
-
-#### **Claude**
-
-If you're using [Claude Code](https://claude.ai/code), you can install the Neuron AI skills locally using the [skills CLI](https://skills.sh/):
-
-```bash
-npx skills add ./vendor/neuron-core/neuron-ai/skills
-```
-
-Once installed, the skill will be available to Claude Code automatically. The skilla are installed as a symlink, so it will automatically stay up to date when you update Neuron via composer.
-
-#### Cursor <a href="#cursor" id="cursor"></a>
-
-In [Cursor](https://cursor.sh/), you can add the skill directory to your project's documentation sources via **Cursor Settings > Features > Docs**. Point it to the `vendor/neuron-core/neuron-ai/skills` .
-
-#### Other AI Tools <a href="#other-ai-tools" id="other-ai-tools"></a>
-
-Most AI coding assistants that support the Agent Skills specification can use this skill. Check your tool's documentation for how to add custom skills or documentation sources.
 
 ## MCP Server
 
