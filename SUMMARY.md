@@ -29,6 +29,7 @@
 * [AI Provider](providers/ai-provider.md)
 * [Audio](providers/audio.md)
 * [Image](providers/image.md)
+* [Classifier](providers/classifier.md)
 
 ## RAG
 
