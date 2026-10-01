@@ -38,6 +38,7 @@ class MyAgent extends Agent
 
 // Run the agent
 $message = MyAgent::make()
+    ->setThreadId('chat_id')
     ->chat(new UserMessage("Generate an image of a venue hosting the best PHP conference!"))
     ->getMessage();
 
@@ -73,6 +74,7 @@ class MyAgent extends Agent
 
 // Run the agent
 $message = MyAgent::make()
+    ->setThreadId('chat_id')
     ->chat(new UserMessage("Generate an image of a venue hosting the best PHP conference!"))
     ->getMessage();
 
@@ -128,6 +130,7 @@ class MyAgent extends Agent
 
 // Run the agent
 $message = MyAgent::make()
+    ->setThreadId('chat_id')
     ->chat(new UserMessage("Generate an image of a venue hosting the best PHP conference!"))
     ->getMessage();
 

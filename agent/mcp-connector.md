@@ -41,11 +41,11 @@ class MyAgent extends Agent
 }
 ```
 
-You should create an `McpConnector` instance for each MCP server you want to interact to.
+You should create an `McpConnector` instance for each MCP server you want to interact to.&#x20;
 
 Neuron automatically discovers the tools exposed by the server and connects them to your agent.
 
-When the agent decides to run a tool, Neuron will generate the appropriate request to call the tool on the MCP servers and return the result to the LLM to continue the task. It feels exactly like with your own defined tools, but you can access a huge archive of predefined actions your agent can perform with just one line of code.
+When the agent decides to run a tool, Neuron will generate the appropriate request to call the tool on the MCP servers and return the result to the LLM to continue the task.  It feels exactly like with your own defined tools, but you can access a huge archive of predefined actions your agent can perform with just one line of code.
 
 ### Local MCP Server
 
@@ -134,11 +134,9 @@ Many of the applications you build with Neuron will contain multiple steps with 
 
 ## Filter the list of tools
 
-During connection with complex MCP servers they can includes tools that could lead to undesired behavior in specific contexts. The `exclude()` and `only()` methods address this challenge elegantly, allowing developers to connect with comprehensive MCP servers while maintaining fine-grained control over available capabilities you want to provide to your agent.
+During connection with complex MCP servers they can includes tools that could lead to undesired behavior in specific contexts. The **`exclude()`** and **`only()`** methods address this challenge elegantly, allowing you to connect with large MCP servers while maintaining fine-grained control over available capabilities you want to provide to the agent.
 
-This becomes particularly useful when working with specialized agents that need specific capabilities but you want to reduce the probability of an agent mistake, and reduce tokens consumption.
-
-These methods accept a list of tool names that you do or do not want to associate with the agent.
+These methods accept a list of tool names that you do, or do not want to associate with the agent.
 
 ```php
 class MyAgent extends Agent 
@@ -162,6 +160,29 @@ class MyAgent extends Agent
             ])->only([
                 'tool_name_1',
                 'tool_name_2',
+            ])->tools(),
+        ];
+    }
+}
+```
+
+### Interact with tool instances
+
+If you need to apply specific policies to tools coming from an MCP server, like `requireApproval()` or `setMaxRuns()`, you can extract a tool instance using the **`with()`** method:
+
+```php
+class MyAgent extends Agent 
+{
+    ...
+    
+    protected function tools()
+    {
+        return [
+            ...McpConnector::make([
+                'url' => 'https://mcp.example.com',
+            ])->with(
+                name: 'tool_name_1',
+                callback: fn (Tool $tool) => $tool->requireApproval()
             ])->tools(),
         ];
     }

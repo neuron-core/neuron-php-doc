@@ -6,17 +6,23 @@ metaLinks:
 
 # Upgrade
 
-## Upgrade to v3 from v2
+{% hint style="warning" %}
+### Agentic Upgrade (recommended)
 
-In this new major version the public APIs of Neuron components weren't changed dramatically (we minimized the impact as much as possible), but the underlying architecture of Agent, RAG, and the Message system have been completely rebuilt on top of the Workflow component that now powers the entire framework.
+We documented the entire upgrade process in a dedicated directory **`vendor/neuron-core/neuron-ai/upgrade`**. You can point your coding agent to this directory and it will automatically receive accurate instructions to upgrade your code. Here is the prompt you can use:
 
-Now Agent and RAG are no longer simple objects but workflows. They inherit features that were impossible to integrate in the previous standalone implementation, such as:
+```
+I updated the `neuron-core/neuron-ai` dependency from version 3.x to 4.x. 
+Please look at the upgrade guide at `vendor/neuron-core/neuron-ai/upgrade` 
+and update my application code if necessary.
+```
+{% endhint %}
 
-* The unified [messaging system](../agent/messages.md#the-unified-messaging-layer) for multi-modal agents
-* Native support for [tool approval](../agent/middleware.md#human-in-the-loop) and fully customizable human-in-the-loop flows
-* Multi-agent [streaming](https://docs.neuron-ai.dev/workflow/streaming) and collaboration.
+## Upgrade to v4 from v3
 
-We also took advantage of this release to fix other critical design issues emerged in the v2 like the **complete support for reasoning models across all providers**, and other design improvements to have more freedom to evolve the framework with less breaking changes in the future.
+In this new major version the public APIs of Neuron components weren't changed dramatically (we minimized the impact as much as possible). We've focused on improving the most important component on which the entire framework is built on. Workflow it's the foundation of the entire architecture, the changes implemented in this new version may impact your code, especially if you use patterns like tool approval, interruption, and Streaming Adapters. We recommend to use the upgrade guides for coding agents.
+
+We also took advantage of this release to fix other critical issues emerged in the v3 like the Tool Approval flow in the Agent, and other design improvements to have more freedom to evolve the framework with less breaking changes in the future.
 
 We continue to work to provide the best possible developer experience, to help you create successful AI products in PHP.
 
@@ -24,305 +30,390 @@ We continue to work to provide the best possible developer experience, to help y
 
 You should update the following dependencies in your application's `composer.json` file:
 
-* **neuron-core/neuron-ai** to **^3.0**
+```json
+{
+    "require": {
+        ...,
+        "neuron-core/neuron-ai": "^4.0",
+    },
+}
+```
+
+The `inspector-php` package was removed from default dependencies. So you have to install it in your application if you want to connect your agent to the [Inspector](https://inspector.dev/) monitoring dashboard:
+
+```shellscript
+composer require inspector-apm/inspector-php
+```
 
 ## High Impact Changes
 
-### New Agent namespace
+### New Agentic Skills
 
-The Agent class and related classes and traits have been moved from the root directory under the dedicated namespace `NeuronAI\Agent`.
+Skills for coding agents have been completely rewritten and reorganized to reflect the improvements and new features of this new major version. We recommend to remove the skills directory inside your coding agent folder (e.g. `.claude`, `.agent`) and follow the installation guide again.
 
-You need to update the namespace in the files where you use the Agent class, from:
-
-```php
-use NeuronAI\Agent;
-```
-
-To:
-
-```php
-use NeuronAI\Agent\Agent;
-```
-
-The same for the SystemPrompt class. The new namespace is `NeuronAI\Agent\SystemPrompt`.
-
-### Remove chatAsync()
-
-The `chatAsync()` method was completely removed from the `AgentInterface`. If you are using this method in your application you have to switch to the new async pattern.
-
-<a href="../agent/async.md" class="button primary" data-icon="arrow-right-long">Learn about Async</a>
+<a class="button primary" data-icon="arrow-right-long">Agentic Skills</a>
 
 ### Agent return type
 
-Since the Agent is now a workflow, you have slightly different APIs to actually run the agent and retrieve the LLM response.
+In this new major version the Agent entity was subject to a substantial refactor in order to eliminate many frictions for advanced use cases, and make the agent class more usable as a normal Workflow from which it inherits.
 
-Previously you will get an instance of a Message directly from the `chat()` method. Now the chat method returns a workflow state that you can use to retrieve the final agent response.
+The most important impact is the return type. The Agent return an instance of the `AgentState` that is an extension of the underlying `WorkflowState` with a couple of helper methods to keep as much as possible the external APIs seen by your application unchanged.
 
-The returning agent state allows you to eaily access the LLM response, but it makes also possible the inspection of other aspects of the internal execution of the agent. Here is an example of the new syntax to run an agent, and output the content generated by the LLM.
+The most impactful change is in the `stream()` method. Without the `AgentHandler` the method return the generator directly.&#x20;
 
 ```php
-// Previous versions chat() return the LLM response
-$message = MyAgent::make()->chat(new UserMessage("Hi, who are you?"));
-
-// V3 - you need to call "getMessage()"
-$message = MyAgent::make()
-    ->chat(new UserMessage("Hi, who are you?"))
-    ->getMessage();
-
-echo $message->getContent();
+foreach ($agent->stream(new UserMessage("Hello")) as $event) {
+    if ($event instanceof TextChunk) {
+        echo $event->content;
+    }
+}
 ```
 
-### Message Content Blocks
-
-The content blocks now replace the old approach based on "attachments". The legacy attachment system has been removed. To migrate:
-
-**Old Approach** (no longer available):
+If you interact with frontend protocol, you must register the stream adapter on the agent instance.
 
 ```php
-$message = new UserMessage('Analyze this');
-$message->addAttachment(new Image($url, AttachmentContentType::URL));
+$generator = MyAgent::make()
+    ->setStreamAdapter(new AGUIAdapter('thread_id'))
+    ->stream(
+        new UserMessage("Hello")
+    );
+
+foreach ($generator as $event) {
+    echo $event;
+    ob_flush();
+    flush();
+}
 ```
 
-**New Approach**:
+nothing change for `structured()` and `chat()`.
+
+### Tool becomes fully abstract
+
+The `Tool` class is now abstract and can no longer be used directly. Its design is now intended to be extendable, allowing you to implement your own tools with less code and more flexibility.
+
+We also removed the constructor from the abstract class so you can specify tool name and description as normal class properties instead of calling the parent constructor. You are free to use a class constructor only if you want to pass external dependencies to the tool:
 
 ```php
-// Simple text message (backward compatible)
-$message = new UserMessage("Hi");
-
-// New format for passing images, files, etc.
-$message = new UserMessage([
-    new TextBlock('Analyze this'),
-    new ImageBlock($url, SourceType::URL)
-]);
-
-// Adding more blocks
-$message->addContent(
-    new TextBlock('Remeber to answer as you are a professinal concierge.')
-);
-
-// Print all the text content blocks
-echo $message->getContent();
-```
-
-The method `getContent()` didn't change, but now returns all text blocks concatenated skipping media types.
-
-Block composition unlock multimodality support, and can be very helpful if you need to inject additional prompts or instructions dynamically along the execution.
-
-<a href="../agent/messages.md" class="button primary" data-icon="arrow-right-long">Learn about Messages</a>
-
-### Streaming Chunks
-
-In previous versions the streaming interface will return simple string for LLM response chunk, and `ToolCallMessage`, or `ToolCallResultMessage` instances directly for tool related operations. This creates too direct a coupling between the message instances and your application reading the stream.
-
-We implemented dedicated chunk classes `TextChunk`, `ReasoningChunk`, `ToolCallChunk`, `ToolResultChunk`, and others, in order to have dedicated containers for each kind of stream delta. This more clear separation of concerns opened the door to the implementation of the [adapter system](upgrade.md#streaming-adapters), and give us more freedom to improve this layer in the future with less breaking changes to the unified message system.
-
-#### ToolCallChunk
-
-In the previous version Neuron stream directly the `ToolCallMessage` instance with the list of tools involved in the iteration. Now you get a dedicated `ToolCallChunk` for each tool the model is asking to run.
-
-<a href="../agent/streaming.md" class="button primary" data-icon="arrow-right-long">Read more about streaming</a>
-
-### Structured Output
-
-We extended the role of the `SchemaProperty` attribute to be the source of truth for the JSON schema definition of a class property. It now supports `min`, `max`, `minLength`, `maxLength`, `anyOf`.
-
-```php
-use NeuronAI\StructuredOutput\SchemaProperty;
-
-class Person 
+class MyTool extends Tool
 {
-    #[SchemaProperty(
-        description: 'The user name.',
-        required: true,
-        minLength: 3,
-        maxLength: 255,
-    )]
-    public string $name;
+    protected string $name = 'my_tool';
     
-    #[SchemaProperty(
-        description: 'What the user love to eat.', 
-        required: false,
-        min: 18,
-        max: 64,
-    )]
-    public ?int $age = null;
+    protected ?string $description = 'What the tool does.';
+    
+    public function __construct(protected string $apiKey){}
+    
+    public function __invoke()
+    {
+        ...
+    }
 }
 ```
 
-#### Array of objects
+### Remove WorkflowHandler
 
-If a property is an array of structured object, you no longer need to specify the doc-block of the property types, you can just list them in the `anyOf` argument:
+The Workflow component was subject of an important refactoring in order to simplify its usage and public APIs. Working with Workflow in the previous version, you were need to call the `init()` method to get the `WorkflowHandler` instance and than call `run()` or `events()` on the handler to finally execute the workflow:
 
 ```php
-class Report
+$handler = MyWorkflow::make()->init();
+
+// One shot run
+$finalState = $handler->run();
+
+// Stream events
+foreach($handler->events() as $chunk) {
+    // ...
+}
+$finalState = $handler->getResult();
+```
+
+Following a drastic simplification of the workflow execution logic, the handler is no longer necessary and it is possible to invoke the two methods `run()` and `events()` directly in the workflow.
+
+```php
+// One shot run
+$finalState = MyWorkflow::make()->run();
+
+// Stream events
+$generator = MyWorkflow::make()->events();
+foreach($generator as $chunk) {
+    // ...
+}
+$finalState = $generator->getResult();
+```
+
+### Workflow Interrupt/Resume
+
+The architecture of the workflow execution and its interruption capabilities was redisigned to make it easier to manage interruption and tool approval, but also open the doors for the implementation of durable, crash proof, agentic workflows.
+
+#### Remove WorkflowInterrupt exception
+
+In case of interruption the Workflow doesn't throw the special `WorkflowException` to inform the caller script about the interruption. It just return an "interrupted" state:
+
+```php
+$state = $workflow->run();
+
+if ($state->isInterrupted()) {
+    // Use the information in the request
+    $request = $state->getInterruptRequest();
+    // The resume token is auto-generated and available from the workflow instance
+    $workflowId = $workflow->getWorkflowId();
+}
+```
+
+No more try/catch block.
+
+This change the [Tool Approval](../agent/tool-approval.md) flow. Check out the documentation in case you are using this middleware in your agents.
+
+#### Resume Payload as plain array
+
+The interruption request you propagate from the node is now only a signal to carry information from the node to the outside caller script. To resume the workflow you no longer need to pass the request back to the workflow. The resume payload is now just a simple array:
+
+```php
+// Example of a node calling interrupt()
+class InterruptableNode extends Node
 {
-    #[SchemaProperty(
-        description: 'The content of the report', 
-        required: true,
-        anyOf: [TextBlock::class, TableBlock::class, ImageBlock::class]
-    )]
-    public array $content;
+    public function __invoke(FirstEvent $event, WorkflowState $state): NextEvent
+    {
+        $payload = $this->interrupt(new ApprovalRequest('human input needed'));
+        $state->set('received_feedback', $payload);
+        return new NextEvent();
+    }
+}
+
+// Define the inbound payload — it will be returned by the interrupt() method
+$payload = ['action_id' => 'approve'];
+
+$finalState = $workflow->resume($payload);
+```
+
+### Agent Instructions
+
+Agent instructions must be an instance of the new message type `SystemMessage`. You can just pass the string to the constructor to make it compatible with this new version:
+
+```php
+use NeuronAI\Chat\Messages\SystemMessage;
+
+class YouTubeAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        ...
+    }
+    
+    protected function instructions(): SystemMessage
+    {
+        return new SystemMessage(
+            "You are an AI Agent specialized in writing YouTube video summaries"
+        );
+    }
 }
 ```
 
-<a href="../agent/structured-output.md" class="button primary" data-icon="arrow-right-long">Structured Output</a>
+### Tool Approval
 
-### Workflow Interrupt Request (Human In The Loop)
+The tool approval flow was entirely rewritten. The Agent class now manages the entire process. You just need to take care of rendering the UI so users can decide whether to approve or reject a tool call.
 
-In the previous version when you asked for an interrupt inside a Node you could pass an array of data to inform the client about the reason and the actions behind the interruption.
+The status of tools requiring approval is stored into the chat history within the last `ToolCallMessage`. This allows you to design the UI to just render the messages in the chat history, and when it meets a `ToolCallMessage` you can check the approval status of the tools to show the Approve/Deny actions, or the normal tool call already happened.
 
-{% code title="Old syntax" %}
+<a href="../agent/tool-approval.md" class="button primary" data-icon="arrow-right-long">Tool Approval</a>
+
+#### New Tool `requiresApproval()` method
+
+We introduced the `requiresApproval()` method on the Tool class to determine whether approval is needed based on the tool call's arguments:
+
 ```php
-$feedback = $this->interrupt(['message' => 'do you want to approve?']);
+class MyTool extends Tool
+{
+    ...,
+    
+    public function requiresApproval(array $inputs): bool
+    {
+        return $inputs['amount'] > 100;
+    }
+}
 ```
-{% endcode %}
 
-This lazy typed method led to inconsistencies and errors. We introduced the `InterruptRequest` primitive to help you create interrutpion flows with a typed structure for a safe UI integration.
+To activate the tool approval flow you always need to attach the [ToolApproval](../agent/tools.md#tool-approval) middleware to the Agent. Custom approval policy on the middleware have precedence over the one defined in the tool's `requiresApproval()` method.
 
-{% code title="New syntax" %}
+### Database Schema For Workflow Persistence
+
+Due to the changes in the workflow execution model, the database schema for persistence across interruptions has been changed to support the new features. Check out the dedicated section to get ready to run SQL queries to start with the new database format.
+
+<a href="../workflow/persistence.md" class="button primary" data-icon="arrow-right-long">Persistence</a>
+
+### Guzzle dependency removed
+
+In the previous version guzzle was a required composer depedency to power the framework default `GuzzleHttpClient`. This new major version ships with the default `CurlHttpClient` that do not require any package dependency, just `ext-curl` that should be already available in any PHP installation.
+
+If you are passing a custom GuzzleHttpClient instance to framework components you have to explicitly require guzzle in your application.
+
+```shellscript
+composer require guzzlehttp/guzzle
+```
+
+### Built-In Vector Store Fitlering
+
+`VectorStoreInterface` changed to support built-in filtering capabilities. Methods changed their name and signature. If you are implementing `VectorStoreInterface` by yourself you shuold migrate your implementation to the new contract.
+
+<a href="../rag/vector-store.md" class="button primary" data-icon="arrow-right-long">Vector Stores</a>&#x20;
+
+### Calculator Toolkit
+
+It turned out that models struggled a lot in composing multiple tool calls to resolve mathematical expressions, and instead they are really good in expression representation. The CalculatorToolkit was refactored with a main `Evaluate` tool, removing tool representing single math operations: `add`, `subtract`, `multiply`, etc. The model can now describe the formula it wants to solve and the evaluate tool will interpret this expression and return the result, all in one turn, no matter how complex the expression is. This strategy also saves a lot of tokens, since less tools are sent to the provider API.
+
+<a href="../agent/tools.md#toolkits" class="button primary" data-icon="arrow-right-long">Calculator Toolkit</a>
+
+### Chat History
+
+Chat history was subject of major refactor to achieve two goals:
+
+* Separate the message store from the history and context window management
+* Making Neuron integration in your application easier
+
+`ChatHisotryInterface` was removed. The new public APIs are backed by the new `MessageStoreInterface`. As the name says, the message store is responsible only for storing your messages in a persistence layer. It marks messages that fall out of the context window as `archived` instead of deleting them, so the model sees a trimmed thread while your storage keeps the full history.
+
+{% hint style="warning" %}
+We recommennd to rely on the agentic upgrade process to move your Agent and history implementation to the new APIs.
+{% endhint %}
+
+<a href="../agent/chat-history-and-memory.md" class="button primary" data-icon="arrow-right-long">Chat History</a>
+
+### Middleware Signature
+
+The Worklow engine allows you to declare `resources` you want to carry during execution that will not need to be saved during interruptions. Middleware receive resources too, so you can interact with this items during worklow execution. In an Agent or example, resources contains tools, agent instructions, and the chat history. Middleware mehtods now get an additional argument `$resources`.&#x20;
+
 ```php
-$feedback = $this->interrupt(new ApprovalRequest(
-    reason: 'Do you want to approve?',
-    actions: [
-        new Action(...)
-    ]
-));
+interface WorkflowMiddleware
+{
+    public function before(
+        NodeInterface $node, 
+        Event $event, 
+        WorkflowState $state, 
+        WorkflowResources $resources, // Middleware receive resources next to the state.
+    ): void;
+
+    public function after(
+        NodeInterface $node, 
+        Event $result, 
+        WorkflowState $state, 
+        WorkflowResources $resources, // Middleware receive resources next to the state.
+    ): void;
+}
 ```
-{% endcode %}
 
-Learn more in the dedicated section of the documentation.
+### Change ReaderInterface contract
 
-<a href="../workflow/human-in-the-loop.md" class="button primary" data-icon="arrow-right-long">Workflow interruption</a>
+The contract had a single static method `getText()`. The static method makes real readers instances with custom constructions meaningless. The interface now enforce the implementation of concrete instances instead of static ones:
 
-### Workflow Database Persistence Change
+{% hint style="warning" %}
+**Custom readers must be adjusted accordingly**. The agentic upgrade will cover this refactor.
+{% endhint %}
 
-The name of the columns for the workflow persistence database table changed:
-
-* data -> interrupt
-
-<a href="../workflow/persistence.md" class="button primary" data-icon="arrow-right-long">Workflow presistence</a>
+```php
+interface ReaderInterface
+{
+    public function read(string $filePath): string;
+}
+```
 
 ## Medium Impact
 
-### Rename ToolCallResultMessage
+### Monitoring
 
-This class was renamed to `ToolResultMessage`.
+The framework is transitioning to the [PSR-14 Event Dispatcher](https://www.php-fig.org/psr/psr-14/) interface, instead of the PHP native \SplObserver. We kept the existing interfaces in place, and also the `LogObserver` usgin adapters, but they are marked as `@deprecated`.
 
-### Monitoring & Observers
+This will make it easier to integrate Neuron agents and agentic workflows in general with other existing frameworks and applications.
 
-Agent, RAG, and Workflow entities no longer implement the PHP `\SplSubject` interface, and the observer classes no longer implement the `\SplObserver` interface. We introduced the new `ObserverInterface` that must be implemented only by event listeners like `LogObserver`. This lighter structure helped us to make the workflow building blocks observable like Workflow, node, and middleware. This means you can emit events from your custom nodes, and you only need to create and register your custom observer to listen for these events.
+<a href="../agent/observability.md" class="button primary" data-icon="arrow-right-long">Monitoring</a>
 
-Read more on the [Monitoring section](../agent/observability.md).
+### Providers return ProviderResponse
 
-### Remove HttpClientOptions
+AI provider methods `chat()` and `stream()` now return `ProviderResponse` instead of `Message`. The `ProviderResponse` wraps the assistant message and provides access to the raw HTTP response body and headers.
 
-This class was removed in favor a complete abstraction of the HttpClient inside the framework. We adopted an adapter pattern to allow you inject custom http clients into the framework components, and customize their configuration. The Guzzle client adapter also support handler stack, custom headers, etc.
+**This only affects standalone provider usage.** When providers are used inside an Agent (via `chat()`, `stream()`, or `structured()` on the Agent itself), no changes are needed — the Agent handles the `ProviderResponse` internally.
 
-You can see an example of how to customize the Http client configuration in the [Async](../agent/async.md) section.
-
-### Qdrant 1.10.x
-
-The Qdrant vector store components was updated to support the new [query APIs](https://api.qdrant.tech/api-reference/search/query-points) that are included starting from the version 1.10.x. If you use a previous version of the Qdrant database you need to upgrade your instance.
-
-### AbstractChatHistory methods signature
-
-If you have implemented a custom chat history component you need to adjust the signature of the hook methods. They changed the visibility level, from public to protected, and they no longer have a return type:
+You only need to refactor code that calls provider methods directly, such as in scripts, controllers, commands, or custom workflows.
 
 ```php
-class MyChatHistory extends AbstractChatHistory
+$response = $provider->chat(new UserMessage(...));
+
+// Get the assistance Message
+$response->message();
+
+// Get the raw provider body
+$response->body();
+
+// Get the headers
+$response->headers();
+```
+
+### Changes on AIProviderInterface
+
+We removed `messageMapper()` and `toolPayloadMapper()` from the `AIProviderInterface`, and the new `getModel()` methos was introduced. If you have any custom provider implementation that directly use this interface, you need to adjust it properly.
+
+```php
+interface AIProviderInterface
 {
-    protected function setMessages(array $messages): void
-    {
-        // Handle saving the entire history at once.
-    }
+    public function getModel(): string;
 
-    protected function onNewMessage(Message $message): void
-    {
-        // Handle single message addition.
-    }
+    public function systemPrompt(string|array|null $prompt): AIProviderInterface;
 
-    protected function onTrimHistory(int $index): void
-    {
-        // When the trim is triggered, the messages in the position from zero to $index must be removed.
-    }
+    public function setTools(array $tools): AIProviderInterface;
 
-    protected function clear(): void
-    {
-        // Remove all messages.
-    }
+    public function chat(Message ...$messages): ProviderResponse;
+
+    public function stream(Message ...$messages): Generator;
+
+    public function structured(array|Message $messages, string $class, array $response_schema): ProviderResponse;
+
+    public function setHttpClient(HttpClientInterface $client): AIProviderInterface;
 }
 ```
 
 ## New Features
 
-### Tool Approval & Conditional Approval
+### AG-UI Custom Events
 
-Thanks to the human in the loop pattern supported by the underlying workflow architecture, we created a built-in middleware to enable Tool approval in your agent like a plu\&play feature:
+AG-UI uses its native `STEP_STARTED`, `STEP_FINISHED`, `ACTIVITY_SNAPSHOT`, and `CUSTOM` events. Vercel emits transient `data-*` parts, so intermediate domain information is available to the UI without being added to assistant-message history.
 
-```php
-new ToolApproval(
-    tools: [
-        BuyTicketTool::class => function (array $args): bool {
-            return $args['amount'] > 100;
-        }
-    ]
-)
-```
+You can map application events by its exact class when domain code should remain independent from Neuron's portable event objects.
 
-<a href="../agent/middleware.md#tool-approval-human-in-the-loop" class="button primary" data-icon="arrow-right-long">Tool Approval</a>
+<a href="../agent/streaming.md#custom-events" class="button primary" data-icon="arrow-right-long">UI Protocol Custom Events</a>
 
-### Mistral Dedicated Provider
+### Streaming Channels
 
-Mistral provider is no longer a pure OpenAI implementation, but it was evolved with its own API format implementation to support multi-modal input and reasoning models.
+As agents become more interactive and capable, application developers are increasingly forced to run them outside the HTTP request lifecycle because of its timeout limits, which leaves the streamed output with no way to reach the UI. Channels deliver the streamed output of Agents and Workflows to the user interface through external streaming systems such as [Pusher](https://pusher.com/), websockets, a Redis queue, or whatever your application already uses.
 
-<a href="../providers/ai-provider.md#mistral" class="button primary" data-icon="arrow-right-long">Mistral AI Provider</a>
+<a href="../agent/streaming.md#delivery-channels" class="button primary" data-icon="arrow-right-long">Streaming Channels</a>
 
-### Cohere AI Provider
+### Partial Event Streaming
 
-This version ships with a brand new provider to support Cohere inference platform both cloud and privately deployed.
+Realtime servers like Pusher, Socketi, or any Pusher compatible server usually put a limit on the size of the payload. Pusher caps an event at 10 KB; Reverb defaults to the same, Soketi to 100 KB.
 
-<a href="../providers/ai-provider.md#cohere" class="button primary" data-icon="arrow-right-long">Cohere AI Provider</a>
+To support streaming when your real-time server haa such a limit, an event that does not fit the max size - typically a tool result, or a message snapshot - is split into consecutive fragments. Furthermore servers do not guarantee that fragments arrive in order and never interleave. So the browser must be able to reconcile this fragmentation and ordering in order to deliver consistent streaming to your UI components.
 
-### Text-To-Speech providers
+Neuron 4 ships with a first-party Typescript module that brings this capability in your frontend.
 
-Thanks to the new block composition of messages it's easy now to deal with input and output multimodality. In this release we included a couple of providers you can use to process audio contents.
+<a href="../agent/streaming.md#event-fragmentation" class="button primary" data-icon="npm">@neuron-core/streaming</a>
 
-<a href="../providers/audio.md" class="button primary" data-icon="arrow-right-long">Text-To-Speech providers</a>
+### Semantic Memory
 
-### Streaming Adapters
+Your agent can now remember what matters to a person across multiple conversations. Users with multiple active threads can see the agent remember their past conversations and preferences.
 
-Adapters act as translators between Neuron's internal streaming events (text chunks, tool calls, reasoning steps) and specific frontend protocols like Vercel AI SDK, AG-UI, or your custom frontend needs.
+V4 introduces the `SemanticMemoryRetrieval` component, which automatically stores and recalls memories across user sessions. It belongs to the RAG agent can be customized or replaced to fit your application logic.
 
-This architecture allows you to seamlessly integrate Neuron agents with various frontend frameworks (React, Vue, etc.) without modifying your core agent logic.
+<a href="../rag/retrieval.md#semantic-memory" class="button primary" data-icon="arrow-right-long">Semantic Memory</a>
 
-<figure><img src="../.gitbook/assets/streaming-adapter.png" alt=""><figcaption></figcaption></figure>
+### StoppableHttpClient
 
-<a href="../agent/streaming.md#stream-adapters" class="button primary" data-icon="arrow-right-long">Learn more about Adapters</a>
+Stop a streamed answer mid-flight, for a "stop generating" button. The provider keeps the text streamed so far as a partial content and store it in the chat history.
 
-### File ID content block
+<a href="../agent/async.md#stoppablehttpclient" class="button primary" data-icon="arrow-right-long">Http Client</a>
 
-Usually you can attach files to your message (images or documents) as URLs, or encoded in base64 format. Many provider allows you to upload files on their platform once, and reference these files with a simple ID in the message. This can generate big savings in token consumption and can improve model response time.
+### Classifier
 
-After receiveing the file ID from the provider platofrm you can add a file block to your message with `SourceType::ID`.
+In Neuron AI you could already answer them with [structured output](https://docs.neuron-ai.dev/agent/structured-output): describe the allowed answers, force the response into a PHP class, read the property. It is the same mechanism behind the [AI as a judge](https://docs.neuron-ai.dev/agent/evaluation#ai-as-a-judge) pattern in agent evaluations. It works well when the decision is taken once in a while. The trouble begins when you want it on every turn of every conversation, because a generative model produces text one token after the other, and you are paying a general purpose writer, with its latency and its price, to obtain one word. A guardrail that doubles the response time of the agent gets switched off at the first complaint. A judge that costs as much as the agent it evaluates runs on a sample of the traffic, if it runs at all.
 
-```php
-// Reference a file ID previously uploaded on the provider platform
-$message = new UserMessage([
-    new TextBlock('Analyze this'),
-    new FileBlock("file_id_xxxx", SourceType::ID)
-]);
-```
+A classifier has no conversation and no text to stream. The Neuron AI Classifier is has its own contract, `ClassifierInterface`, for asking closed questions about some input and receiving probabilities back. You can use it to take decision inside your Agents or Workflow like guardrails, prompt injections, score the quality of a response, atc.
 
-You can do the same with Image, Video, etc, based on your provider specifications.
+<a href="../providers/classifier.md" class="button primary" data-icon="arrow-right-long">Classifier</a>
 
-### Middleware
-
-Middleware provides a way to tightly control what happens inside the workflow and therefore also in your Agents and RAGs, since they too are workflows now.
-
-The core Workflow execution involves calling nodes based on the events returned by other nodes. Middleware exposes hooks to step inside `before` and `after` the execution of nodes:
-
-<figure><img src="../.gitbook/assets/middleware.png" alt=""><figcaption></figcaption></figure>
-
-This architecture has been used to create the [buit-in middlewares](../agent/middleware.md) for the Agent class, like context summarization, or tool approval.
-
-<a href="../workflow/middleware.md" class="button primary" data-icon="arrow-right-long">Learn more about Middleware</a>

@@ -18,12 +18,13 @@ You can also provide an initial state to workflow to feed in input values.
 ```php
 // 1. Provide an initial state as workflow input to feed in some data
 $workflow = Workflow::make(state: new WorkflowState(['query' => 'Hi!']))
-        ->addNode(new InitialNode())
-        ->addNode(...)
-        ->addNode(...);
+    ->setWorkflowId('wk_id')
+    ->addNode(new InitialNode())
+    ->addNode(...)
+    ->addNode(...);
 
 // 2. Execute the workflow and get the final state
-$finalState = $workflow->init()->run();
+$finalState = $workflow->run();
 
 // 3. Use the final state data
 echo $finalState->get('message');
@@ -33,20 +34,18 @@ echo $finalState->get('message');
 
 In our examples so far, we have passed data from node to node using properties of custom events. This is a powerful way to pass data around, but it has limitations. For example, if you want to pass data between steps that are not directly connected, you need to pass the data through all the nodes in between. This can make your code harder to read and maintain.
 
-For this reasons we have the `WorkflowState` object available to every node in the workflow. To use it, the workflow inject the WorkflowState instance as the second argument of the node.
+For this reasons we have the `WorkflowState` object available to every node in the workflow. To use it, the workflow inject the WorkflowState instance as the second argument of the node.&#x20;
 
 ```php
-namespace App\Neuron;
-
-use NeuronAI\Workflow\Node;
-use NeuronAI\Workflow\StartEvent;
-use NeuronAI\Workflow\StopEvent;
 use NeuronAI\Workflow\WorkflowState;
 
 class InitialNode extends Node
 {
-    public function __invoke(StartEvent $event, WorkflowState $state): StopEvent
-    {
+    public function __invoke(
+        StartEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): StopEvent {
         $state->set('message', 'Hello World!');
         
         return new StopEvent();
@@ -86,8 +85,11 @@ Nodes can accept an instance of `CustomState` instead of the default `WorkflowSt
 ```php
 class ExampleNode extends Node 
 {
-    public function __invoke(StartEvent $event, CustomState $state): StopEvent
-    {
+    public function __invoke(
+        StartEvent $event, 
+        CustomState $state,
+        WorkflowResources $resources
+    ): StopEvent {
         // Use state properties in your nodes
         if ($state->getUser()->isAdmin()) {
             //...
@@ -104,8 +106,9 @@ Inject the `CustomState` on the workflow creation:
 $state = new CustomState();
 $state->setUser($user);
 
-$workflow = MyWorkflow::make(state: $state);
+$finalState = MyWorkflow::make(state: $state)
+    ->setWorkflowId('wk_id')
+    ->run();
 
-$finalState = $workflow->init()->run();
 echo $finalState->getUser()->email;
 ```

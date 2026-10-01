@@ -9,19 +9,19 @@ metaLinks:
 
 ### What is a Middleware
 
-Middleware provides a way to hook the workflow execution and therefore also Agent and RAG, since they too are workflows.
+Middleware provides a way to hook the workflow execution and therefore also Agent and RAG, since they too are workflows.&#x20;
 
-The core Workflow execution involves calling nodes based on the events returned by other nodes. Middleware exposes hooks to step inside `before` and `after` the execution of nodes:
+The core Workflow execution involves calling nodes based on the events returned by other nodes. Middleware exposes hooks to step inside `before` and `after`  the execution of nodes:
 
 <figure><img src="../.gitbook/assets/middleware.png" alt=""><figcaption></figcaption></figure>
 
 ### What can middleware do?
 
-<table data-view="cards"><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Control</strong></td><td>Transform prompts, tool selection, and output formatting.</td></tr><tr><td><strong>Guardrails</strong></td><td>Add retries, rate limits, implement guardrails, prompt rejection.</td></tr><tr><td><strong>Monitor</strong></td><td>Track agent behavior with logging, analytics, and debugging.</td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Control</strong></td><td>Transform prompts, tool selection, and output formatting.</td></tr><tr><td><strong>Guardrails</strong></td><td>Add retries, rate limits, implement guardrails, prompt rejection.</td></tr><tr><td><strong>Injection</strong></td><td>Middleware can provide resources to nodes or later middleware on the fly.</td></tr></tbody></table>
 
 ### Creating Middleware
 
-You can use the command below to create a middleware class:
+You can use the command below to create a middleware  class:
 
 {% tabs %}
 {% tab title="Unix" %}
@@ -49,16 +49,24 @@ class CustomMiddleware implements WorkflowMiddleware
     /**
      * Execute before the node runs.
      */
-    public function before(NodeInterface $node, Event $event, WorkflowState $state): void
-    {
+    public function before(
+        NodeInterface $node, 
+        Event $event, 
+        WorkflowState $state, 
+        WorkflowResources $resources,
+    ): void {
         // ...
     }
     
     /**
      * Execute after the node runs.
      */
-    public function after(NodeInterface $node, Event $result, WorkflowState $state): void
-    {
+    public function after(
+        NodeInterface $node, 
+        Event $event, 
+        WorkflowState $state, 
+        WorkflowResources $resources,
+    ): void {
         // ...
     }
 }
@@ -66,7 +74,7 @@ class CustomMiddleware implements WorkflowMiddleware
 
 ### Registering Middleware
 
-If you would like to assign middleware to specific nodes, you may override the `middleware` method when defining the workflow:
+If you would like to assign middleware to specific nodes, you may override the  `middleware` method when defining the workflow:
 
 ```php
 class MyWorkflow extends Workflow

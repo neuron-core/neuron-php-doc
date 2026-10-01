@@ -14,13 +14,16 @@ To create a loop, simply return the entry event of a previous node as the exit e
 
 Take a look at the example below. The `NodeOne` can have two events as return type, `FirstEvent` and `SecondEvent`. If the node returns FirstEvent it will cause another execution of the same node because FirstEvent is handled by itself, creating a loop.
 
-If the node returns `SecondEvent` it will finally move forward the execution to another node.
+If the node returns `SecondEvent` it will finally move forward the execution to another node.&#x20;
 
 ```php
 class NodeOne extends Node
 {
-    public function __invoke(FirstEvent $event, WorkflowState $state): FirstEvent|SecondEvent
-    {
+    public function __invoke(
+        FirstEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): FirstEvent|SecondEvent {
         echo "\n- ".$event->firstMsg;
         
         if (rand(0, 1) === 1) {
@@ -41,12 +44,12 @@ Returning FirstEvent will trigger another execution of `NodeOne`. So the final o
 
 ```php
 $state = Workflow::make()
+    ->setWorkflowId('wk_id')
     ->addNodes([
         new InitialNode(),
         new NodeOne(),
         new NodeTwo()
     ])
-    ->init()
     ->run();
 
 /*
@@ -59,7 +62,7 @@ $state = Workflow::make()
 */
 ```
 
-You can create a loop from any node to any other node in the workflow by defining the appropriate input event and return events of the invoke method.
+You can create a loop from any node to any other node in the workflow by defining the appropriate input event and return events of the invoke method.&#x20;
 
 <figure><img src="../.gitbook/assets/workflow-loop.png" alt=""><figcaption></figcaption></figure>
 
@@ -67,7 +70,7 @@ The `NodeOne` can even return a StartEvent to jump right to the first node of th
 
 ## Branches
 
-As you've already seen, you can conditionally return different events from a node to define custom execution flows. In this section we'll see an example of a workflow that branches into two different paths.
+As you've already seen, you can conditionally return different events from a node to define custom execution flows. In this section we'll see an example of a workflow that branches into two different paths.&#x20;
 
 First let's create some custom events:
 
@@ -100,8 +103,11 @@ In the initial node of he workflow we decide what branched we want to go through
 ```php
 class InitialNode extends Node
 {
-    public function __invoke(StartEvent $event, WorkflowState $state): BrancheA1Event|BrancheB1Event
-    {
+    public function __invoke(
+        StartEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): BrancheA1Event|BrancheB1Event {
         if (rand(0, 1) === 1) {
             // Returning FirstEvent it will trigger another execution of NodeOne
             return new BrancheA1Event();
@@ -116,6 +122,7 @@ The other nodes will move forward sequencially.
 
 ```php
 $state = Workflow::make()
+    ->setWorkflowId('wk_id')
     ->addNodes([
         new InitialNode(),
         new A1Node(),
@@ -123,7 +130,6 @@ $state = Workflow::make()
         new B1Node(),
         new B2Node(),
     ])
-    ->init()
     ->run();
 ```
 
@@ -133,15 +139,18 @@ You can of course combine branches and loops in any order to fulfill the needs o
 
 <figure><img src="../.gitbook/assets/parallel-branch.png" alt=""><figcaption></figcaption></figure>
 
-When you want to call the execution of multiple branches in parallel, you need to return the special event `ParallelEvent` from your node.
+When you want to call the execution of multiple branches in parallel, you need to return the special event `ParallelEvent`  from your node.
 
 ```php
 use NeuronAI\Workflow\Events\ParallelEvent;
 
 class DocumentProcessing extends Node
 {
-    public function __invoke(StartEvent $event, WorkflowState $state): ParallelEvent
-    {
+    public function __invoke(
+        StartEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): ParallelEvent {
         // Node logic here...
 	
         // Finally return a ParallelEvent
@@ -197,8 +206,11 @@ In the example above `TextRefactorNode` and `AddWatermarkNode` will declare the 
 ```php
 class AddWatermarkNode extends Node
 {
-    public function __invoke(TextProcessEvent $event, WorkflowState $state): StopEvent
-    {
+    public function __invoke(
+        TextProcessEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): StopEvent {
         // Node code here...
 		
         // Returning StopEvent the branch ends
@@ -218,8 +230,11 @@ In the example above, the `MergeNode` is in charge to finally handle the `Parall
 ```php
 class MergeNode extends Node
 {
-    public function __invoke(ParallelEvent $event, WorkflowState $state): StopEvent
-    {
+    public function __invoke(
+        ParallelEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): StopEvent {
         $textBranchResult = $event->getResult('text');
         $imageBranchResult = $event->getResult('image');
         
@@ -234,11 +249,11 @@ As usual the merge node can stop the workflow, or return other events moving the
 
 ### Branch State Isolation
 
-One detail worth noting: **each branch gets an isolated copy of the workflow state**. They start with the same snapshot, but mutations inside a branch don't propagate to sibling branches or to the main workflow. The only way to pass data back is through the `StopEvent` result.
+One detail worth noting: **each branch gets an isolated copy of the workflow state**. They start with the same snapshot, but mutations inside a branch don't propagate to sibling branches or to the main workflow. The only way to pass data back is through the `StopEvent` result.&#x20;
 
 This is intentional, it avoids a whole class of concurrency bugs where branches step on each other's state.
 
-### AsyncExecutor
+### Async Execution
 
 We also provide an implementation of the internal workflow executor that allows you to run multiple branches concurrently. To use the `AsyncExecutor` you need to install the [Amp](https://github.com/amphp/amp) package:
 
@@ -247,14 +262,17 @@ composer require amphp/amp
 ```
 
 ```php
+use NeuronAI\Workflow\AsyncBranchRunner;
+use NeuronAI\Workflow\BranchRunner;
+
 class MyAgent extends Workflow 
 {
     /**
      * Use the AsyncExecutor
      */
-    protected function executor(): WorkflowExecutorInterface
+    protected function branchRunner(): BranchRunner
     {
-        return new AsyncExecutor();
+        return new AsyncBranchRunner();
     }
 
     protected function nodes(): array
@@ -264,15 +282,18 @@ class MyAgent extends Workflow
 }
 ```
 
-This is particularly useful if you want to run multiple agentic tasks in parallel, since Neuron AI already provides the `AmpHttpClient` that you can inject into all components.
+This is particularly useful if you want to run multiple agentic tasks in parallel, since Neuron AI already provides the [`AmpHttpClient`](../agent/async.md) that you can inject into all components.
 
 ```php
 use NeuronAI\HttpClient\AmpHttpClient;
 
 class DescriptionGenerationNode extends Node
 {
-    public function __invoke(TextProcessEvent $event, WorkflowState $state): StopEvent
-    {
+    public function __invoke(
+        TextProcessEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): StopEvent {
         $input = new UserMessage('Describe this image');
         $input->addContent(
             new ImageContent(...)

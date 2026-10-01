@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS rag_documents (
 )
 ```
 
-Use it in a RAG context:
+Here is how to use the component in your RAG:
 
 ```php
 namespace App\Neuron;
@@ -159,54 +159,6 @@ class MyChatBot extends RAG
     }
 }
 ```
-
-Pinecone also supports hybrid search that allows you to filter documents not only by similarity with the input prompt, but also by metadata stored along with your documents. You can pass additional filters to your agent instance so Pinecone will take them in consideration while filtering documents.
-
-You can add the `addVectorStoreFilters()` method to your agent class to pass down filters at runtime:
-
-```php
-namespace App\Neuron;
-
-use NeuronAI\RAG\RAG;
-use NeuronAI\RAG\VectorStore\PineconeVectorStore;
-use NeuronAI\RAG\VectorStore\VectorStoreInterface;
-
-class MyChatBot extends RAG
-{
-    protected array $vectorStoreFilters = [];
-
-    ...
-
-    protected function vectorStore(): VectorStoreInterface
-    {
-        $store = new PineconeVectorStore(
-            key: 'PINECONE_API_KEY',
-            indexUrl: 'PINECONE_INDEX_URL'
-        );
-
-        return $store->withFilters($this->vectorStoreFilters);
-    }
-
-    public function addVectorStoreFilters(array $filters): self
-    {
-        $this->vectorStoreFilters = $filters;
-        return $this;
-    }
-}
-```
-
-When you run your agent you can pass filters on the fly:
-
-```php
-$response = MyRAG::make()
-    ->addVectorStoreFilters([
-        // Add filters
-    ])
-    ->chat(new UserMessage(...))
-    ->getMessage();
-```
-
-Take a look at the Pinecone official documentation to better understand the metadata filters: [https://docs.pinecone.io/reference/api/2025-04/data-plane/query#body-filter](https://docs.pinecone.io/reference/api/2025-04/data-plane/query#body-filter)
 
 ### Weaviate
 
@@ -267,61 +219,6 @@ class MyChatBot extends RAG
         );
     }
 }
-```
-
-Elasticsearch also support hybrid search. You can pass additional filters to your agent instance so Elasticsearch will take them in consideration while filtering documents.
-
-You can add the `addVectorStoreFilters()` method to your agent class to pass down filters at runtime:
-
-```php
-namespace App\Neuron;
-
-use Elastic\Elasticsearch\Client;
-use NeuronAI\RAG\RAG;
-use NeuronAI\RAG\VectorStore\ElasticsearchVectorStore;
-use NeuronAI\RAG\VectorStore\VectorStoreInterface;
-
-class MyChatBot extends RAG
-{
-    protected array $vectorStoreFilters = [];
-
-    ...
-
-    protected function vectorStore(): VectorStoreInterface
-    {
-        // Create the client
-        $elasticsearch = ClientBuilder::create()
-           ->setHosts(['<elasticsearch-endpoint>'])
-           ->setApiKey('<api-key>')
-           ->build();
-           
-        // Create the store
-        $store = new ElasticsearchVectorStore(
-            client: $this->elasticsearch,
-            index: 'neuron-ai'
-        );
-
-        // Apply filters
-        return $store->withFilter($this->vectorStoreFilters);
-    }
-
-    public function addVectorStoreFilters(array $filters): self
-    {
-        $this->vectorStoreFilters = $filters;
-        return $this;
-    }
-}
-```
-
-Pass filters dynamically at runtime:
-
-```php
-$response = MyRAG::make()
-    ->addVectorStoreFilters([
-        // Add filters
-    ])
-    ->chat(new UserMessage(...))
-    ->getMessage();
 ```
 
 ### OpenSearch
@@ -488,39 +385,74 @@ class MyChatBot extends RAG
 }
 ```
 
-### Implement custom Vector Stores
+### MongoDB
 
-If you want to create a new provider you have to implement the `VectorStoreInterface` interface:
+To use this component you need to install the official mongoDB client:
+
+```shellscript
+composer require mongodb/mongodb
+```
+
+Use the component in you RAG or script:
 
 ```php
-namespace NeuronAI\RAG\VectorStore;
+namespace App\Neuron;
 
-use NeuronAI\RAG\Document;
+use NeuronAI\RAG\RAG;
+use NeuronAI\RAG\VectorStore\MongoDBVectorStore;
+use NeuronAI\RAG\VectorStore\VectorStoreInterface;
 
+class MyChatBot extends RAG
+{
+    ...
+
+    protected function vectorStore(): VectorStoreInterface
+    {
+        $uri = 'mongodb://localhost:27017';
+        $uriOptions = ['serverSelectionTimeoutMS' => 10000];
+        $client = new MongoDB\Client($uri, $uriOptions);
+        
+        return new MongoDBVectorStore(
+            client: $client,
+            database: 'MONGODB_DATABASE',
+            collectionName: 'MONGO_DB_COLLECTION',
+            topK: 4
+        );
+    }
+}
+```
+
+### Extend Vector Stores
+
+If you want to support a new vector store you have to implement `VectorStoreInterface`:
+
+```php
 interface VectorStoreInterface
 {
-    public function addDocument(Document $document): void;
+    public function addDocument(Document $document): VectorStoreInterface;
 
     /**
      * @param  Document[]  $documents
      */
-    public function addDocuments(array $documents): void;
-
-    public function deleteBySource(string $sourceName, string $sourceType): void;
+    public function addDocuments(array $documents): VectorStoreInterface;
 
     /**
-     * Return docs most similar to the embedding.
+     * Delete every document matching the filters.
+     */
+    public function delete(FilterGroup $filters): VectorStoreInterface;
+
+    /**
+     * Return the documents most similar to the request's embedding.
      *
-     * @param  float[]  $embedding
      * @return Document[]
      */
-    public function similaritySearch(array $embedding, int $k = 4): iterable;
+    public function search(SearchRequest $request): iterable;
 }
 ```
 
-There are two different methods for adding a single document or a collection of documents because many databases provide different APIs for these use cases. If the database you want to interact to doesn't handle these requests differently you can implement `addDocument()` as a placeholder.
+There are two different methods for adding a single document or a collection of documents because many databases provide different APIs for these use cases. If the database you want to interact to doesn't handle these requests differently you can implement `addDocuments()` as a placeholder o `addDocument()`.
 
-The similaritySearch should return documents with a similarity score not a similarity distance. If the underlying database returns a distance you can convert it to a score using the utility class `VectorSimilarity`:
+The `search()` method should return the list of documents with a similarity score not a similarity distance. If the underlying database returns a distance you can convert it to a score using the utility class `VectorSimilarity`:
 
 ```php
 namespace App\Neuron\VectorStore;
@@ -537,7 +469,7 @@ class MyVectorStore implements VectorStoreInterface
     /**
      * @param float[] $embeddings
      */
-    public function similaritySearch(array $embedding): iterable
+    public function search(SearchRequest $request): iterable
     {
         $documents = // get documents from the vector store
 
@@ -550,65 +482,7 @@ class MyVectorStore implements VectorStoreInterface
 }
 ```
 
-This is the basic template for a new AI provider implementation.
-
-```php
-namespace App\Neuron\VectorStore;
-
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
-use NeuronAI\RAG\Document;
-use NeuronAI\RAG\VectorStore\VectorStoreInterface;
-
-class MyVectorStore implements VectorStoreInterface
-{
-    protected Client $client;
-
-    public function __construct(
-        string $key,
-        protected string $index,
-        protected int $topK = 5
-    ) {
-        $this->client = new Client([
-            'base_uri' => 'https://api.vector-store.com',
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'Authorization' => "Bearer {$key}",
-            ]
-        ]);
-    }
-
-    public function addDocument(Document $document): void
-    {
-        $this->addDocuments([$document]);
-    }
-
-    /**
-     * @param Document[] $documents
-     */
-    public function addDocuments(array $documents): void
-    {
-        $this->client->post("indexes/{$this->index}", [
-            RequestOptions::JSON => \array_map(function (Document $document) {
-                return [
-                    'vector' => $document->embedding,
-                ];
-            }, $documents)
-        ]);
-    }
-
-    /**
-     * @return Document[]
-     */
-    public function similaritySearch(array $embedding): iterable
-    {
-        // perform similarity search and return an array of Document objects
-    }
-}
-```
-
-After creating your own implementation you can use it in the agent:
+After creating your own implementation you can use it in the agent as any other store:
 
 ```php
 namespace App\Neuron;
@@ -629,6 +503,62 @@ class MyAgent extends Agent
 }
 ```
 
-{% hint style="warning" %}
-We strongly recommend you to submit new vector store implementations via PR on the official repository or using other [Inspector.dev](https://inspector.dev/developer-support/) support channels. The new implementation can receives an important boost in its advancement by the community.
-{% endhint %}
+## Filters
+
+### DocumentSchema
+
+`Document` is the unified processing object across loading, splitting, embedding, storage, retrieval, middleware, and reranking. Its fields are accessed through methods. Embedding and score are nullable runtime values; strict `null` checks express whether a stage produced them (`0.0` remains a valid score).
+
+Custom metadata stays schema-less for storage and round-tripping. Portable filtering requires a collection-level schema passed to the vector store:
+
+```php
+$schema = DocumentSchema::of(
+    DocumentField::string('tenant')->required()->filterable(),
+    DocumentField::integer('year')->filterable(),
+    DocumentField::strings('tags')->filterable(),
+);
+
+$store = new FileVectorStore(schema: $schema);
+```
+
+Stores validate declared values and filters locally. Only `sourceType`, `sourceName`, and declared filterable metadata fields are portable filter targets. Array fields are supported for validation/storage but need raw backend filters except for portable filterable string arrays, which support `containsAny` and `containsAll`. Declared arrays must be non-empty homogeneous lists. A `DocumentField` can be passed directly to filter factories for schema-aware construction. `neq` requires a required field so missing-field behavior cannot diverge between databases. RAG validates documents before embedding.
+
+### Filter Expression
+
+Once you have deined ilterable fields with `DocumentSchema`, you can pass a filtering expression to the retriaval strategy at runtime.
+
+Filter are a portable, backend-neutral expression tree compiled to each store's native syntax. This is **filtered similarity search**: metadata filters constrain vector similarity results. Reserve **hybrid search** for strategies that combine vector and lexical ranking.
+
+```php
+class MyRAG extends RAG
+{
+    ...,
+    
+    protected function retrieval(): RetrievalInterface
+    {
+        return new SimilarityRetrieval(
+            vectorStore: $this->resolveVectorStore(),
+            embeddingProvider: $this->resolveEmbeddingsProvider(),
+            filters: Filter::gt('year', 2020)
+                ->lt('year', date('Y'))
+                ->eq('tenant', Tenant::id())
+        );
+    }
+}
+```
+
+### Available Filters
+
+**`Filter::eq/neq/in/gt/gte/lt/lte(field, value)`** — low-level comparison factories.
+
+**`Filter::where(field, value)`** starts an immutable fluent `Criteria` with `where*` methods for the common path. Values are scalars only (`null` throws: no portable missing-vs-null semantics); range values normalize to `int|float` (string ranges are not portable). Backed enums normalize to their value and `DateTimeInterface` values normalize to epoch timestamps.
+
+**`FilterGroup::allOf(...)` / `anyOf(...)`** — nested boolean expressions; `and(...)` / `or(...)` remain short aliases. Same-operator groups flatten, while mixed operators preserve their boundaries.
+
+**`Filter::containsAny/containsAll(field, values)`** — portable filtering for filterable `string[]` fields. Other array types remain backend-native.
+
+**`Filter::raw(StoreClass::class, $fragment)`** — backend-native escape hatch, tagged with its target store. The tagged store passes the fragment through verbatim; every other store's compiler throws (fail-loud on store swap, never silent misfiltering). Raw fragments must be trusted, developer-authored syntax; never interpolate request values into them.
+
+**`FilterScope::merge(...)`** — combines independently supplied mandatory scopes with a root AND. Query expressiveness and scope safety are separate.
+
+**`FilterGroup::allOf(...)` / `anyOf(...)`** — nested boolean expressions; `and(...)` / `or(...)` remain short aliases. Same-operator groups flatten, while mixed operators preserve their boundaries.

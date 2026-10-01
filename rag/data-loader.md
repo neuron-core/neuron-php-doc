@@ -7,17 +7,11 @@ metaLinks:
 
 # Data loader
 
-{% hint style="info" %}
-PREREQUISITES
-
-This guide assumes you are already familiar with RAG. Check out the dedicated documentation: [https://docs.neuron-ai.dev/rag](https://docs.neuron-ai.dev/rag)
-{% endhint %}
-
 To build a structured AI application you need the ability to convert all the information you have into text, so you can generate embeddings, save them into a vector store, and then feed your Agent to answer the user's questions.
 
 <figure><img src="../.gitbook/assets/neuron-ai-data-loader-rag.png" alt=""><figcaption></figcaption></figure>
 
-Neuron gives you several tools (data loaders) to simplify this process.
+Neuron gives you several tools (data loaders) to simplify this process.&#x20;
 
 ```php
 use App\Neuron\MyRAG;
@@ -33,7 +27,7 @@ Using the Neuron toolkit you can create data loading pipelines with the benefits
 
 ## FileDataLoader
 
-If you need to extract text from files the `FileDataLoader` allows you to process any simple text document.
+If you need to extract text from files the `FileDataLoader` allows you to process any simple text document.&#x20;
 
 ```php
 use NeuronAI\RAG\DataLoader\FileDataLoader;
@@ -57,10 +51,11 @@ To use `PdfReader` you need to install the [**poppler**](https://en.wikipedia.or
 
 ```php
 use NeuronAI\RAG\DataLoader\FileDataLoader;
+use NeuronAI\RAG\DataLoader\PdfReader;
 
 // Register the PDF reader
 $documents = FileDataLoader::for(__DIR__)
-    ->addReader('pdf', new \NeuronAI\RAG\DataLoader\PdfReader())
+    ->addReader('pdf', new PdfReader())
     ->getDocuments();
 ```
 
@@ -72,11 +67,23 @@ To use `HtmlReader` you need to install the [**html2text**](https://github.com/m
 
 ```php
 use NeuronAI\RAG\DataLoader\FileDataLoader;
+use NeuronAI\RAG\DataLoader\HtmlReader;
 
 // Register the PDF reader
 $documents = FileDataLoader::for(__DIR__)
-    ->addReader(['html', 'xhtml'], new \NeuronAI\RAG\DataLoader\HtmlReader())
+    ->addReader(['html', 'xhtml'], new HtmlReader())
     ->getDocuments();
+```
+
+### Custom Readers
+
+You are free to create custom document readers just implement the following small interface. Once your calss implement this contract, you can pass it to the data loaders to automatically transform your documents.
+
+```php
+interface ReaderInterface
+{
+    public function read(string $filePath): string;
+}
 ```
 
 ### StringDataLoader
@@ -112,7 +119,7 @@ foreach($documents as $document) {
 MyRAG::make()->addDocuments($documents);
 ```
 
-Once you have these custom fields in the vector store you can use hybrid search for databases that support this feature.
+Once you have these custom fields in the vector store you can use hybrid search for databases that support this feature.&#x20;
 
 {% hint style="info" %}
 Hybrid search allows you to narrow the scope of a semantic search query against records that match certain criteria on other document fields rather that compare only the vector embeddings. Explore the [Vector Store section](vector-store.md) to know which database support hybrid search.
@@ -132,7 +139,7 @@ $documents = FileDataLoader::for($directory)
     ->getDocuments();
 ```
 
-### DelimiterTextSplitter (default)
+### &#x20;DelimiterTextSplitter (default)
 
 This is the default splitter for all data loaders.
 
@@ -229,6 +236,108 @@ $documents = FileDataLoader::for($directory)
     ->getDocuments();
 ```
 
+## Load documents into a RAG
+
+Each document carries the text to embed, its source, and any metadata required by the RAG schema. The schema is configured when defining the RAG. See [Configure documents and schemas in a RAG](rag.md#documents-and-schemas-in-rag).
+
+### Add schema metadata before ingestion
+
+The vector store validates every document against the schema. Add required and filterable metadata after loading and before calling `addDocuments()`.
+
+```php
+foreach ($documents as $document) {
+    $document
+        ->addMetadata('tenant', 'acme')
+        ->addMetadata('status', 'published')
+        ->addMetadata('published_at', 1767225600)
+        ->addMetadata('tags', ['php', 'ai']);
+}
+```
+
+Use the type declared in the schema. For example, an integer field requires `2026`, not `'2026'`.
+
+Metadata not declared in the schema is also allowed. It must contain JSON-safe values: strings, integers, floats, booleans, null, or arrays containing those values.
+
+```php
+foreach ($documents as $document) {
+    $document->addMetadata('ui_hint', [
+        'color' => 'blue',
+        'icon' => 'book',
+    ]);
+}
+```
+
+{% hint style="warning" %}
+Undeclared metadata is stored and returned, but it cannot be used in filters.
+{% endhint %}
+
+### Create documents manually
+
+Create a `Document` directly when a loader is unnecessary. Setting the source makes later replacement or deletion predictable.
+
+```php
+use NeuronAI\RAG\Document;
+
+$document = (new Document('Neuron is an agentic PHP framework.'))
+    ->setSourceType('article')
+    ->setSourceName('introduction.md')
+    ->setMetadata([
+        'tenant' => 'acme',
+        'status' => 'published',
+        'published_at' => 1767225600,
+        'tags' => ['php', 'ai'],
+    ]);
+
+$documents = [$document];
+```
+
+### Split a document after adding metadata
+
+When creating a document manually, metadata can be added before splitting. Built-in splitters copy the source and metadata to every resulting chunk.
+
+```php
+use NeuronAI\RAG\Document;
+use NeuronAI\RAG\Splitter\SentenceTextSplitter;
+
+$document = (new Document($content))
+    ->setSourceType('cms')
+    ->setSourceName('article-42')
+    ->setMetadata([
+        'tenant' => 'acme',
+        'status' => 'published',
+    ]);
+
+$documents = (new SentenceTextSplitter(
+    maxWords: 200,
+    overlapWords: 20,
+))->splitDocument($document);
+```
+
+### Embed and store the documents
+
+`RAG::addDocuments()` completes ingestion. It validates each document, creates its embedding, and stores it in the configured vector database.
+
+```php
+KnowledgeBase::make()->addDocuments($documents);
+```
+
+Documents are processed in batches of 50 by default. Change the batch size when required by the embedding provider:
+
+```php
+$rag->addDocuments($documents, chunkSize: 100);
+```
+
+Schema validation happens before the embedding request. Missing required metadata or a wrong type therefore fails before consuming embedding tokens or writing partial data for that batch.
+
+### Common validation errors
+
+Neuron rejects invalid documents before database I/O. The most common causes are:
+
+* a required field is missing or null;
+* a metadata value has a different type from the schema;
+* metadata contains an object or another non-JSON-safe value;
+* an application tries to use a reserved document property as metadata.
+
 ## Reindex Knowledge Source
 
 Reindexing is a hot topic in RAG system design because the practice of breaking text into chunks makes it difficult to update individual pieces of information when the content of the original knowledge changes.
@@ -257,7 +366,7 @@ If `sourceType` and `sourceName` of the Documents are already present into the v
 
 ## Use standalone components
 
-In the examples below we used the RAG agent instance to process the final part of the ingestion pipeline: generate embeddings for document chunks, and store them into jthe vector database.
+In the examples below we used the RAG agent instance to process the final part of the ingestion pipeline: generate embeddings for document chunks, and store them into jthe vector database.&#x20;
 
 In alternative of take advantage of the RAG agent instance you can use the embedding provider and the vector store as standalone components. Remember that the vector store here must be same connected to the RAG agent.
 
@@ -265,6 +374,7 @@ In alternative of take advantage of the RAG agent instance you can use the embed
 use App\Neuron\MyRAG;
 use NeuronAI\RAG\DataLoader\FileDataLoader;
 use NeuronAI\RAG\DataLoader\StringDataLoader;
+use NeuronAI\RAG\DataLoader\PdfReader;
 use NeuronAI\RAG\EmbeddingProvider\OpenAIEmbeddingProvider;
 use NeuronAI\RAG\VectorStore\FileVectorStore;
 
@@ -280,7 +390,7 @@ $store = new FileVectoreStore(
 
 // Process files and contents
 $documents = FileDataLoader::for(__DIR__.'/documents');
-    ->addReader('pdf', new \NeuronAI\RAG\DataLoader\PdfReader())
+    ->addReader('pdf', new PdfReader())
     ->getDocuments(); 
 
 // Generate embeddings and store documents in the vector database

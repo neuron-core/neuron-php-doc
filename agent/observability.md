@@ -9,9 +9,58 @@ metaLinks:
 
 The [Inspector](https://inspector.dev/) team designed Neuron with built-in observability features, so you can monitor AI agents running, helping you maintain production-grade implementations with confidence.
 
-## Install Inspector
+### Subscribing Listeners
 
-You can follow this step-by-step guide to connect your Neuron AI Agents, RAG, or Workflow to the Inspector monitoring dashboard:
+Listeners are class-keyed with instanceof matching — subscribe to a specific event class, or to `ObservabilityEvent::class` to receive everything:
+
+```php
+use NeuronAI\Observability\Events\InferenceStop;
+use NeuronAI\Observability\ObservabilityEvent;
+
+// React to one event type
+$agent->subscribe(InferenceStop::class, function (InferenceStop $event): void {
+    // do something...
+});
+
+// Catch-all events
+$agent->subscribe(ObservabilityEvent::class, function (ObservabilityEvent $event): void {
+    echo "Event: {$event->name()}\n";
+    echo "Source: " . ($event->source !== null ? $event->source::class : 'n/a') . "\n";
+});
+```
+
+#### Custom Events
+
+Emit your own events from nodes with `Node::emit()` — the event object is the payload. Extends `ObservabilityEvent` :
+
+```php
+use NeuronAI\Observability\ObservabilityEvent;
+
+class DocumentScored extends ObservabilityEvent
+{
+    public function __construct(public string $documentId, public float $score)
+    {
+    }
+}
+
+// Inside a node
+$this->emit(new DocumentScored($doc->id, $score));
+
+// Anywhere
+$workflow->subscribe(DocumentScored::class, fn (DocumentScored $e) => $metrics->gauge('score', $e->score));
+```
+
+#### Integrating a Host Framework
+
+Forward every event to an application-wide PSR-14 dispatcher (Symfony, Laravel's PSR bridge, League\Event) — Neuron events become regular application events:
+
+```php
+$agent->setEventDispatcher($appEventDispatcher);
+```
+
+### Install Inspector <a href="#install-inspector" id="install-inspector"></a>
+
+Connect your Neuron AI Agents, RAG, or Workflow to the Inspector monitoring dashboard:
 
 {% embed url="https://docs.inspector.dev/guides/neuron-ai" %}
 
@@ -29,42 +78,51 @@ To create an Ingestion key head to the [**Inspector dashboard**](https://app.ins
 For any additional support drop in a live chat in the dashboard. We are happy to listen from your experience, find new possible improvements, and make the tool better overtime.
 {% endhint %}
 
-### Inject InspectorObeserver
+### Register the Inspector Listener
 
-If your application doesn't have a specific integration with PHP environment variables, you can inject the InspectorObserver component into the agent programmatically, passing the ingestion key generated in the dashboard:
+If your application doesn't have a specific integration with PHP environment variables, you can inject the `InspectorListener` component into the agent programmatically, passing the ingestion key generated in the dashboard:
 
 ```php
-use Inspector\Neuron\InspctorObserver;
+use NeuronAI\Observability\InspctorObserver;
 
 /*
  * Inject at runtime
  */
 $message = MyAgent::make()
-    ->observe(InspctorObserver::instance('INSPECTOR_INGESTION_KEY'))
+    ->subscribe(
+        ObservabilityEvent::class, 
+        InspctorObserver::instance('INSPECTOR_INGESTION_KEY')
+    )
     ->chat(...)
     ->getMessage();
     
 /*
- * Setup the observer once into the agent constructor
+ * Setup the listener once into the agent constructor
  */
 class MyAgent extends Agent
 {
     public function __construct()
     {
-        $this->observe(InspctorObserver::instance('INSPECTOR_INGESTION_KEY'));
+        parent::__construct();
+        
+        $this->subscribe(
+            ObservabilityEvent::class, 
+            InspctorObserver::instance('INSPECTOR_INGESTION_KEY')
+        );
     }
 }
 ```
 
 ## Logging
 
-If you want to report agent activity into your log system you can attach the built-in `LogObserver` to your agent passing an instance of a PSR `LoggerInterface` compatible logger, like monolog for example:
+If you want to report agent activity into your log system you can attach the built-in `LogListener` to your agent passing an instance of a PSR `LoggerInterface` compatible logger, like monolog for example:
 
 ```php
-use NeuronAI\Observability\LogObserver;
+use NeuronAI\Observability\LogListener;
+use NeuronAI\Observability\ObservabilityEvent;
 
 $message = MyAgent::make()
-    ->observe(new LogObserver($logger))
+    ->subscribe(ObservabilityEvent::class, new LogListener($logger))
     ->chat(...)
     ->getMessage();
 ```

@@ -32,6 +32,7 @@ class MyAgent extends Agent
 }
 
 $message = MyAgent::make()
+    ->setThreadId('chat_id')
     ->chat(new UserMessage("Hi!"))
     ->getMessage();
 
@@ -41,29 +42,36 @@ echo $message->getContent();
 
 #### Anthropic Prompt Cache
 
-Anthropic provider expose a dedicated method `systemPromptBlocks()` to leverage system prompt cache. Instead of using the `instructions()` method in the Agent class, you can pass prompts definition directly to the provider instance with cache type definition.
+To laverage Anthropic prompt cache you should provide agent instructions as an array of `SystemContent`:
 
 ```php
+use NeuronAI\Chat\Messages\ContentBlocks\SystemContent;
+
 class MyAgent extends Agent
 {
     protected function provider(): AIProviderInterface
     {
         return new Anthropic(
-            key: 'ANTHROPIC_KEY',
-            model: 'ANTHROPIC_MODEL'
-        )->systemPromptBlocks([
-            ['type' => 'text', 'text' => 'Static instructions...', 'cache_control' => ['type' => 'ephemeral']],
-            ['type' => 'text', 'text' => 'Dynamic context...']
-        ]);
+            key: 'ANTHROPIC_API_KEY',
+            model: 'ANTHROPIC_MODEL',
+        );
+    }
+
+    protected function instructions(): string|array
+    {
+        return [
+            new SystemContent('fixed part')->cache(),
+            new SystemContent('dynamic part'),
+        ];
     }
 }
 ```
 
-### Anthropic On Google Vertex AI
+### Anthropic on Google Vertex AI
 
 To use this provider you need to install the goole auth composer package:
 
-```shellscript
+```bash
 composer require google/auth
 ```
 
@@ -585,15 +593,7 @@ echo $message->getContent();
 
 ## Routing
 
-Official [Neuron Router](https://github.com/neuron-core/router) adds a reliability and management layer between the Agent session and providers API, giving you and your appliaction several key benefits.
-
-#### Provider Failover for High Availability <a href="#provider-failover-for-high-availability" id="provider-failover-for-high-availability"></a>
-
-Providers API occasionally experiences outages or rate limiting. Using the RouterProvider, your requests automatically fail over between multiple underlying providers. If one provider is unavailable or rate-limited, the router seamlessly routes to another, keeping your sessions uninterrupted.
-
-#### Routing logic control
-
-You can use routing logic like `RoundRobin` as a load balancer, `ContentRule` to route the request based on the content blocks inside the message (images, files, audio, video), or `DifficultyRule` to determine which model has the best capabilities to handle the incoming prompt.
+Not every prompt needs your most expensive model. With our official [neuron-core/router](https://github.com/neuron-core/router) package you can route inference calls to different providers or models, transparently to the agent itself. The router also provides you with a fallback strategy to a second provider in case the primary fails due to a service down or exceeding usage limits.
 
 First install the package:
 

@@ -5,7 +5,7 @@ metaLinks:
     - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/async
 ---
 
-# Async
+# Http & Async
 
 Neuron supports asynchronous execution and parallel processing of agents, enabling you to efficiently handle multiple operations simultaneously. Neuron's approach to asynchronous execution offers several advantages:
 
@@ -17,7 +17,7 @@ Neuron supports asynchronous execution and parallel processing of agents, enabli
 
 ### Concurrency vs Async
 
-Concurrency is the high-level concept of managing tasks, which can involve multiple threads/cores (parallelism), whereas async uses event loops/callbacks to let tasks run out of order, perfect for I/O-bound work without waiting.
+Concurrency is the high-level concept of managing tasks, which can involve multiple threads/cores (parallelism), whereas async uses event loops/callbacks to let tasks run out of order, perfect for I/O-bound work without waiting.&#x20;
 
 Concurrency is about managing many things in parallel, while asynchrony is how a single thread can manage many I/O operations efficiently.
 
@@ -25,21 +25,21 @@ AI Agents are typically considered I/O heavy software because the HTTP request t
 
 ## Concurrency
 
-You don't need any particular feature from Neuron to run multiple agents in parallel. You only need your PHP application to be able to span multiple processes to handle the execution of multiple agents at the same time. You can do this with PHP libraries like [spatie/fork](https://github.com/spatie/fork), or framework specific solutions like [Laravel concurrency](https://laravel.com/docs/master/concurrency), or [Symfony process](https://symfony.com/doc/current/components/process.html).
+You don't need any particular feature from Neuron to run multiple agents in parallel. You only need your PHP application to be able to span multiple processes to handle the execution of multiple agents at the same time. You can do this with PHP libraries like [spatie/fork](https://github.com/spatie/fork), or framework specific solutions like [Laravel concurrency](https://laravel.com/docs/master/concurrency), or [Symfony process](https://symfony.com/doc/current/components/process.html).&#x20;
 
-Async is a different story.
+Async is a different story.&#x20;
 
 ## Async
 
 Previous versions of Neuron were strongly coupled with the Guzzle client to perform HTTP requests for model inference on the providers API. Guzzle is a great tool, but it's not compatible with truly async event loops like those provided by frameworks like [Amp](https://github.com/amphp/amp) and [ReactPHP](https://github.com/reactphp/reactphp).
 
-In order to run agents in such async environments it's required to integrate with their specific implementations. That's why Neuron ships with a simple `HttpClientInterface` that can be implemented to allow AI providers run HTTP requests smoothly in an async loop.
+In order to run agents in such async environments it's required to integrate with their specific implementations. That's why Neuron ships with a simple `HttpClientInterface` that can be implemented to allow AI providers run HTTP requests smoothly in an async loop.&#x20;
 
 By default the framework uses the Guzzle implementation, but you can inject custom HTTP clients based on your needs. We already provide implementations for the most common async framework.
 
 ### AmpHttpClient
 
-If you want to use Amp to run multiple async agent requests you need to install `amphp/http-client` .
+If you want to use Amp to run multiple async agent requests you need to install  `amphp/http-client` .
 
 ```bash
 composer require amphp/http-client
@@ -75,9 +75,9 @@ use Amp\Future;
 
 use function Amp\async;
 
-$handler1 = MyAgent::make()->chat(new UserMessage('Hi!'));
-$handler2 = MyAgent::make()->chat(new UserMessage('Hi!'));
-$handler3 = MyAgent::make()->chat(new UserMessage('Hi!'));
+$handler1 = MyAgent::make()->setThreadId('chat_id_x')->chat(new UserMessage('Hi!'));
+$handler2 = MyAgent::make()->setThreadId('chat_id_xx')->chat(new UserMessage('Hi!'));
+$handler3 = MyAgent::make()->setThreadId('chat_id_xxx')->chat(new UserMessage('Hi!'));
 
 // Run three requests in parallel
 [$response1, $response2, $response3] = Future\await([
@@ -142,8 +142,14 @@ $input = new UserMessage('Hi!');
 
 // Run three requests in parallel
 [$response, $guardrail] = Future\await([
-    async(fn() => MyAgent::make()->chat($input)->getMessage()), 
-    async(fn() => GuardrailAgent::make()->structured($input, Guardrail::class)),
+    async(fn() => MyAgent::make()
+        ->setThreadId('chat_id')
+        ->chat($input)
+        ->getMessage()),
+        
+    async(fn() => GuardrailAgent::make()
+        ->setThreadId('guardrails')
+        ->structured($input, Guardrail::class)),
 ]);
 
 if (! $guardrail->valid) {
@@ -152,4 +158,28 @@ if (! $guardrail->valid) {
 
 // Print the content
 echo $response->getContent();
+```
+
+## StoppableHttpClient
+
+Stop a streamed answer mid-flight, for a "stop generating" button. The provider keeps the text streamed so far as a partial content and store it in the chat history.
+
+Wrap the client in `StoppableHttpClient` with a predicate the provider asks before every event it reads; the "stop" endpoint only raises a flag the predicate reads, in any store both processes share:
+
+```php
+use NeuronAI\HttpClient\Curl\CurlHttpClient;
+use NeuronAI\HttpClient\StoppableHttpClient;
+
+protected function provider(): AIProviderInterface
+{
+    return new Anthropic(
+        key: $this->apiKey,
+        model: 'claude-sonnet-4-6',
+        // Cache or any shared store works (Laravel or Symfony Cache, Redis, a database row)
+        httpClient: new StoppableHttpClient(
+            new CurlHttpClient(), 
+            fn (): bool => Cache::pull("stop:{$this->getThreadId()}", false)
+        ),
+    );
+}
 ```

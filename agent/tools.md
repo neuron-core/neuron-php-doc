@@ -9,6 +9,14 @@ metaLinks:
 
 # Tools & Toolkits
 
+{% hint style="warning" %}
+#### Coding Agent Skill
+
+&#x20;**`/neuron-tool`** to teach your coding agent how to implement custom tools and use them in your agent class.
+
+[AI-Assisted Development](../overview/agentic-development.md)
+{% endhint %}
+
 The core agent loop involves calling a model, letting it choose tools to execute, and then finishing when no more tools are needed to provide a response:
 
 <figure><img src="../.gitbook/assets/neuron-tool-call.png" alt=""><figcaption></figcaption></figure>
@@ -47,61 +55,34 @@ class YouTubeAgent extends Agent
     
     protected function instructions(): string 
     {
-        return (string) new SystemPrompt(
-            background: ["You are an AI Agent specialized in writing YouTube video summaries."],
-            steps: [
-                "Get the url of a YouTube video, or ask the user to provide one.",
-                "Use the tools you have available to retrieve the transcription of the video.",
-                "Write the summary.",
-            ],
-            output: [
-                "Write a summary in a paragraph without using lists. Use just fluent text.",
-                "After the summary add a list of three sentences as the three most important take away from the video.",
-            ]
-        );
+        return new SystemMessage(<<<TEXT
+            You are an AI Agent specialized in writing YouTube video summaries.
+            Get the url of a YouTube video, or ask the user to provide one.
+            Use the tools you have available to retrieve the transcription of the video.
+            Write a summary in a paragraph without using lists. Use just fluent text.
+            After the summary add a list of three sentences as the three most important take away from the video.
+        TEXT);
     }
     
     protected function tools(): array
     {
         return [
-            Tool::make(
-                'get_transcription',
-                'Retrieve the transcription of a youtube video.',
-            )->addProperty(
-                new ToolProperty(
-                    name: 'video_url',
-                    type: PropertyType::STRING,
-                    description: 'The URL of the YouTube video.',
-                    required: true
-                )
-            )->setCallable(function (string $video_url) {
-                return "Video transcripton...";
-            })
+            GetTranscriptionTool::make('API_KEY'),
         ];
     }
 }
 
 ```
 
-Let’s break down the code.
+We introduced the new method `tools()` into the Agent class. This method expects to return an array of Tools that the AI can use if needed to complete tasks.
 
-We introduced the new method `tools()` into the Agent class. This method expects to return an array of Tool objects that the AI will be able to use if needed.
+Neuron provides you with these clear and simple APIs and automates all the underlying interactions with the LLM. You can connect basically everything you want to the Agent. Being able to execute local functions allows you to invoke any external APIs or application components and let the Agent performs real action on your environment.
 
-In this example we return an array of just one tool, named `get_transcription`.
+### Create Tools
 
-Notice that the `ToolProperty` we define should match with the signature of the function you use as a callable. The callable gets the `$video_url` arguments, and the name of the property is exactly "video\_url".
+Tools are components that extends the `Tool`  class. You are free to create pre-packaged tools to make the agent able to perform actions.
 
-The most important thing are the name and description you give to the tool and its properties. All these pieces of information will be passed to the LLM in natural language. The more explicit and clear you are, the more likely the LLM understands when, if, and why, it’s the case to use the tool.
-
-Once the Agent decides to use a tool the callable function is executed. Here we can implement the logic to retrieve the video transcription and return the information back to the LLM.
-
-Neuron provides you with these clear and simple APIs and automates all the underlying interactions with the LLM. Once you get the point it can immediately open to a possibility to connect basically everything you want to the Agent. Being able to execute local functions allows you to invoke any external APIs or application components.
-
-### Custom Tools
-
-Thanks to the Neuron modular architecture, Tools are components that implement `ToolInterface` . You are free to create pre-packaged tool classes to make the agent able to perform sapecific actions, and release them as external composer packages or submit a PR to our repository to have them integrated into the core framework.
-
-To create a new Tool execute the console command below:
+To create a new Tool run the console command below:
 
 {% tabs %}
 {% tab title="Unix" %}
@@ -127,19 +108,19 @@ namespace App\Neuron\Tools;
 use GuzzleHttp\Client;
 use NeuronAI\Tools\PropertyType;
 use NeuronAI\Tools\Tool;
+use NeuronAI\Tools\ToolOutput;
 use NeuronAI\Tools\ToolProperty;
 
 class GetTranscriptionTool extends Tool
 {
+    protected string $name = 'get_transcription';
+    
+    protected ?string $description = 'Retrieve the transcription of a youtube video.';
+    
     protected Client $client;
     
     public function __construct(protected string $key)
     {
-        // Define Tool name and description
-        parent::__construct(
-            'get_transcription',
-            'Retrieve the transcription of a youtube video.',
-        );
     }
     
     /**
@@ -160,7 +141,7 @@ class GetTranscriptionTool extends Tool
     /**
      * Implementing the tool logic
      */
-    public function __invoke(string $video_url): string
+    public function __invoke(string $video_url): ToolOutput
     {
         $response = $this->getClient()
             ->get('transcript?url=' . $video_url.'&text=true')
@@ -169,7 +150,7 @@ class GetTranscriptionTool extends Tool
 
         $response = json_decode($response, true);
 
-        return $response['content'];
+        return ToolOutput::text($response['content']);
     }
     
     protected function getClient(): Client
@@ -184,15 +165,15 @@ class GetTranscriptionTool extends Tool
 }
 ```
 
-**Tool name and description**: Define name and description of the tool in the tool constructor. Invest in prompt engineering to help the model take better decisions.
+**Tool name and description**: These are the information that the LLM uses to decide when and why the tool should be used. Prompt engineering can help to instruct the model take better decisions.
 
 **The properties method**: Implement this method to return the list of properties the tool expects.
 
-**The `__invoke` method**: Here you need to implement the logic of the tool, and return a result that will be returned back to the model. The PHP `__invoke` magic method is used by default.
+**The `__invoke` method**: Here you need to implement the logic of the tool, and return a result that will be returned back to the model.
 
-Notice how the `__invoke()` method accepts the same arguments defined by the `ToolProperty` . In this example I'm using an external service to retrieve the YouTube video transcription called [Supadata.ai](https://supadata.ai/).
+Notice how the `__invoke()` method accepts the same arguments defined by the `ToolProperty` with the same name and data type.
 
-You can attach the tool in the agent class as usual:
+Once implemented, you can list the tool in the array returned by the tools method.
 
 ```php
 <?php
@@ -220,16 +201,19 @@ class YouTubeAgent extends Agent
 }
 ```
 
-GetTranscriptions is just an example. You can eventually implement other tools to make the Agent able to retrieve other video metadata to enhance its video analysis capabilities.
+`GetTranscriptionTool` is just an example. You can eventually implement other tools to make the Agent able to retrieve other video metadata to enhance its video analysis capabilities.
 
 Finally you can talk to the agent asking for the summary of a YouTube video.
 
 ```php
 use NeuronAI\Chat\Messages\UserMessage;
 
-$message = YouTubeAgent::make($user)->chat(
-    new UserMessage('What about this video: https://www.youtube.com/watch?v=WmVLcj-XKnM')
-)->getMessage();
+$message = YouTubeAgent::make($user)
+    ->setThreadId('chat_id')
+    ->chat(
+        new UserMessage('What about this video: https://www.youtube.com/watch?v=WmVLcj-XKnM')
+    )
+    ->getMessage();
     
 echo $message->getContent();
 
@@ -260,6 +244,7 @@ You can customize this value with the `toolMaxRuns()` method at agent level, or 
 try {
 
     $response = YouTubeAgent::make()
+        ->setThreadId('chat_id')
         ->toolMaxRuns(5) // Max number of calls for each tool
         ->addTool(
             // Tool level config takes precedence over the global setting
@@ -270,6 +255,33 @@ try {
         
 } catch (ToolMaxTriesException $exception) {
     // do something
+}
+```
+
+By default, tool runs are tracked by the tool name. You can customize this key implementing `getRunKey()`  in the tool class:
+
+```php
+class GetTranscriptionTool extends Tool
+{
+    ...
+    
+    public function getRunKey(): string
+    {
+        return $this->getName() . ':' . hash('sha1', json_encode($this->getInputs()));
+    }
+}
+```
+
+In the previous example, we also track tool runs based on input parameters, so the same tool, called with different inputs, will be counted on separate keys. For this specific use case you can use the built-in trait `NeuronAI\Tools\TrackByInputs` that already implement parameters-aware run tracking:
+
+```php
+use NeuronAI\Tools\TrackByInputs;
+
+class GetTranscriptionTool extends Tool
+{
+    use TrackByInputs;
+    
+    ...
 }
 ```
 
@@ -295,25 +307,57 @@ class YouTubeAgent extends Agent
 
 If the `visible` method get `false`, the tool will not be available during agent execution.
 
-### Tool Approval
+### Multimodal Tool Output
 
-Neuron provides you with full support for the human in the loop pattern including tool approval. It's different from visbility because "approval" is a runtime gatekeeper. The framework intercepts the tool call and pause waiting for the user's final decision.
-
-You can plug this feature into your agent with our built-in [ToolApproval](middleware.md#tool-approval-human-in-the-loop) middleware.
+By default a tool returns a string (or an array, which is JSON-encoded). When your tool needs to send richer content back to the model like images, documents, audio, video, return a `ToolOutput` instance from `__invoke()` instead. It wraps a list of content blocks that providers supporting multimodal tool results (like Anthropic) map natively to their API; text-only providers automatically fall back to the concatenated text blocks. This works on every tool out of the box.
 
 ```php
-new ToolApproval(
-    tools: [
-        BuyTicketTool::class => function (array $args): bool {
-            return $args['amount'] > 100;
-        }
-    ]
-)
+use NeuronAI\Chat\Enums\MediaType;
+use NeuronAI\Chat\Enums\SourceType;
+use NeuronAI\Chat\Messages\ContentBlocks\ImageContent;
+use NeuronAI\Chat\Messages\ContentBlocks\TextContent;
+use NeuronAI\Tools\ToolOutput;
+
+class PriceChartTool extends Tool
+{
+    ...
+
+    public function __invoke(string $symbol): ToolOutput
+    {
+        $base64 = $this->renderChart($symbol);
+
+        return new ToolOutput([
+            new TextContent("Price chart for {$symbol}"),
+            new ImageContent($base64, SourceType::BASE64, MediaType::PNG),
+        ]);
+    }
+}
 ```
 
-{% content-ref url="middleware.md" %}
-[middleware.md](middleware.md)
-{% endcontent-ref %}
+For single-block outputs you can use the shortcut constructors: `ToolOutput::text(...)`, `ToolOutput::image(...)`, `ToolOutput::file(...)`, `ToolOutput::audio(...)`, `ToolOutput::video(...)`.
+
+> Include a `TextContent` block in outputs meant to work across all providers: text-only providers see only the text blocks, so an image-only output would reach them empty.
+
+### Tool Approval
+
+Neuron provides you with full support for the human in the loop patterns including tool approval. The framework intercepts the tool call and pause, waiting for the user's final decision.&#x20;
+
+Just override the `approvalPolicy()` method on the Tool class to determine whether the tool shuold be gated for approval. The method will receive the inputs the model want to use to call the tool. Returning a string counts as true and doubles as the approval request reason.
+
+```php
+class BuyTicketTool extends Tool
+{
+    ...,
+    
+    protected function approvalPolicy(array $inputs): bool|string
+    {
+        // The tool requires approval if the amount is greather than 100
+        return $inputs['amount'] > 100;
+    }
+}
+```
+
+Check out the dedicated section to understand how to manage the full approval flow: [Tool Approval](tool-approval.md)
 
 ### Tool Search
 
@@ -329,7 +373,7 @@ Tool search reframes the tool catalog as something the agent queries on demand r
 
 ### Monitoring & Debugging
 
-To watch inside the tool loop you can connect your Agent to the [Inspector monitoring dashboard](https://inspector.dev/) in order to see the tool call execution flow in real-time.
+Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
 
 {% embed url="https://docs.inspector.dev/guides/neuron-ai" %}
 
@@ -359,13 +403,15 @@ class MyTool extends Tool
                 name: 'arg',
                 type: PropertyType::STRING,
                 description: 'Describe the value you expect',
-                required: true,
-                nullable: false
+                required: true
             )
         ];
     }
     
-    public function __invoke(string $arg){...}
+    public function __invoke(string $arg): ToolOutput 
+    {
+        ...
+    }
 }
 ```
 
@@ -404,7 +450,10 @@ class MyTool extends Tool
         ];
     }
     
-    public function __invoke(string $arg){...}
+    public function __invoke(string $arg): ToolOutput
+    {
+        ...
+    }
 }
 ```
 
@@ -475,7 +524,10 @@ class MyTool extends Tool
         ];
     }
     
-    public function __invoke(string $arg){...}
+    public function __invoke(string $arg): ToolOutput
+    {
+        ...
+    }
 }
 ```
 
@@ -507,7 +559,10 @@ class MyTool extends Tool
         ];
     }
     
-    public function __invoke(Color $color){...}
+    public function __invoke(Color $color): ToolOutput
+    {
+        ...
+    }
 }
 ```
 
@@ -533,7 +588,7 @@ class Color
 }
 ```
 
-## Provider Tools
+## ProviderTool
 
 Some providers offer the possibility to use their built-in tools like web\_search, file\_search, and others instead of relying on external services. Even they offer this service they introduce a lot of constraints using these tools. The most flexible and reliable way to add cpabailities to your agents remains the Tools and Toolkit systems.
 
@@ -565,9 +620,106 @@ class MyAgent extends Agent
 
 Currently only [OpenAIResponses](../providers/ai-provider.md#openairesponses), [Gemini](../providers/ai-provider.md#gemini), and [Anthropic](../providers/ai-provider.md#anthropic) support these tools.
 
+## FrontendTool
+
+Until now a tool was a single thing: a representation of a PHP function the model can ask to run and the backend executes. `FrontendTool` allows you to define tools that will be executed by the frontend of your application. Once completed the frontend send back the result of the tool execution, and Neuron will provide this result to the model continuing the loop.
+
+This is how backend agents can access the browser APIs, or the device capabailities in a mobile app, transparently.
+
+`FrontendTool` makes this a first-class concept in Neuron. The model sees it and can call it, but the backend never executes it. When the model calls a frontend tool, the agent suspends the run, hands the pending calls to you, and continues from exactly that point once you submit the results.
+
+The framework ships with built-in integration for AG-UI with [CopilotKit](https://docs.copilotkit.ai/frontend-tools), and [Vercel AI SDK](https://ai-sdk.dev/docs/foundations/tools#provider-defined-tools).
+
+### How it works
+
+A `FrontendTool` is constructed from a name, an optional description, and an optional JSON Schema describing its inputs. It has no `__invoke()`; so a frontend tool can never run on the server.
+
+When the model returns a batch of tool calls, the agent splits the batch:
+
+1. **Approval first.** Any call whose tool requires approval suspends the run with an `ApprovalRequest`, exactly as for local tools. See [tool approval](tools.md#tool-approval).
+2. **Local tools execute** on the backend as usual.
+3. **Deferred calls suspend the run** with a `ToolResultsRequest`. The request carries the pending `ToolCall` objects (name, call ID, inputs) so you can dispatch them to the frontend.
+
+{% hint style="warning" %}
+We recommend to use **`/neuron-frontend-integration`** skill in your coding assistant to better understand the complete flow and the implementation details.
+{% endhint %}
+
+To continue, submit the results keyed by call ID through `Agent::submitInputs()` with a `ToolResultsTranslator`. Once every deferred call has a result, the agent writes the tool results to chat history and runs the next inference.
+
+### Registering a FrontendTool
+
+```php
+use NeuronAI\Tools\FrontendTool;
+
+$readTitle = new FrontendTool(
+    name: 'read_page_title',
+    description: 'Read the title of the page the user is currently looking at.'
+);
+
+$readText = new FrontendTool(
+    name: 'read_element_text',
+    description: 'Read the text content of an element on the page.',
+    inputSchema: [
+        'type' => 'object',
+        'properties' => [
+            'selector' => ['type' => 'string', 'description' => 'CSS selector of the element'],
+        ],
+        'required' => ['selector'],
+    ]
+);
+
+$agent = Agent::make()
+    ->setAiProvider($provider)
+    ->setChatHistory(new SQLChatHistory($pdo, $threadId))
+    ->setPersistence(new DatabasePersistence($pdo))
+    ->addTool([$readTitle, $readText, new SearchDocsTool()]);
+```
+
+Without a schema, a deferred tool behaves like any other tool: you can add properties with `addProperty()` or override `properties()` in a subclass. A frontend tool can also require approval with `requireApproval()` as any other tool.
+
+### Suspending and resuming with results
+
+```php
+use NeuronAI\Agent\Interrupt\ToolResultsRequest;
+use NeuronAI\Agent\Interrupt\ToolResultsTranslator;
+use NeuronAI\Chat\Messages\UserMessage;
+
+// Request 1: the model decides to read the page.
+$state = $agent->chat(new UserMessage('What is this page about?'));
+
+if ($state->isInterrupted()) {
+    $request = $state->getInterruptRequest();
+
+    if ($request instanceof ToolResultsRequest) {
+        foreach ($request->getToolCalls() as $call) {
+            // Send $call->getName(), $call->getCallId() and $call->getInputs()
+            // to the client that will execute them.
+        }
+    }
+}
+
+// Request 2: the client sends the outcomes back, keyed by call ID.
+$results = [
+    'call_01' => ['result' => 'Neuron AI - PHP Agent Framework'],
+    'call_02' => ['error' => 'Element not found'],
+];
+
+$state = $agent
+    ->submitInputs($results, new ToolResultsTranslator())
+    ->run();
+
+echo $state->getMessage()->getContent();
+```
+
+The next inference sees the successful result as a normal tool result message, and the error as a tool error the model can act on.
+
+{% hint style="warning" %}
+We recommend to use **`/neuron-frontend-integration`** skill in your coding assistant to better understand the complete flow and the implementation details.
+{% endhint %}
+
 ## Toolkits
 
-The philosophy behind Neuron's toolkit system emerged from a fundamental observation during AI Agent Development: while individual tools provide specific capabilities, real-world AI agents often require coordinated sets of related functionalities.
+The philosophy behind Neuron's toolkit system emerged from a fundamental observation during AI Agent Development: while individual tools provide specific capabilities, real-world AI agents often require coordinated sets of related functionalities.&#x20;
 
 Rather than forcing developers to manually assemble collections of tools for common use cases, Neuron introduces toolkits as an abstraction layer that transforms how we think about agent capability composition. Here is an example of how you can add a toolkit to an agent:
 
@@ -592,18 +744,18 @@ class MyAgent extends Agent
 }
 ```
 
-The traditional approach requires instantiating each tool individually. Imagine you want to build agents that need mathematical reasoning – addition, subtraction, multiplication, division, and exponentiation tools must all be declared separately in the agent's tool configuration. This granular approach quickly becomes unwieldy when agents require comprehensive functionality sets.
+The traditional approach requires instantiating each tool individually. Imagine you want to build agents that need mathematical reasoning – addition, subtraction, multiplication, division, and exponentiation tools must all be declared separately in the agent's tool configuration. This granular approach quickly becomes unwieldy when agents require comprehensive functionality sets.&#x20;
 
 Toolkits represent Neuron's solution to this complexity, packaging tools created around the same scope into a single, coherent interface that can be attached to any agent with a single line of code.
 
-Here is an example of the `CalculatorToolkit`:
+Here is an example:
 
 ```php
 namespace NeuronAI\Tools\Toolkits\Calculator;
 
 use NeuronAI\Tools\Toolkits\AbstractToolkit;
 
-class CalculatorToolkit extends AbstractToolkit
+class BookingToolkit extends AbstractToolkit
 {
     public function guidelines(): ?string
     {
@@ -614,11 +766,10 @@ class CalculatorToolkit extends AbstractToolkit
     public function provide(): array
     {
         return [
-            SumTool::make(),
-            SubtractTool::make(),
-            MultiplyTool::make(),
-            DivideTool::make(),
-            ExponentiateTool::make(),
+            Search::make(),
+            Book::make(),
+            Checkin::make(),
+            Checkout::make(),
         ];
     }
 }
@@ -632,11 +783,11 @@ The `guidelines()` method serves a particularly important function in agent deve
 
 **Provide**
 
-The `provide()` method returns the array of tools included in the toolkit by default. When a toolkit is attached to an agent, the individual tools become available exactly as if they had been added separately, but without the cognitive overhead of managing multiple tool declarations.
+The `provide()` method returns the array of tools included in the toolkit by default. When a toolkit is attached to an agent, the individual tools become available exactly as if they had been added separately, but without the cognitive overhead of managing multiple tool declarations.&#x20;
 
 ### Filters
 
-During development of complex agents, I've frequently encountered scenarios where a toolkit provides mostly the right functionality but includes tools that could lead to undesired behavior in specific contexts, or just need to be restricted and configured individually.
+During development of complex agents, I've frequently encountered scenarios where a toolkit provides mostly the right functionality but includes tools that could lead to undesired behavior in specific contexts, or just need to be restricted and configured individually.&#x20;
 
 #### Exclude
 
@@ -651,16 +802,14 @@ class MyAgent extends Agent
     {
     	return [
             CalculatorToolkit::make()->exclude([
-                DivideTool::class,
-                ExponentiateTool::class,
-                MultiplyTool::class,
+                Book::class,
             ]),
         ];
     }
 }
 ```
 
-The exclusion mechanism operates at the class level, using fully qualified class names to identify tools for removal.
+The exclusion mechanism operates at the class level, using fully qualified class names to identify tools for removal.&#x20;
 
 #### Only
 
@@ -675,8 +824,7 @@ class MyAgent extends Agent
     {
     	return [
             CalculatorToolkit::make()->only([
-                StandardDeviationTool::class,
-                MedianTool::class,
+                Search::class,
             ]),
         ];
     }
@@ -697,7 +845,7 @@ class MyAgent extends Agent
     	return [
             MySQLToolkit::make()
                 ->with(
-                    MySQLSchemaTool::class, 
+                    Book::class, 
                     fn (ToolInterface $tool) => $tool->setMaxTries(1)
                 ),
         ];
@@ -713,7 +861,11 @@ Neuron ships with several built-in tools and toolkits that allows you to quickly
 
 ### Calculator
 
-The CalculatorToolkit provides a comprehensive suite of computational tools designed to make your AI agents performs accurate calculations. It can seamlessly integrates with complementary toolkits that provide data access—such as database connectors, CSV processors, API clients, or spreadsheet readers—enabling AI agents to perform sophisticated statistical calculations, and deliver comprehensive insights in response to complex business queries.
+The `CalculatorToolkit` provides a comprehensive suite of computational tools designed to make your AI agents accurately resolve mathematical expressions. It can seamlessly integrates with complementary toolkits that provide data access, such as database connectors, CSV processors, API clients, or spreadsheet readersì, enabling AI agents to perform sophisticated statistical calculations, and deliver comprehensive insights in response to complex business queries.
+
+{% hint style="warning" %}
+**`ext-bcmath`** PHP extension is required to use this toolkit. Be sure to add it as a requirement to your `composer.json` file.
+{% endhint %}
 
 ```php
 <?php
@@ -736,7 +888,7 @@ class MyAgent extends Agent
 }
 ```
 
-<table data-header-hidden><thead><tr><th width="253"></th><th></th></tr></thead><tbody><tr><td>sum</td><td>NeuronAI\Tools\Toolkits\Calculator\SumTool</td></tr><tr><td>subtract</td><td>NeuronAI\Tools\Toolkits\Calculator\SubtractTool</td></tr><tr><td>multiply</td><td>NeuronAI\Tools\Toolkits\Calculator\MultiplyTool</td></tr><tr><td>divide</td><td>NeuronAI\Tools\Toolkits\Calculator\DivideTool</td></tr><tr><td>exponential</td><td>NeuronAI\Tools\Toolkits\Calculator\ExponentialTool</td></tr><tr><td>square root</td><td>NeuronAI\Tools\Toolkits\Calculator\SquareRootTool</td></tr><tr><td>nth root</td><td>NeuronAI\Tools\Toolkits\Calculator\NthRootTool</td></tr><tr><td>mean</td><td>NeuronAI\Tools\Toolkits\Calculator\MeanTool</td></tr><tr><td>median</td><td>NeuronAI\Tools\Toolkits\Calculator\MedianTool</td></tr><tr><td>mode</td><td>NeuronAI\Tools\Toolkits\Calculator\ModeTool</td></tr><tr><td>standard deviation</td><td>NeuronAI\Tools\Toolkits\Calculator\StandardDeviationTool</td></tr><tr><td>variance</td><td>NeuronAI\Tools\Toolkits\Calculator\VarianceTool</td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="253"></th><th></th></tr></thead><tbody><tr><td>evaluate</td><td>NeuronAI\Tools\Toolkits\Calculator\Evaluate</td></tr><tr><td>mean</td><td>NeuronAI\Tools\Toolkits\Calculator\MeanTool</td></tr><tr><td>median</td><td>NeuronAI\Tools\Toolkits\Calculator\MedianTool</td></tr><tr><td>mode</td><td>NeuronAI\Tools\Toolkits\Calculator\ModeTool</td></tr><tr><td>standard deviation</td><td>NeuronAI\Tools\Toolkits\Calculator\StandardDeviationTool</td></tr><tr><td>variance</td><td>NeuronAI\Tools\Toolkits\Calculator\VarianceTool</td></tr></tbody></table>
 
 ### Calendar
 
@@ -773,7 +925,7 @@ These toolkits make your agent able to interact with your database. If you ask "
 
 All the tools in the MySQL and PostgreSQL toolkits require a [PDO](https://www.php.net/manual/en/class.pdo.php) instance as a constructor argument. If you are in a framework environment or you are already using an ORM in general, you can gather the underlying PDO instance from the ORM and pass it to the tools. You can learn more about this implementation strategy in this in-depth article: [https://inspector.dev/mysql-ai-toolkit-bringing-intelligence-to-your-database-layer-in-php/](https://inspector.dev/mysql-ai-toolkit-bringing-intelligence-to-your-database-layer-in-php/)
 
-The PDO instance is basically a connection to a specific database, so you could aslo think to create dedicated credentials for your agent. It could be helpful to control the level of access your agent has to the database.
+The PDO instance is basically a connection to a specific database, so you could aslo think to create dedicated credentials for your agent. It could be helpful to control the level of access your agent has to the database.&#x20;
 
 Anyway you have separate tools for reading and writing to the database. If you are not confident about your agent behaviour you may not provide the writing tool.
 
@@ -937,7 +1089,7 @@ class MyAgent extends Agent
 
 <table data-header-hidden><thead><tr><th width="256"></th><th></th></tr></thead><tbody><tr><td>describe_directory_content</td><td>NeuronAI\Tools\Toolkits\FileSystem\DescribeDirectoryContentTool</td></tr><tr><td>read_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\ReadFileTool</td></tr><tr><td>grep_file_content</td><td>NeuronAI\Tools\Toolkits\FileSystem\GrepFileContentTool</td></tr><tr><td>glob_path</td><td>NeuronAI\Tools\Toolkits\FileSystem\GlobPathTool</td></tr><tr><td>preview_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\PreviewFileTool</td></tr><tr><td>parse_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\ParseFileTool</td></tr></tbody></table>
 
-### Tavily
+### Tavily&#x20;
 
 This toolkit enable your agent to performs web search, page content extraction, and crawling.
 
@@ -1048,7 +1200,7 @@ class MyAgent extends Agent
 }
 ```
 
-### Jina
+### Jina&#x20;
 
 This toolkit enable your agent to performs web search, and read the content of a specific URL.
 
@@ -1123,199 +1275,6 @@ class MyAgent extends Agent
 }
 ```
 
-### Zep Memory
-
-This toolkit connects a NeuronAI Agent to [Zep](https://www.getzep.com/) knowledge graph. This kind of system allows the agent to store relevant facts that may emerge during interactions with the agent over time. It's a long term memory in the sense that is not limited to the current conversation like the [ChatHistory](chat-history-and-memory.md) component does. It's an external persistent storage the agent will use to store and retrieve single pieces of information that can allow more personalized answers.
-
-To learn more about the capabilities of these kind of system you can visit the Zep website: [https://www.getzep.com/](https://www.getzep.com/)
-
-```php
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Tools\Toolkits\Zep\ZepLongTermMemoryToolkit;
-
-class MyAgent extends Agent
-{
-    ...
-    
-    protected function tools(): array
-    {
-        return [
-            ZepLongTermMemoryToolkit::make(
-                key: 'ZEP_API_KEY',
-                user_id: 'ID'
-            ),
-        ];
-    }
-}
-```
-
-The `user_id` arguments allows you to separate the long term memory in different silos if you want to serve multiple users. Based on your use case you can use this parameter as a "key" to separate the memory for the various entities the agent interact to (users, companies, etc.).
-
-### AWS SES
-
-#### Simple Email Service (SES)
-
-This tool allows the agent to send an email message to one or more recipients, send notifications, confirmations, reports, or any other email-based communication. The tool handles proper email delivery, and basic error handling automatically.
-
-In order ti use this tool the AWS sdk for PHP must be installed.
-
-```
-composer require aws/aws-sdk-php
-```
-
-The tool gets an instance of the `SesClient` class from the AWS PHP sdk.
-
-```php
-namespace App\Neuron;
-
-use Aws\Ses\SesClient;
-use NeuronAI\Agent;
-use NeuronAI\Tools\Toolkits\AWS\SESTool;
-
-class MyAgent extends Agent
-{
-    ...
-    
-    protected function tools(): array
-    {
-        return [
-            SESTool::make(
-                sesClient: new SesCleint(...),
-                fromEmail: 'my-address@email.com'
-            ),
-        ];
-    }
-}
-```
-
-### Supadata YouTube
-
-This toolkit provides access to YouTube video transcriptions, metadata, channel information,\
-and playlist data through Supadata.ai for content analysis and research purposes.
-
-```php
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Tools\Toolkits\Supadata\SupadataYouTubeToolkit;
-
-class MyAgent extends Agent
-{
-    ...
-    
-    protected function tools(): array
-    {
-        return [
-            SupadataYouTubeToolkit::make(
-                key: 'SUPADATA_API_KEY',
-            ),
-        ];
-    }
-}
-```
-
-#### Video Transcription
-
-Allow the agent to retrieve the transcription of a youtube video.
-
-```php
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Tools\Toolkits\Supadata\SupadataVideoTranscriptTool;
-
-class MyAgent extends Agent
-{
-    ...
-    
-    protected function tools(): array
-    {
-        return [
-            SupadataVideoTranscriptTool::make(
-                key: 'SUPADATA_API_KEY',
-            ),
-        ];
-    }
-}
-```
-
-#### Video Metadata
-
-Allow the agent to retrieve the metadata of a youtube video.
-
-```php
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Tools\Toolkits\Supadata\SupadataVideoMetadataTool;
-
-class MyAgent extends Agent
-{
-    ...
-    
-    protected function tools(): array
-    {
-        return [
-            SupadataVideoMetadataTool::make(
-                key: 'SUPADATA_API_KEY',
-            ),
-        ];
-    }
-}
-```
-
-#### Channel Metadata
-
-Allow the agent to retrieve metadata from a YouTube channel including name, description, subscriber count, and more.
-
-```php
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Tools\Toolkits\Supadata\SupadataYoutubeChannelTool;
-
-class MyAgent extends Agent
-{
-    ...
-    
-    protected function tools(): array
-    {
-        return [
-            SupadataYoutubeChannelTool::make(
-                key: 'SUPADATA_API_KEY',
-            ),
-        ];
-    }
-}
-```
-
-#### Playlist Metadata
-
-Allow the agent to retrieve metadata from a YouTube playlist including title, description, video count, and more.
-
-```php
-namespace App\Neuron;
-
-use NeuronAI\Agent;
-use NeuronAI\Tools\Toolkits\Supadata\SupadataYoutubePlaylistTool;
-
-class MyAgent extends Agent
-{
-    ...
-    
-    protected function tools(): array
-    {
-        return [
-            SupadataYoutubePlaylistTool::make(
-                key: 'SUPADATA_API_KEY',
-            ),
-        ];
-    }
-}
-```
-
 ## Parallel Tool Calls
 
 If your agents are tool-hungry, you can enable parallel execution if the model ask for multiple tool calls in a single request.
@@ -1358,6 +1317,8 @@ This implementation requires the `pcntl` extension which is installed in many Un
 
 **pcntl only works in CLI processes, not in a web context.**
 
+
+
 If the `pcntl` extension is not present in the system running the agent (e.g. Windows machines) the trait automatically fallbacks to the standard tool calls execution. This can be helpful if you have a missmatch between your local development environment and the production environment. You can develop locally with `pcntl` disabled, then deploy to production environments where it may be enabled—**without modifying a single line of code**. The agent adapts automatically to whatever execution environment it finds itself in.
 {% endhint %}
 
@@ -1371,7 +1332,13 @@ class DemoAgent extends Agent
     public function __construct()
     {
         parent::__construct();
-        $this->parallelToolCalls(true);
+        
+        // Enable parallel tool call
+        $this->parallelToolCalls(
+            enabled: true,
+            beforeChild: fn() => DB::purge(),
+            afterChild: fn() => DB::purge()
+        );
     }
     
     protected function provider(): AIProviderInterface
@@ -1387,6 +1354,10 @@ class DemoAgent extends Agent
     }
 }
 ```
+
+The mthod accept two optional callbacks: `beforeChild`, `afterChild`.
+
+Forked child processes may inherit process-bound resources that cannot safely be shared, such as database connections.
 
 ## Error Handler
 
@@ -1405,7 +1376,7 @@ $agent = Agent::make()
     );
 ```
 
-**Extending the Agent**
+**Extending the Agent**&#x20;
 
 You can also implement `resolveToolErrorHandler()` directly to define the callback to run.
 

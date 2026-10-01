@@ -35,6 +35,7 @@ class MyAgent extends Agent
 
 // Run the agent
 $message = MyAgent::make()
+    ->setThreadId('chat_id')
     ->chat(new UserMessage("Hi!"))
     ->getMessage();
 

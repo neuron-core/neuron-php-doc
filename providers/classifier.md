@@ -4,9 +4,7 @@ In Neuron AI you could already answer them with [structured output](https://docs
 
 A classifier has no conversation and no text to stream. The Neuron AI Classifier is has its own contract, `ClassifierInterface`, for asking closed questions about some input and receiving probabilities back. You can use it to take decision inside your Agents or Workflow like guardrails, prompt injections, score the quality of a response, atc.
 
-#### TypeSafeAI (Jev) <a href="#typesafeai-jev" id="typesafeai-jev"></a>
-
-<a class="button secondary">Copy</a>
+### TypeSafeAI (Jev)
 
 ```php
 use NeuronAI\Classifier\Boolean;
@@ -47,8 +45,6 @@ $result = $classifier->classify($request);
 
 The input can be a string or any JSON compatible array, so you can pass the contents together. Every question has an identifier that you choose, and you use the same identifier to read the answer later.
 
-<a class="button secondary">Copy</a>
-
 ```php
 $injection = $result->boolean('injection');
 
@@ -63,4 +59,4 @@ if ($injection->probability > 0.8) {
 }
 ```
 
-If you ask for `$result->choice('injection')` on a question defined as `Boolean`, you get an `InvalidArgumentException` immediately.
+If you ask for `$result->choice('injection')` on a question defined as `Boolean`, you get an `InvalidArgumentException` immediately.&#x20;

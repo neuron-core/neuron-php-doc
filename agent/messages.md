@@ -22,7 +22,7 @@ Messages are the fundamental unit of context. They represent the input and outpu
 Messages are objects that contain:
 
 * **Role** - Identifies the message type (e.g. user, assistant)
-* **Content Blocks** - Represents the actual content of the message (like text, images, audio, files, etc.)
+*  **Content Blocks** - Represents the actual content of the message (like text, images, audio, files, etc.)
 * **Metadata** - Optional fields such as additional LLM response information.
 
 Here is an example of how to send a user message to the agent and get back the assistant message as response.
@@ -31,11 +31,14 @@ Here is an example of how to send a user message to the agent and get back the a
 use NeuronAI\Chat\Messages\UserMssage;
 
 $response = MyAgent::make()
+    ->setThreadId('chat_id')
     ->chat(new UserMessage("Hi, who are you?"))
     ->getMessage();
 
 echo $response->getContent();
 ```
+
+
 
 ## Content Blocks
 
@@ -46,7 +49,10 @@ The message can contains an arbitrary list of blocks, even multiple blocks of ea
 You can get and process the list of blocks into a message using `getContentBlocks()` method:
 
 ```php
-$response = MyAgent::make()->chat(...)->getMessage();
+$response = MyAgent::make()
+    ->setThreadId('chat_id')
+    ->chat(...)
+    ->getMessage();
 
 foreach ($response->getContentBlocks() as $block) {
     echo match($block::class) {
@@ -62,6 +68,7 @@ Or just use `getContent()` to get all the textual contents concatenated:
 
 ```php
 $response = MyAgent::make()
+    ->setThreadId('chat_id')
     ->chat(new UserMessage("..."))
     ->getMessage();
 
@@ -125,10 +132,10 @@ foreach ($response->getContentBlocks() as $block) {
 
 ### Image
 
-For models that support multimodality you can attach images and other type of contents, like files, audio, and video.
+For models that support multimodality you can attach images and other type of contents, like files, audio, and video.&#x20;
 
 ```php
-use NeuronAI\Chat\Enum\MediaType;
+use NeuronAI\Chat\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\ImageContent;
 
@@ -149,7 +156,7 @@ echo $response->getContent();
 ### File
 
 ```php
-use NeuronAI\Chat\Enum\MediaType;
+use NeuronAI\Chat\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\FileContent;
 
@@ -171,7 +178,7 @@ echo $response->getContent();
 
 Usually you can attach files to your message (images or documents) as URLs, or encoded in base64 format. Many provider allows you to upload files on their platform once, and reference these files with a simple ID on the message. This can unlock big saving in token consumption and can improve the model response time.
 
-After receiveing the file ID from the provider platofrm you can add a file block to your message with `SourceType::ID`.
+After receiveing the file ID from the provider platofrm you can add a file block to your message with  `SourceType::ID`.
 
 ```php
 // Reference a file ID previously uploaded on the provider platform
@@ -186,7 +193,7 @@ You can do the same with Image, or Video, etc, based on your provider specificat
 ### Audio
 
 ```php
-use NeuronAI\Chat\Enum\MediaType;
+use NeuronAI\Chat\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\AudioContent;
 
@@ -207,7 +214,7 @@ echo $response ->getContent();
 ### Video
 
 ```php
-use NeuronAI\Chat\Enum\MediaType;
+use NeuronAI\Chat\MediaType;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ContentBlocks\VideoContent;
 
@@ -217,7 +224,7 @@ $message->addContent(
     new VideoContent(
         source: base64_encode(file_get_contents(__DIR__.'/lesson_1.mp4')),
         sourceType: SourceType::BASE64,
-        mediaType: MediaType::MP$
+        mediaType: MediaType::MP4
     )
 );
 

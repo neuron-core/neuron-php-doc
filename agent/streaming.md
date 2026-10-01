@@ -1,5 +1,7 @@
 ---
-description: Presenting AI response to your user in real-time.
+description: >-
+  Show users chunks of response text and UI as they arrive rather than blindly
+  waiting for the full response.
 metaLinks:
   alternates:
     - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/streaming
@@ -7,11 +9,13 @@ metaLinks:
 
 # Streaming
 
-Streaming enables you to show users chunks of response text as they arrive rather than blindly waiting for the full response. You can offer a real-time Agent conversation experience.
+<figure><img src="../.gitbook/assets/generative-ui.gif" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/ChatGPT-stream.gif" alt=""><figcaption></figcaption></figure>
+{% hint style="warning" %}
+Use **`/neuron-streaming`** to teach your coding agent how to stream the agent response to the UI.
 
-### Agent
+[AI-Assisted Development](../overview/agentic-development.md)
+{% endhint %}
 
 To stream the AI response you should use the `stream()` method on the agent, instead of `chat()`. This method prepares the agent workflow to use the `StreamingNode` instead of `ChatNode`.
 
@@ -21,10 +25,12 @@ Calling the `events()` method on the returning agent handler you get a PHP gener
 use App\Neuron\MyAgent;
 use NeuronAI\Chat\Messages\UserMessage;
 
-$handler = MyAgent::make()->stream(new UserMessage('How are you?'));
+$stream = MyAgent::make()
+    ->setThreadId('chat_id')
+    ->stream(new UserMessage('How are you?'));
 
 // Print the response chunk-by-chunk in real-time
-foreach ($handler->events() as $chunk) {
+foreach ($stream as $chunk) {
     echo $chunk->content;
 }
 
@@ -59,7 +65,8 @@ use App\Neuron\MyAgent;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Tools\Tool;
 
-$handler = MyAgent::make()
+$stream = MyAgent::make()
+    ->setThreadId('chat_id')
     ->addTool(
         Tool::make(
             'get_server_configuration',
@@ -71,7 +78,7 @@ $handler = MyAgent::make()
     );
 
 // Iterate chunks
-foreach ($handler->events() as $chunk) {
+foreach ($stream as $chunk) {
     if ($chunk instanceof ToolCallChunk) {
         // Output the ongoing tool call
         echo "\n- Calling tool: ".$chunk->tool->getName();
@@ -100,20 +107,22 @@ foreach ($handler->events() as $chunk) {
 When the model finishes streaming output you can retrieve the final `AssistantMessage` instance with the `getMessage()` method on the workflow handler:
 
 ```php
-$handler = MyAgent::make()->stream(...);
+$stream = MyAgent::make()
+    ->setThreadId('chat_id')
+    ->stream(...);
 
 // Iterate chunks
-foreach ($handler->events() as $chunk) {
+foreach ($stream as $chunk) {
     // ...
 }
 
-$message = $handler->getMessage(); // Get the final message instance
+$message = $stream->getResult()->getMessage(); // Get the final message instance
 echo $message->getContent();
 ```
 
 ### Monitoring & Debugging
 
-Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
+Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/)
 
 {% embed url="https://docs.inspector.dev/guides/neuron-ai" %}
 
@@ -127,7 +136,28 @@ This architecture allows you to seamlessly integrate Neuron agents with various 
 
 <figure><img src="../.gitbook/assets/streaming-adapter.png" alt=""><figcaption></figcaption></figure>
 
-You simply need to provide an adapter instance to the `events()` method of the agent handler used to stream the LLM response.
+You simply need to provide an adapter instance to the `stream()` method of the agent used to stream the LLM response.
+
+### Vercel AI SDK Adapter
+
+Adapter for Vercel AI SDK Data Stream Protocol: [https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol](https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol)
+
+```php
+use NeuronAI\Chat\Messages\Stream\Adapters\VercelAIAdapter;
+
+// Instruct the agent
+$stream = MyAgent::make()
+    ->setThreadId('chat_id')
+    ->setStreamAdapter(new VercelAIAdapter())
+    ->stream(
+        new UserMessage('What is the square root of 144?')
+    );
+
+// Process the response
+foreach ($stream as $line) {
+    echo $line;
+}
+```
 
 ### AG-UI Adapter
 
@@ -139,13 +169,12 @@ For more information, visit: [https://docs.ag-ui.com/concepts/events](https://do
 use NeuronAI\Chat\Messages\Stream\Adapters\AGUIAdapter;
 
 // Instruct the agent
-$handler = MyAgent::make()
+$stream = MyAgent::make()
+    ->setThreadId('chat_id')
+    ->setStreamAdapter(new AGUIAdapter('chat_id'))
     ->stream(
         new UserMessage('What is the square root of 144?')
     );
-
-// Provide the adapter instance to the events() method
-$stream = $handler->events(new AGUIAdapter());
 
 // Process the response
 foreach ($stream as $line) {
@@ -206,7 +235,9 @@ foreach ($adapter->getHeaders() as $name => $value) {
     header("{$name}: {$value}");
 }
 
-$stream = MyAgent::make()->stream($messages)->events($adapter);
+$stream = MyAgent::make()
+    ->setStreamAdapter($adapter)
+    ->stream($messages);
 
 foreach ($stream as $line) {
     echo $line;
@@ -214,80 +245,399 @@ foreach ($stream as $line) {
 }
 ```
 
-#### Emitted events
-
 The adapter translates Neuron streaming chunks into the following AG-UI events:
-
-| Neuron chunk      | AG-UI events                                                                                                        |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Run lifecycle     | `RUN_STARTED`, `RUN_FINISHED`                                                                                       |
-| `TextChunk`       | `TEXT_MESSAGE_START`, `TEXT_MESSAGE_CONTENT`, `TEXT_MESSAGE_END`                                                    |
-| `ReasoningChunk`  | `REASONING_START`, `REASONING_MESSAGE_START`, `REASONING_MESSAGE_CONTENT`, `REASONING_MESSAGE_END`, `REASONING_END` |
-| `ToolCallChunk`   | `TOOL_CALL_START`, `TOOL_CALL_ARGS`, `TOOL_CALL_END`                                                                |
-| `ToolResultChunk` | `TOOL_CALL_RESULT`                                                                                                  |
 
 Tools attached to a Neuron agent are executed on the server. The client is informed of the ongoing execution through the `TOOL_CALL_*` events and receives the tool output in the `TOOL_CALL_RESULT` event, followed by the agent's final text message. The frontend-defined tools listed in the `tools` field of `RunAgentInput` (tools executed by the client) are not handled by the adapter.
 
 The adapter does not emit the AG-UI shared state events (`STATE_SNAPSHOT`, `STATE_DELTA`, `MESSAGES_SNAPSHOT`), so state synchronization features of AG-UI clients are not available through this adapter.
 
-### Vercel AI SDK Adapter
+### Custom Events
 
-Adapter for Vercel AI SDK Data Stream Protocol: [https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol](https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol)
+Both adapters understand portable step, activity, and custom events. AG-UI uses its native `STEP_STARTED`, `STEP_FINISHED`, `ACTIVITY_SNAPSHOT`, and `CUSTOM` events. Vercel emits transient `data-*` parts, so intermediate information is available to the UI without being added to assistant-message history.
+
+Map an application event by its exact class when domain code should remain independent from Neuron's portable event objects:
 
 ```php
+use NeuronAI\Chat\Messages\Stream\Adapters\Events\ActivityStreamEvent;
 use NeuronAI\Chat\Messages\Stream\Adapters\VercelAIAdapter;
 
-// Instruct the agent
-$handler = MyAgent::make()
-    ->stream(
-        new UserMessage('What is the square root of 144?')
-    );
-
-// Provide the adapter instance to the events() method
-$stream = $handler->events(new VercelAIAdapter());
-
-// Process the response
-foreach ($stream as $line) {
-    echo $line;
-}
+$adapter = (new AGUIAdapter())->mapEvent(
+    IndexingProgress::class,
+    static fn (IndexingProgress $event): ActivityStreamEvent =>
+        new ActivityStreamEvent(
+            id: $event->jobId,
+            type: 'indexing',
+            data: [
+                'processed' => $event->processed,
+                'total' => $event->total,
+            ],
+        ),
+);
 ```
+
+The callback returns a portable event, never SSE, JSON, or a protocol-specific array. Return `null` to suppress the explicitly mapped event. Mappings are exact class matches, so a parent-class mapping does not silently capture subclasses.
 
 ### Custom Adapters
 
-The events() method of the agent handler accept an instance of StreamAdapterInterface. So you are free to implement this interface with custom implementation, and pass it to the handler. Here is how the interface looks like:
+The `stream()` method of the agent handler accept an instance of `StreamAdapterInterface`. So you are free to implement this interface with custom implementation, and pass it to the handler. Here is how the interface looks like:
 
 ```php
 interface StreamAdapterInterface
 {
     /**
-     * Transform a Neuron chunk into protocol-specific output.
+     * Begin a run segment. The Workflow calls it before start() on every
+     * segment, so one instance can serve a suspension and its continuation
+     * in the same process: drop the previous segment's stream state, keep
+     * the seeded protocol identity and snapshot.
+     */
+    public function reset(): void;
+    
+    /**
+     * Transform a Neuron chunk into protocol events.
      *
-     * @param object $chunk Any Neuron chunk (TextChunk, ToolCallChunk, etc.)
-     * @return iterable<string> One or more output lines/messages
+     * @param object $chunk Neuron chunk (TextChunk, ToolCallChunk, etc.) or custom objects
+     * @return iterable<ProtocolEvent> Zero or more events
      */
     public function transform(object $chunk): iterable;
 
     /**
-     * Get HTTP headers for this protocol.
-     *
-     * @return array<string, string>
-     */
-    public function getHeaders(): array;
-
-    /**
      * Protocol initialization sequence (optional).
      *
-     * @return iterable<string>
+     * @return iterable<ProtocolEvent>
      */
     public function start(): iterable;
 
     /**
      * Protocol termination sequence (optional).
      *
-     * @return iterable<string>
+     * @return iterable<ProtocolEvent>
      */
     public function end(): iterable;
+
+    /**
+     * Protocol suspension sequence, consumed instead of end() when the run
+     * pauses for external input.
+     *
+     * Adapters encode the active requests so the client learns what the run
+     * is waiting for, including any termination frames. Return an empty
+     * iterable if the protocol cannot express a pause.
+     *
+     * @param array<int, InterruptRequest> $requests The active requests, keyed by interrupt ID.
+     * @return iterable<ProtocolEvent>
+     */
+    public function interrupt(array $requests): iterable;
+
+    /**
+     * Protocol failure sequence, consumed instead of end() when streaming fails.
+     *
+     * Adapters encode the original error for their protocol, including any
+     * termination frames. Return an empty iterable if no failure output is needed.
+     *
+     * @return iterable<ProtocolEvent>
+     */
+    public function error(Throwable $error): iterable;
 }
 ```
 
 You can always get inspiration by the built-in implementations.
+
+## Streaming Channels
+
+As agents become more interactive and capable, application developers are increasingly forced to run them outside the HTTP request lifecycle because of its timeout limits, which leaves the streamed output with no way to reach the UI. Channels deliver the streamed output of Agents and Workflows to the user interface through external broadcast systems such as [Pusher](https://pusher.com/), websockets, a Redis queue, or whatever your application already uses.
+
+### The problem it solves
+
+There are two ways to run an Agent. You can consume its real-time events:
+
+```php
+foreach ($agent->events() as $event) {
+    // handle each streamed item
+}
+```
+
+or you can just ask for the final result:
+
+```php
+$state = $agent->setThreadId('chat_id')->chat(new UserMessage(...));
+```
+
+The first style works well when your application code holds the stream from start to finish, like a controller that keeps the HTTP connection open and prints every chunk to the browser.
+
+The problem appears when nobody is holding the stream. Think about an Agent running in a background job. The job calls `events()`, the agent produces chunks, but there is no browser attached to that process. Without a Channel, all that output is simply thrown away.
+
+Channels automatically forwards the streamed events to a custom transport: a websocket, a Redis queue, an SSE response, anything you want, in order to stream real-time results to your web app from a background process.
+
+Remeber that a streaming adapter is required to use channels. If you want to forward the Neuron native chunks to the channel you can use the built-in `NeuronAI\Agent\Adapter\AgentChunkAdapter`.
+
+### Attaching a channel
+
+You attach a Channel implementing the `channel()` method in the Agent class, or using  `setChannel()` directly on the Agent instance.&#x20;
+
+```php
+use NeuronAI\Agent\Adapter\AgentChunkAdapter;
+use NeuronAI\Workflow\Channel\CallbackChannel;
+use NeuronAI\Workflow\Persistence\FilePersistence;
+
+class MyAgent extends Agent
+{
+    ...
+    
+    protected function streamAdapter(): ?StreamAdapterInterface
+    {
+        // Or specialized UI protocols adapters
+        return new AgentChunkAdapter();
+    }
+    
+    protected function channel(): ?StreamingChannelInterface
+    {
+        return new PusherChannel(
+            client: new Pusher(...),
+            channel: 'PUSHER_CHANNEL_NAME'
+        );
+    }
+}
+
+// Run the agent
+MyAgent::make()->stream(new UserMessage('Hi'));
+```
+
+### CallbackChannel
+
+The fastest way to get started is `CallbackChannel`. It wraps up to four closures, one for each method of the interface. All of them are optional. Here is a complete example that publishes every streamed item to Redis, so a websocket server can forward it to the browser:
+
+```php
+use NeuronAI\Workflow\Channel\CallbackChannel;
+use NeuronAI\Workflow\Persistence\FilePersistence;
+
+$agent = MyAgent::make()
+    ->setThreadId('chat_id')
+    ->setChannel(new CallbackChannel(
+        onSend: function (ProtocolEvent $item) use ($redis): void {
+            $redis->publish('thread-123', serialize($item));
+        },
+    ));
+
+$agent->stream(new UserMessage('Hi'));
+```
+
+Now it does not matter if `stream()` is called by a controller, a queue worker, or a cron job. The chunks always reach Redis, and from there your frontend.
+
+You can also react to the terminal calls. This example notifies the frontend when the run pauses for approval, completes, or fails:
+
+```php
+use NeuronAI\Workflow\Channel\CallbackChannel;
+use NeuronAI\Workflow\Interrupt\InterruptRequest;
+use NeuronAI\Workflow\WorkflowState;
+
+$channel = new CallbackChannel(
+    onSend: fn (ProtocolEvent $item) => $redis->publish(
+        'thread-123', 
+        json_encode($item)
+    ),
+    onInterrupted: fn (InterruptRequest $request, string $runId) => $redis->publish(
+        'thread-123',
+        json_encode(['type' => 'interrupted', 'runId' => $runId])
+    ),
+    onCompleted: fn (WorkflowState $state, string $runId) => $redis->publish(
+        'thread-123',
+        json_encode(['type' => 'completed', 'runId' => $runId])
+    ),
+    onFailed: fn (\Throwable $e, string $runId) => $redis->publish(
+        'thread-123',
+        json_encode(['type' => 'failed', 'runId' => $runId, 'message' => $e->getMessage()])
+    ),
+);
+
+MyAgent::make()
+    ->setChannel($channel)
+    ->stream(new UserMessage('Hi'));
+```
+
+### PusherChannel
+
+You can stream the Agent output to the frontend via Pusher, or Pusher compatible servers.
+
+```php
+use NeuronAI\Agent\Adapter\AgentChunkAdapter;
+use NeuronAI\Workflow\Streaming\Channel\PusherChannel;
+use NeuronAI\Workflow\Streaming\Channel\StreamingChannelInterface;
+use Pusher\Pusher;
+
+class MyAgent extends Agent
+{
+    ...
+    
+    protected function streamAdapter(): ?StreamAdapterInterface
+    {
+        // Or specialized UI protocols adapters
+        return new AgentChunkAdapter();
+    }
+    
+    protected function channel(): StreamingChannelInterface
+    {
+        return new PusherChannel(
+            client: new Pusher(...),
+            channel: 'PUSHER_CHANNEL_NAME',
+            maxRequestBytes: 10_000,
+            batchSize: 10
+        );
+    }
+}
+```
+
+**`maxRequestBytes`** allows you to adjust the component compatibility with Pusher compatible servers. Its default value of 10 KB is good for Pusher but other servers could support a different request size.
+
+**`batchSize`** instead allows you to define how many events must be collected before sending them in a single batch request. Higher values make the backend execution smoothly but can result in a scattered frontend experience. Lower values makes the frontend experience smoothly running more sending requests on the backend side.
+
+#### Partial Events
+
+Pusher caps an event at 10 KB; Reverb defaults to the same, Soketi to 100 KB, and `maxRequestBytes` (default `10_000`) tunes the ceiling.&#x20;
+
+To support streaming when your real-time server haa such a limit, an event that does not fit the max size - typically a tool result, or a message snapshot - is split into consecutive fragments. Furthermore servers do not guarantee that fragments arrive in order and never interleave. So the browser must be able to reconcile this fragmentation and ordering in order to deliver consistent streaming to your UI components.
+
+Neuron ships with a first-party Typescript module that brings this capability in your frontend.
+
+Install the module with:
+
+```shellscript
+npm install @neuron-core/streaming
+```
+
+Check out the dedicated documentation to integrate it in your frontend: [https://www.npmjs.com/package/@neuron-core/streaming](https://www.npmjs.com/package/@neuron-core/streaming)
+
+{% hint style="warning" %}
+Use the skill **`/neuron-streaming`** to give your coding assistant all the details on how to build this itnegration.
+{% endhint %}
+
+### RedisChannel
+
+`RedisChannel` publishes the segment on a Redis Pub/Sub channel, the usual fan-out between a worker running the agent and the process holding the client's connection (an SSE endpoint, a websocket server). It needs `ext-redis` and a connected `Redis` client.
+
+```php
+use NeuronAI\Agent\Adapter\AgentChunkAdapter;
+use NeuronAI\Workflow\Streaming\Channel\RedisChannel;
+use NeuronAI\Workflow\Streaming\Channel\StreamingChannelInterface;
+use Redis;
+
+class MyAgent extends Agent
+{
+    ...
+    
+    protected function streamAdapter(): ?StreamAdapterInterface
+    {
+        return new AGUIAdapter($this->getThreadId());
+    }
+    
+    protected function channel(): StreamingChannelInterface
+    {
+        return new RedisChannel(
+            client: new Redis(...), 
+            channel: "chat:{$threadId}",
+        );
+    }
+}
+```
+
+#### Redis consumer
+
+With channels your agent  sends streamed chunks to the specified redis queue. So now your app need a way to listen for these chunks and forward the stream to the frontend.&#x20;
+
+`RedisChannelReader` reads what `RedisChannel` publishes. An agent that started before it subscribed, raises `ChannelReadException`, as does silence past its timeout. Redis delivers one publisher's messages in order and `RedisChannel` never fragments, so it needs no reordering or reassembly.
+
+```php
+(new RedisChannelReader(new Redis(...), 'chat:{$threadId}'))
+    ->listen(function (ProtocolEvent $event): void {
+        echo SSEEncoder::frame($event);
+        if (ob_get_level() > 0) {
+            ob_flush();
+        }
+        flush();
+    });
+```
+
+{% hint style="warning" %}
+Use **`/neuron-streaming`** skill or framework specific skills **`/neuron-laravel-integration`** , **`/neuron-symfony-integration`**.
+{% endhint %}
+
+### Channel errors never break the run
+
+A Channel talks to external systems, and external systems fail. A Redis server can be down, a socket can be closed. The framework protects the run from this: every call to the Channel is guarded. If your Channel throws an exception, the workflow catches it, reports it as a `ChannelError` event through the observability system, and continues the run as if nothing happened.
+
+This means the AI work is never lost because a delivery transport had a problem. The chat history remains the source of truth. The live stream is only a convenience on top of it, and a client that missed some chunks can always reload the final result from history.
+
+If your transport needs a real policy for repeated failures, for example stop trying after ten errors, put that logic inside your Channel implementation, because only the Channel knows what a failure means for its own transport.
+
+### Custom Channels
+
+A Channel is any class that implements `ChannelInterface`. It has four methods. One receives the streamed items, and three tell you how the run ended:
+
+```php
+namespace NeuronAI\Workflow\Channel;
+
+interface StreamingChannelInterface
+{
+    /** 
+     * A protocol event produced by the stream adapter, in stream order. 
+     */
+    public function send(ProtocolEvent $event): void;
+
+    /**
+     * Run segment ended with one or more active interrupt requests.
+     */
+    public function interrupted(WorkflowState $state): void;
+
+    /** Run segment ended cleanly. */
+    public function completed(WorkflowState $state, string $workflowId): void;
+
+    /**
+     * Run segment died on an unhandled throwable. Notification only — the
+     * exception propagates to the caller regardless.
+     */
+    public function failed(Throwable $exception, string $workflowId): void;
+}
+```
+
+Every run ends with exactly one of the three terminal calls: `suspended()`, `completed()`, or `failed()`. This is important for user interfaces. If a run fails and you have no error signal, the user is left with a spinner that never stops. With `failed()` your frontend always receives a clear end signal and can recover, for example by reloading the chat history.
+
+Two details are good to know. The `failed()` method is a notification only: the exception still reaches the code that called `chat()`.&#x20;
+
+Here is an example of a `LogChannel`:
+
+```php
+use NeuronAI\Workflow\Channel\ChannelInterface;
+use NeuronAI\Workflow\Interrupt\InterruptRequest;
+use NeuronAI\Workflow\WorkflowState;
+
+class LogChannel implements ChannelInterface
+{
+    public function __construct(protected LoggerInterface $log)
+    {
+    }
+
+    public function send(ProtocolEvent $item): void
+    {
+        $this->log->debug(json_encode($item));
+    }
+
+    public function interrupted(InterruptRequest $request, string $runId): void
+    {
+        $this->log->debug("interrupted: {$runId}");
+    }
+
+    public function completed(WorkflowState $state, string $runId): void
+    {
+        $this->log->debug("completed: {$runId}");
+    }
+
+    public function failed(Throwable $exception, string $runId): void
+    {
+        $this->log->debug("failed: {$runId} ({$exception->getMessage()})");
+    }
+}
+```
+
+And attach it like any other channel:
+
+```php
+$agent->setChannel(new LogChannel(new Logger(__DIR__ . '/storage/workflow.log')));
+```

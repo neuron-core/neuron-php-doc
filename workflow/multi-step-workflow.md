@@ -71,6 +71,7 @@ namespace App\Neuron;
 
 use NeuronAI\Workflow\Node;
 use NeuronAI\Workflow\StartEvent;
+use NeuronAI\Workflow\WorkflowResources;
 use App\Neuron\FirstEvent;
 
 class InitialNode extends Node
@@ -78,8 +79,11 @@ class InitialNode extends Node
     /**
      * Gets the "StartEvent" and returns "FirstEvent"
      */
-    public function __invoke(StartEvent $event, WorkflowState $state): FirstEvent
-    {
+    public function __invoke(
+        StartEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): FirstEvent {
         echo "\n- Handling StartEvent";
         
         return new FirstEvent("InitialNode complete");
@@ -109,8 +113,11 @@ class NodeOne extends Node
     /**
      * Takes "FirstEvent" as input and returns "SecondEvent"
      */
-    public function __invoke(FirstEvent $event, WorkflowState $state): SecondEvent
-    {
+    public function __invoke(
+        FirstEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): SecondEvent {
         echo "\n- ".$event->firstMsg;
         
         return new SecondEvent("NodeOne complete");
@@ -140,8 +147,11 @@ class NodeTwo extends Node
     /**
      * Takes "SecondEvent" as input and returns "StopEvent"
      */
-    public function __invoke(SecondEvent $event, WorkflowState $state): StopEvent
-    {
+    public function __invoke(
+        SecondEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): StopEvent {
         echo "\n- ".$event->secondMsg;
         
         echo "\n- NodeTwo complete";
@@ -156,18 +166,18 @@ Define the Workflow attaching the nodes:
 ```php
 use NeuronAI\Workflow\Workflow;
 
-$handler = Workflow::make()
+$workflow = Workflow::make()
+    ->setWorkflowId('wk_id')
     ->addNodes([
         new InitialNode(),
         new NodeOne(),
         new NodeTwo(),
-    ])
-    ->init();
+    ]);
 
 /*
  * Run the workflow
  */
-$handler->run();
+$workflow->run();
 ```
 
 The full output will be:

@@ -7,43 +7,20 @@ metaLinks:
 
 # Interruption
 
-### What it is
+Neuron's interruption pattern lets a Workflow pause execution and wait for external input — a human decision, or an event from another system — and resume later, even in a different process, hours or days after.
 
-Neuron's interruption pattern provides a built-in _human-in-the-loop_ mechanism that allows\
-workflows to pause execution and wait for external input before resuming.
+In this major version the mental model rests on one rule:
 
-At its core, interruptions are implemented through the abstract `InterruptRequest` class, a framework primitive that developers can extend to create custom interruption experiences tailored to their\
-application's specific needs. The framework includes an `ApprovalRequest` as a built-in implementation covering the most common use case of approving actions (such as tool calls), but the architecture is intentionally flexible: any workflow node or middleware can trigger an interruption, and the persistence layer ensures state is preserved across the pause/resume cycle, making it suitable for long-running processes that require human decision points at any stage.
+> **A pause sends data&#x20;**_**out**_**&#x20;of a node. A resume brings data&#x20;**_**back in**_**.**
 
-If the built-in `ApprovalRequest` doesn't fit with your use case, you are free to create your custom interrutpion request to create a specific UI experience.
-
-Here's how it works:
-
-**Interruption Points**: Any node in your Workflow can request an interruption by specifying the data it want to present to the human. This could be a simple yes/no decision, an alert, or any structured data.
-
-**State Preservation**: When an interruption happens, Neuron automatically saves the complete state of your Workflow. Your Workflow essentially goes to sleep, waiting for human input.
-
-**Resume**: Once a human responde to the interruption request, the Workflow wakes up exactly from the node it left off. No data is lost, no context is forgotten.
-
-**External Feedback Integration**: The edited interruption request is injected into the interrupted node to be continue its execution receiving the human feedback.
-
-### Video Introduction
-
-We know that Interruption flow is a quite advanced feature. Even with all the documentation below it may not be easy to grasp all aspects of this architecture. We're happy to link you below to an introductory video made by our community member [Amitav Roy](https://www.linkedin.com/in/royamitav/).
-
-It might give you some additional information that, combined with the documentation, can help you understand how to implement your use cases.
-
-{% embed url="https://www.youtube.com/watch?v=jjEBjTRDLZE" %}
+* **Outbound — `InterruptRequest`**: the description of the pause. A node constructs it to tell the outside world _what it is waiting for_ (actions to approve, an event name, content to review). It is immutable, and it is never handed back into the workflow.
+* **Inbound — the payload array**: the answer that satisfies the pause. A plain, serialization-safe `array` delivered via `resume(payload: [...])`. The interrupted node receives it as the **return value** of the suspend call.
 
 ### How it works
 
-When you call for an interruption, the Workflow doesn't simply stop, it preserves its entire state, and waits for guidance before proceeding. This allows you to creates a hybrid intelligence system where AI handles the computational heavy lifting while humans contribute to strategic oversight, and decision-making.
-
-The simplest way to ask for an interruption is calling the `interrupt()` method inside a node, providing an interruption request. Here is an example using the built-in `ApprovalRequest`:
+An AI workflow often needs to stop mid-flight, typically to ask a human for approval before acting, without keeping a PHP process alive while the human decides. To pause, a node calls `interrupt()`: the workflow stops traversal, persists its progress, and returns normally to the caller with the state marked as interrupted.
 
 ```php
-<?php
-
 namespace App\Neuron;
 
 use NeuronAI\Workflow\Events\Event;
@@ -52,312 +29,361 @@ use NeuronAI\Workflow\Interrupt\ApprovalRequest;
 use NeuronAI\Workflow\Node;
 use NeuronAI\Workflow\WorkflowState;
 
-class InterruptionNode extends Node
+class ApprovalNode extends Node
 {
-    public function __invoke(InputEvent $event, WorkflowState $state): OutputEvent
-    {
-        // Interrupt the workflow and wait for the feedback.
-        $humanResponse = $this->interrupt(
+    public function __invoke(
+        PurchaseEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): Event {
+        // Suspend the workflow, carrying the request OUTBOUND.
+        $payload = $this->interrupt(
             new ApprovalRequest(
-                message: 'Should I continue?'
+                message: 'Do you approve this purchase?',
                 actions: [
-                    new Action('delete_file', 'Delete File', 'Delete /var/log/old.txt'),
+                    new Action(
+                        id: 'purchase_1',
+                        name: 'Purchase',
+                        description: "Buy {$event->item} for {$event->price}$",
+                    ),
                 ],
             )
         );
-    
-        $action = $humanResponse->getAction('delete_file');
-    
-        if ($action->isApproved()) {
-            $state->set('is_sufficient', true);
-            $state->set('user_feedback', $action->feedback);
-            return new OutputEvent();
+
+        // Code below this line runs ONLY on resume.
+        // $payload is the INBOUND answer delivered by resume() — your node interprets it.
+        if (($payload['purchase_1'] ?? null) === 'approve') {
+            return new PurchaseApprovedEvent();
         }
-        
-        $state->set('is_sufficient', false);
-        return new InputEvent();
+
+        return new PurchaseRejectedEvent();
     }
 }
 ```
 
-You can eventually implement your custom interruption request to pass the information you need for the human interaction. You will be able to catch this data later, outside of the workflow so you can inform the user for feedback.
+The lifecycle:
 
-When the Workflow will be resumed it will restart from the same node it was interrupted, and the `$feedback` variable will receive the human's response data.
+1. **Request** — the node builds an `InterruptRequest` describing the pause and calls `interrupt()`.
+2. **Suspend** — the executor stops traversal, persists the workflow's steps, and marks the returned state as interrupted. The request travels outbound on the state for your application to render.
+3. **Decision** — your application presents the request to a human and collects the answer.
+4. **Resume** — you call `resume($payload)` on a workflow rebuilt with the same `runId`. Traversal replays: completed nodes are skipped, and the interrupted node re-runs with the payload injected — `interrupt()` returns it instead of suspending again.
 
-The `InterruptRequest` follows a **request-response pattern** where:
+#### The Persistence layer
 
-1. **Request Phase**: A workflow node identifies actions requiring human approval and creates an `InterruptRequest` containing details of those actions
-2. **Pause Phase**: The workflow throws a `WorkflowInterrupt` exception, preserving the entire execution context
-3. **Decision Phase**: The application presents actions to users, who approve, reject, or edit each action
-4. **Resume Phase**: The workflow resumes with user decisions, continuing execution based on the feedback
-
-This design ensures workflow can safely pause at any point, persist its state, and resume exactly where it left off, even across different sessions.
-
-### Custom Interruption Request
-
-The `InterruptRequest` is the central component of Neuron's human-in-the-loop (HITL) pattern, designed to pause workflow execution and request human approval or input for specific actions. It provides a structured, type-safe approach to building interactive AI workflows.
-
-You can create your own implementation and feed it into the interrupt method.
+Suspend & resume works by **replay**: every node executes as a durable step, and completed steps are persisted so a resumed run can skip straight to the interrupted node. That requires a persistence backend. Without one, there is nothing to resume from.
 
 ```php
-class ContentReviewInterrupt extends InterruptRequest
+use NeuronAI\Workflow\Persistence\FilePersistence;
+use NeuronAI\Workflow\Persistence\PersistenceInterface;
+use NeuronAI\Workflow\Workflow;
+
+class MyWorkflow extends Workflow
 {
-    public function __construct(
-        protected string $message,
-        protected string $content
-    ) {
-        parent::__construct($message)
+    ...
+    
+    protected function persistence(): PersistenceInterface
+    {
+        return new FilePersistence(__DIR__);
+        // or: new DatabasePersistence($pdo)
+        // or: EloquentPersistence for Laravel apps
+    }
+}
+```
+
+The default `InMemoryPersistence` supports suspend & resume **within the same process** (useful in tests); use `FilePersistence`, `DatabasePersistence`, or `EloquentPersistence` when the resume happens in a later request or a background worker.
+
+The request is fire-and-forget. The `InterruptRequest` itself is not persisted, only an "interrupted" flag is stored per step. On resume the node re-executes and rebuilds the request deterministically (replay-by-rerun).
+
+Two consequences:
+
+* You may safely put live object instances in a custom request, nothing is ever serialized.
+* If your application needs to show "what is this run waiting for?" later, store the request yourself at suspend time (see below), the framework hands it to you through the returned state.
+
+### Catching the interruption
+
+After a suspend, your application has to detect that the workflow paused, show the request to a human, and keep a handle to come back later. Since `run()` returns normally, this is a plain check on the returned state: `isInterrupted()` tells you the workflow paused, `getInterruptRequest()` gives you the outbound request to render, and the `runId` is the resume token.
+
+```php
+use NeuronAI\Workflow\Persistence\FilePersistence;
+use NeuronAI\Workflow\Persistence\PersistenceInterface;
+use NeuronAI\Workflow\Workflow;
+
+class MyWorkflow extends Workflow
+{
+    protected function nodes(): array
+    {
+        return [
+            new FirstNode(),
+            new ApprovalNode(),
+            new FinalNode(),
+        ];
     }
     
+    protected function persistence(): PersistenceInterface
+    {
+        return new FilePersistence(__DIR__);
+    }
+}
+
+// Run the workflow
+$state = $workflow->setWorkflowId('wk_id')->run();
+
+// Check if it was interrupted
+if ($state->isInterrupted()) {
+    $request = $state->getInterruptRequest();  // the OUTBOUND request — render it
+    $runId = $workflow->getRunId();            // the resume token — store it
+
+    // e.g. store it for your UI, along with the resume token
+    $stmt = $pdo->prepare("INSERT INTO pending_approvals (run_id, request) VALUES (?, ?)");
+    $stmt->execute([$runId, json_encode($request)]);
+}
+```
+
+Every `InterruptRequest` is `JsonSerializable`, so `json_encode($request)` gives your frontend everything it needs to render the pause.
+
+#### Resuming
+
+Once you have the human's answer, rebuild the workflow with the **same `runId`** , and deliver the inbound payload. You never rebuild or pass back the request — the payload alone is the answer. `resume()` takes no step identifier: the framework finds the interrupted step by replaying.
+
+```php
+// A new process, a new HTTP request — hours later.
+$workflow = Workflow::make(runId: $runId)->setWorkflowId('wk_id');
+
+// The inbound payload — a plain array with the answer to the pause.
+$finalState = $workflow->resume(['purchase_1' => 'approve']);
+```
+
+If the workflow suspends again downstream (multiple approval points), the returned state is interrupted again and the cycle repeats with the same `runId`.
+
+### Conditional interruption
+
+Use `interruptIf()` to suspend only when a condition holds. The condition can be a boolean or a callback; when it doesn't hold, the method returns `null` and execution continues.
+
+```php
+$payload = $this->interruptIf(
+    $order->total > 1000,
+    new ApprovalRequest(
+        message: 'High-value order — approval required.',
+        actions: [new Action('order_1', 'Approve order', "Total: {$order->total}$")],
+    )
+);
+
+// Or evaluate lazily
+$payload = $this->interruptIf(
+    fn (): bool => $state->get('confidence', 1.0) < 0.5,
+    new ApprovalRequest(/* ... */)
+);
+```
+
+### Waiting for an external event
+
+Sometimes the answer doesn't come from a human but from another system, a payment webhook, a document upload, a callback from a third-party API. For this case `awaitEvent()` suspends the workflow until an event with the given name is delivered. It's sugar over `interrupt()` with a built-in `WaitForEventRequest`, so no custom class is needed.
+
+```php
+class WaitForPaymentNode extends Node
+{
+    public function __invoke(
+        OrderCreatedEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): Event {
+        // Suspend until 'payment.confirmed' is delivered.
+        $payment = $this->awaitEvent('payment.confirmed');
+
+        $state->set('transaction_id', $payment['transaction_id']);
+        return new OrderPaidEvent();
+    }
+}
+```
+
+Delivering the event is just a resume from wherever the event lands in your application — typically a webhook controller:
+
+```php
+// Your webhook controller, when the payment provider calls back:
+$workflow = OrderWorkflow::make(runId: $order->workflow_run_id)
+    ->setPersistence($persistence);
+
+$workflow->signal('payment.confirmed', ['transaction_id' => $webhook['tx_id']])->run();
+```
+
+The event name on the request is what your application uses to route the right event to the right run. The framework doesn't dispatch events itself; your code decides which suspended `runId` an incoming event belongs to.
+
+### Custom interruption request
+
+The built-in `ApprovalRequest` models approve/reject decisions on a list of actions. When your pause needs a different shape — say, a human editing generated content before it's saved — subclass an existing request type and add the outbound context your UI needs. Extend `WaitForEventRequest` (a human answer is an external event delivered to the workflow); you specialize the payload, not the pause category.
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Workflow\Interrupt\WaitForEventRequest;
+
+class ContentReviewRequest extends WaitForEventRequest
+{
+    public const EVENT_NAME = 'content.review';
+    
+    public function __construct(
+        protected string $message,
+        protected string $content,
+        ?DateTimeImmutable $expiresAt = null,
+    ) {
+        parent::__construct(self::EVENT_NAME, $expiresAt);
+    }
+
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
     public function getContent(): string
     {
         return $this->content;
     }
-    
+
     public function jsonSerialize(): array
     {
         return [
-            'message' => $this->message,
+            'type' => $this->type(),
+            'note' => $this->note,
             'content' => $this->content,
         ];
     }
-    
-    public static function fromArray(array $data)
-    {
-        return new static($data['message'], $data['content']);
-    }
 }
 ```
 
-Use it for your interrutpion use case:
+The request only describes the pause and can be used to carry infomration your application need to present the interrupted process to the user.&#x20;
+
+Use it in a node. The answer will come back as a payload:
 
 ```php
-class InterruptionNode extends Node
+class ContentReviewNode extends Node
 {
-    public function __invoke(InputEvent $event, WorkflowState $state): OutputEvent
-    {
-        // Generate an article
-        $response = ContentCreatorAgent::make()
+    public function __invoke(
+        DraftEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): Event {
+        // Generate the article once, durably (see memoize below).
+        $draft = $this->memoize('draft', fn (): string => ContentCreatorAgent::make()
             ->chat(new UserMessage($event->prompt))
-            ->getMessage();
-    
-        // Interrupt the workflow and wait for the feedback.
-        $reviewRequest = $this->interrupt(
-            new ContentReviewInterrupt(
-                message: 'This is the new article. Review the content before saving it to the database.'
-                $response->getContent()
-            )
+            ->getMessage()
+            ->getContent());
+
+        // Suspend: send the draft OUT for review.
+        $payload = $this->interrupt(
+            new ContentReviewRequest('Review this article before publishing.', $draft)
         );
-        
-        // Save the content of the updated interrupt request
-        $state->set('content', $reviewRequest->getContent());
-        
-        return new InputEvent();
+
+        // Resume: the edited text comes back IN as the payload.
+        $state->set('content', $payload['edited_content']);
+
+        return new PublishEvent();
     }
 }
 ```
 
-### Catching the interruption
-
-To be able to interrupt and resume a Workflow (also Agent and RAG) you need to provide the persistence layer when creating the Workflow instance:
+And on the application side:
 
 ```php
-$workflow = new WorkflowAgent(new FilePersistence(__DIR__));
-```
+$state = $workflow->setWorkflowId('wk_id')->run();
 
-When a node call for an interruption the Workflow fires a special type of exception represented by the **`WorkflowInterrupt`** class. You can catch this exception to manage the interruption request.
-
-```php
-$workflow = new WorkflowAgent(
-    new FilePersistence(__DIR__),
-);
-
-try {
-    return $workflow->init()->run();
-} catch (WorkflowInterrupt $interrupt) {
-    $request = $interrupt->getRequest();
-    $workflowId = $interrupt->getWorkflowId();
-    
-    /*
-    * You can store the request as a json object
-    * along with the resume token, and ask the user for a feedback.
-    */
-    $pdo->prepare("INSERT INTO interruption_requests (resume_token, request) VALUES (?, ?)");
-    $pdo->execute([
-        $workflowId,
-        json_encode($request),
-    ]);
+if ($state->isInterrupted()) {
+    /** @var ContentReviewRequest $request */
+    $request = $state->getInterruptRequest();
+    // render $request->getContent() in your editor UI...
 }
+
+// Later, deliver the edited text as the payload:
+$finalState = $workflow->signal(
+    event: ContentReviewRequest::EVENT_NAME, 
+    payload: ['edited_content' => $editedText]
+)->run();
 ```
 
-Use the information in the `$request` object to guide the human in providing a feedback. Once you finally have the user's feedback you can resume the workflow passing the interruption request to the `init()` method. Remeber to use the same `workflowId` you got during interruption.
+### Consuming the feedback
+
+The answer to the interruption is the **payload** you pass to the run() method, and the primary way to consume it is the return value of the suspend verb, exactly where the pause happened:
 
 ```php
-$workflow = new WorkflowAgent(
-    new FilePersistence(__DIR__),
-    $workflowId // <- Use the same ID you got during interrutpion
-);
-
-$request = ContentReviewInterrupt::fromArray($data);
-
-// Resume the Workflow passing the processed request as the feedback
-$result = $workflow->init($request)->run();
-
-// Get the final answer
-echo $result->get('content');
+$payload = $this->interrupt(new ContentReviewRequest(...));
+// resuming: $payload is the delivered answer
 ```
 
-You can take a look at the script below as an example of this process:
-
-{% @github-files/github-code-block url="https://github.com/inspector-apm/neuron-ai/blob/main/examples/workflow/workflow-interrupt.php" %}
-
-### Checkpointing
-
-When the Workflow is resumed it restarts the execution from the node where it was interrupted. The node will be re-executed entirely including the code present before the interruption.
-
-If you need to call for an interruption not at the beginning of the node, but after performing other operations, you can use checkpoints to save the result of previous statements to be used when the node is resumed. Here is an example:
+If you need to branch _before_ reaching the interrupt call — for example to skip pre-interrupt logic entirely on resume — the node exposes the resume context directly:
 
 ```php
-<?php
+public function __invoke(
+    InputEvent $event, 
+    WorkflowState $state,
+    WorkflowResources $resources
+): Event {
+    // isResuming() is true when this node run was triggered by resume():
+    // the inbound payload has been injected and is readable up front.
+    if ($this->isResuming()) {
+        $payload = $this->getResumePayload();
 
-namespace App\Neuron;
-
-use NeuronAI\Workflow\Node;
-use NeuronAI\Workflow\WorkflowState;
-
-class InterruptionNode extends Node
-{
-    public function __invoke(InputEvent $event, WorkflowState $state): OutputEvent
-    {
-        // The result of this code block is saved and returned when the workflow is resumed.
-        $sentiment = $this->checkpoint('agent-1', function () {
-            return MyAgent::make()->structured(
-                new UserMessage(...),
-                SentimentResult::class
-            );
-        });
-        
-        // Interrupt the workflow and wait for the feedback.
-        if ($sentiment->isNegative()) {
-            $feedback = $this->interrupt(
-                new ApprovalRequest(
-                    message: 'Should I continue?'
-                    actions: [
-                        new Action('review_id', 'Answer review', $sentiment->content),
-                    ],
-                )
-            );
-            
-            if ($feedback->getAction('review_id')->isApproved()) {
-                $state->set('is_sufficient', true);
-                $state->set('user_feedback', $feedback->getAction('review_id')->feedback);
-                return new OutputEvent();
-            }
-        }
-        
-        $state->set('is_sufficient', false);
-        return new InputEvent();
-    }
-}
-```
-
-The checkpoint method accepts two arguments:
-
-* The **name** of the checkpoint must be unique in the node;
-* A **Closure** to wrap the code whose result you want to save.
-
-When the node is executed, the checkpoint method saves the result of the Closure in case of an interruption. When the node is executed again after the interruption, it can reach the interruption point with the exact same state of the previous run to get the external feedback.
-
-### Consume The Interruption Feedback
-
-You can also consume the external feedback somewhere in your code other than where you call the `interrupt()` method.
-
-The `consumeResumeRequest()` method allows you get the value of the external feedback or null if the node is simply running and not awakening:
-
-```php
-<?php
-
-namespace App\Neuron;
-
-use NeuronAI\Workflow\Node;
-use NeuronAI\Workflow\WorkflowState;
-
-class InterruptionNode extends Node
-{
-    public function __invoke(InputEvent $event, WorkflowState $state): OutputEvent
-    {
-        // Ask for the final resume request
-        $feedback = $this->consumeResumeRequest();
-    
-        // If the request has not thare yet jump to the interruption
-        if ($feedback !== null && $feedback->getAction('review_id')->isApproved()) {
+        if (($payload['review_1'] ?? null) === 'approve') {
             $state->set('is_sufficient', true);
-            $state->set('user_feedback', $feedback->getAction('review_id')->feedback);
             return new OutputEvent();
         }
-        
-        $this->interrupt(
-            new ApprovalRequest(
-                message: 'Should I continue?'
-                actions: [
-                    new Action('review_id', 'Answer review', $state->get('review')),
-                ],
-            )
-        );
-        
-        $state->set('is_sufficient', false);
-        return new InputEvent();
     }
+
+    // First pass (or rejected): do the work and suspend.
+    $this->interrupt(
+        new ApprovalRequest(
+            message: 'Should I continue?',
+            actions: [new Action('review_1', 'Answer review', $state->get('review'))],
+        )
+    );
+
+    return new InputEvent(); // unreachable on first pass; reached on rejected resume
 }
 ```
 
-This allows you to apply condition at the beginning of the node based on the given feedback.
+In most nodes you won't need this: wrap the pre-interrupt work in `memoize()` and let the node re-run. The memoized work is recalled, not repeated, and the linear `interrupt()`-returns-the-answer style stays readable.
 
-### Conditional Interruption
+### Durable steps and `memoize()`
 
-You can also use `interruptIf()` as an helper to evaluate a conditional interruption:
+When a workflow resumes, the interrupted node **re-executes from the top** — any statement before the interrupt call would run again, re-billing an LLM call or re-sending an email. Two layers of durability protect you.
+
+**Between nodes, you get durability for free.** Every node executes as a durable step: completed steps are persisted and skipped on replay. Nodes _before_ the interrupted one never re-run.
+
+**Inside a node, use `memoize()`.** It executes a closure and persists its return value mid-node, before the node returns. When the node re-executes — on resume, or after a crash — the recorded value is returned _without_ running the closure again.
 
 ```php
-<?php
-
-namespace App\Neuron;
-
-use NeuronAI\Workflow\Node;
-use NeuronAI\Workflow\WorkflowState;
-
-class InterruptionNode extends Node
+class SentimentNode extends Node
 {
-    public function __invoke(InputEvent $event, WorkflowState $state): OutputEvent
-    {
-        // Conditional interruption
-        $this->interruptIf(
-            $state->get('is_sufficient') == true, 
-            new ApprovalRequest(
-                message: 'Should I continue?'
-                actions: [
-                    new Action('review_id', 'Answer review', $state->get('review')),
-                ],
-            )
-        );
-        
-        // Or use a callback to evaluate the condition
-        $this->interruptIf(
-            fn() => $state->get('is_sufficient', false), 
-            new ApprovalRequest(
-                message: 'Should I continue?'
-                actions: [
-                    new Action('review_id', 'Answer review', $state->get('review')),
-                ],
-            )
-        );
-        
-        return new InputEvent();
+    public function __invoke(
+        ReviewEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): Event {
+        // Runs at most once, even across resume/crash replays of this node.
+        $sentiment = $this->memoize('sentiment', fn (): SentimentResult => MyAgent::make()
+            ->structured(new UserMessage($event->review), SentimentResult::class));
+
+        if ($sentiment->isNegative()) {
+            $payload = $this->interrupt(
+                new ApprovalRequest(
+                    message: 'Negative review detected. Should I answer it?',
+                    actions: [new Action('review_1', 'Answer review', $sentiment->content)],
+                )
+            );
+
+            // On resume the memoized $sentiment was recalled instantly above,
+            // and interrupt() returned the answer here.
+            if (($payload['review_1'] ?? null) === 'approve') {
+                return new AnswerReviewEvent();
+            }
+        }
+
+        return new SkipReviewEvent();
     }
 }
 ```
 
-### Monitoring & Debugging
+`memoize()` takes:
 
-Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
+* a **name**, unique within the node (the framework scopes it to the specific node execution automatically);
+* a **Closure** wrapping the work whose result must survive a re-run.
 
-{% embed url="https://docs.inspector.dev/guides/neuron-ai" %}
+> `checkpoint()` from the previous major version is deprecated and now delegates to `memoize()`. Unlike the old in-memory checkpoint, `memoize()` is **durable**: the value is persisted, so it also protects against crashes — not just interruptions.

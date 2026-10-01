@@ -26,46 +26,50 @@ npx skills add ./vendor/neuron-core/neuron-ai/skills
 
 Once installed, the skill will be available to Claude Code automatically. The skilla are installed as a symlink, so it will automatically stay up to date when you update Neuron via composer.
 
-#### Cursor <a href="#cursor" id="cursor"></a>
+#### Cursor  <a href="#cursor" id="cursor"></a>
 
 In [Cursor](https://cursor.sh/), you can add the skill directory to your project's documentation sources via **Cursor Settings > Features > Docs**. Point it to the `vendor/neuron-core/neuron-ai/skills` .
 
-#### Other AI Tools <a href="#other-ai-tools" id="other-ai-tools"></a>
+#### Other AI Tools  <a href="#other-ai-tools" id="other-ai-tools"></a>
 
 Most AI coding assistants that support the Agent Skills specification can use this skill. Check your tool's documentation for how to add custom skills or documentation sources.
 
 ### Using Skills
 
 {% hint style="info" %}
-Type **`/neuron-*`** in your prompt.
+Type **`/neuron-*`** in your terminal.
 {% endhint %}
 
 Available skills:
 
 ```bash
 vendor/neuron-core/neuron-ai/skills/
-        └── neuron-agent-builder/
+        └── neuron-agent/
             └── SKILL.md
-        └── neuron-debugger/
+        └── neuron-evaluation/
             └── SKILL.md
-        └── neuron-evaluation-engineer/
+        └── neuron-frontend-integration/
             └── SKILL.md
-        └── neuron-rag-specialist/
+        └── neuron-monitoring/
+            └── SKILL.md
+        └── neuron-rag/
+            └── SKILL.md
+        └── neuron-streaming/
             └── SKILL.md
         └── neuron-structured-output/
             └── SKILL.md
-        └── neuron-tool-creator/
+        └── neuron-test/
             └── SKILL.md
-        └── neuron-test-engineer/
+        └── neuron-tool/
             └── SKILL.md
-        └── neuron-tool-creator/
+        └── neuron-tool-approval/
             └── SKILL.md
-        └── neuron-workflow-architect/
+        └── neuron-workflow/
             └── SKILL.md
 
 ```
 
-## MCP Server
+## Documentation as MCP Server
 
 This documentation is also available and searchable as a Model Context Protocol (MCP) server. This allows AI assistants to access Neuron AI documentation content directly. The MCP server is available at: [https://docs.neuron-ai.dev/\~gitbook/mcp](https://docs.neuron-ai.dev/~gitbook/mcp)
 

@@ -7,9 +7,17 @@ metaLinks:
 
 # Agent
 
+{% hint style="warning" %}
+#### Coding Agent Skill
+
+Use **`/neuron-agent`** to teach your coding agent how to implement an agent using Neuron AI components.
+
+[AI-Assisted Development](../overview/agentic-development.md)
+{% endhint %}
+
 ### Introduction
 
-You can create your agent by extending the `NeuronAI\Agent\Agent` class to inherit the main features of the framework and create fully functional agents.
+You can create your agent by extending the `NeuronAI\Agent\Agent` class to inherit the main features of the framework and create fully functional agents.&#x20;
 
 This class automatically manages some mechanisms for you such as memory, tools and function calls. We will go into more detail about these aspects in the following sections.
 
@@ -51,7 +59,9 @@ class YouTubeAgent extends Agent
     
     protected function instructions(): string
     {
-        return "You are a friendly AI Agent created with Neuron AI framework.";
+        return new SystemMessage(
+            "You are a friendly AI Agent created with Neuron framework."
+        );
     }
     
     /**
@@ -74,7 +84,7 @@ Many of the applications you build with Neuron will contain multiple steps with 
 
 The minimum implementation requires assigning an AI Provider that will be the language and reasoning engine of your agent.
 
-The only required method to implement is `provider()` returning the instance of the provider you want to use. Let's assume it's Anthropic.
+The only required method to implement is `provider()`  returning the instance of the provider you want to use. Let's assume it's Anthropic.
 
 ```php
 <?php
@@ -82,7 +92,7 @@ The only required method to implement is `provider()` returning the instance of 
 namespace App\Neuron;
 
 use NeuronAI\Agent\Agent;
-use NeuronAI\Agent\SystemPrompt;
+use NeuronAI\Chat\Message\SystemMessage;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\Anthropic\Anthropic;
 
@@ -97,9 +107,11 @@ class YouTubeAgent extends Agent
         );
     }
     
-    protected function instructions(): string
+    protected function instructions(): SystemMessage
     {
-        return "You are a friendly AI Agent created with Neuron AI framework.";
+        return new SystemMessage(
+            "You are a friendly AI Agent created with Neuron framework."
+        );
     }
     
     /**
@@ -126,7 +138,7 @@ That’s why they are defined by an internal method, and stay encapsulated into 
 namespace App\Neuron;
 
 use NeuronAI\Agent\Agent;
-use NeuronAI\Agent\SystemPrompt;
+use NeuronAI\Chat\Messages\SystemMessage;;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\Anthropic\Anthropic;
 
@@ -141,15 +153,15 @@ class YouTubeAgent extends Agent
         );
     }
     
-    protected function instructions(): string
+    protected function instructions(): SystemMessage
     {
-        return <<<TEXT
+        return new SystemMessage(<<<TEXT
             You are an AI Agent specialized in writing YouTube video summaries.
             Get the url of a YouTube video, or ask the user to provide one.
             Use the tools you have available to retrieve the transcription of the video.
             Write a summary in a paragraph without using lists. Use just fluent text.
             After the summary add a list of three sentences as the three most important take away from the video.
-        TEXT;
+        TEXT);
     }
     
     /**
@@ -162,6 +174,64 @@ class YouTubeAgent extends Agent
 }
 ```
 
+The SystemMessage class can be also populated with multiple content blocks SystemContent in order to dynamically inject contents into the system instructions:
+
+```php
+class YouTubeAgent extends Agent
+{
+    protected function provider(): AIProviderInterface
+    {
+        ...
+    }
+    
+    protected function instructions(): SystemMessage
+    {
+        $message = new SystemMessage(<<<TEXT
+            You are an AI Agent specialized in writing YouTube video summaries.
+            Get the url of a YouTube video, or ask the user to provide one.
+            Use the tools you have available to retrieve the transcription of the video.
+        TEXT);
+        
+        $message->addContent(
+            new SystemContent("Write a summary in a paragraph without using lists. Use just fluent text.")
+        );
+        
+        $message->addContent(
+            new SystemContent("After the summary add a list of three sentences as the three most important take away from the video.")
+        );
+                
+        return $message;
+    }
+}
+```
+
+If you are willing to use the system prompt caching for providers like Anthropic, you can call the cache() method on each content part you want to cache:
+
+```php
+$message->addContent(
+    new SystemContent("...")->cache()
+);
+```
+
+Or call the cache method on the `SystemMessage` to cache the entire system prompt:
+
+```php
+    protected function instructions(): SystemMessage
+    {
+        $message = new SystemMessage(...);
+        
+        $message->addContent(
+            new SystemContent(...)
+        );
+        
+        $message->addContent(
+            new SystemContent(...)
+        );
+                
+        return $message->cache(); // <- Cache everything
+    }
+```
+
 ### Talk to the Agent
 
 We are ready to test how the agent responds to our message based on the new instructions.
@@ -170,6 +240,7 @@ We are ready to test how the agent responds to our message based on the new inst
 use NeuronAI\Chat\Messages\UserMessage;
 
 $message = YouTubeAgent::make()
+    ->setThreadId('chat_id')
     ->chat(new UserMessage("Who are you?"))
     ->getMessage();
     
@@ -184,8 +255,8 @@ Since the Agent is an extension of the Workflow, instead of getting the last mod
 
 ```php
 $state = MyAgent::make()
-    ->chat(new UserMessage("Who are you?"))
-    ->run();
+    ->setThreadId('chat_id')
+    ->chat(new UserMessage("Who are you?"));
 
 // $state is an instance of NeuronAI\Agent\AgentState class
 $state->getMessage();
@@ -199,8 +270,8 @@ The agent state stores the list of all messages between the agent and the provid
 
 ```php
 $state = MyAgent::make()
-    ->chat(new UserMessage("Who are you?"))
-    ->run();
+    ->setThreadId('chat_id')
+    ->chat(new UserMessage("Who are you?"));
 
 // Access the list of steps during the execution
 foreach($state->getSteps() as $message) {
@@ -217,8 +288,8 @@ If the agent decide to use tools during the execution, the agent state keeps tra
 
 ```php
 $state = MyAgent::make()
-    ->chat(new UserMessage("Who are you?"))
-    ->run();
+    ->setThreadId('chat_id')
+    ->chat(new UserMessage("Who are you?"));
 
 // Access the tool runs map
 foreach($state->getToolRuns() as $toolName => $runs) {
@@ -242,6 +313,7 @@ In alternative to the single class encapsulation you can also instruct the agent
 
 ```php
 $agent = Agent::make()
+    ->setThreadId('chat_id')
     ->setAiProvider(
         new Anthropic(
             key: 'ANTHROPIC_API_KEY',
@@ -249,7 +321,7 @@ $agent = Agent::make()
         )
     )
     ->setInstructions(
-        "New system instructions..."
+        new SystemMessage(...)
     )
     ->addTool([...]);
     

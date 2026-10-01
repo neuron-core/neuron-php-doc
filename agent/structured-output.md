@@ -7,13 +7,12 @@ metaLinks:
 
 # Structured Output
 
-{% hint style="info" %}
-### PREREQUISITES
+{% hint style="warning" %}
+#### Coding Agent Skill
 
-This guide assumes you are already familiar with the following concepts:
+Use **`/neuron-structured-output`** to teach your coding agent how to leverage Neuron capabilities ton reliably extract structured output from the LLM response.
 
-* [Agent](agent.md)
-* [Tool & Function Call](tools.md)
+[AI-Assisted Development](../overview/agentic-development.md)
 {% endhint %}
 
 There are many use cases where we need Agents to understand natural language, but output in a _structured format_. One common use-case is extracting data from text to insert into a database or use with some other downstream system. This guide covers how Neuron allows you to enforce structured outputs from the agent.
@@ -55,10 +54,12 @@ Neuron generates the corresponding JSON schema from the PHP object to instruct t
 use NeuronAI\Chat\Messages\UserMessage;
 
 // Talk to the agent requiring the structured output
-$person = MyAgent::make()->structured(
-    new UserMessage("I'm John and I like pizza!"),
-    Person::class
-);
+$person = MyAgent::make()
+    ->setThreadId('chat_id')
+    ->structured(
+        new UserMessage("I'm John and I like pizza!"),
+        Person::class
+    );
 
 echo $person->name.' like '.$person->preference;
 // John like pizza
@@ -84,6 +85,7 @@ class MyAgent extends Agent
 
 // Always use the structured method if you want to get structured output
 $person = MyAgent::make()
+    ->setThreadId('chat_id')
     ->structured(new UserMessage("I'm John and I like pizza"));
 
 echo $person->name.' like '.$person->preference;
@@ -92,7 +94,7 @@ echo $person->name.' like '.$person->preference;
 
 ### Control the output generation
 
-Neuron requires you to define two layers of rules to create the structured output class.
+Neuron requires you to define two layers of rules to create the structured output class.&#x20;
 
 The first is the `SchemaProperty` attribute that allows you to control the JSON schema sent to the LLM to understand the required data format.
 
@@ -131,6 +133,50 @@ class Person
 }
 ```
 
+Using `SchemaProperty` as a pure PHP attribute doesn't allow you to inject dynamic information, like from a database, because attributes are outside of regular code blocks. Imagine you need the schema descriptions to follow the user's locale, something a PHP attribute can't do.
+
+Your DTO class can implements the `SchemaPropertiesInterface` and provide the static method `schemaProperties()`. Keyed by property name, values are `SchemaProperty` objects built at runtime:
+
+```php
+use NeuronAI\StructuredOutput\SchemaPropertiesInterface;
+use NeuronAI\StructuredOutput\SchemaProperty;
+
+class Invoice implements SchemaPropertiesInterface
+{
+    public string $customerName;
+
+    public float $total;
+
+    // Attributes still work — this one has no runtime entry, so the attribute is used
+    #[SchemaProperty(description: 'The invoice number in the format INV-XXXX')]
+    public string $number;
+
+    #[SchemaProperty(anyOf: [InvoiceLine::class])]
+    public array $lines;
+
+    public static function schemaProperties(): array
+    {
+        return [
+            // Any runtime PHP is available here: translators, config, env...
+            'customerName' => new SchemaProperty(
+                description: translate('invoice.customer_name'), // get translation
+                required: true,
+            ),
+            'total' => new SchemaProperty(
+                description: 'Total amount in '.config('billing.currency'), // From app config
+                min: 0,
+            ),
+        ];
+    }
+}
+```
+
+The resolution rules:
+
+* A property listed in `schemaProperties()` uses that `SchemaProperty` object (it **replaces** the attribute entirely for that property — the two aren't merged field by field).
+* A property not listed falls back to its `#[SchemaProperty]` attribute, if any.
+* Everything works identically to attributes downstream, including `anyOf` — so you could even build the class list for a polymorphic array dynamically, and the `Deserializer` will hydrate it correctl
+
 ### Nested Class
 
 You can construct complex output structures using other PHP objects as a property type. Following the example of a the `Person` class we can add the `address` property typed as another structured class.
@@ -167,7 +213,7 @@ class Person
 }
 ```
 
-In the `Address` definition we require only the street and zip code properties, and allow city to be empty.
+In the `Address` definition we require only the street and zip code properties, and allow city to be empty.&#x20;
 
 ```php
 <?php
@@ -288,7 +334,7 @@ class Report
 
 Since the LLM are not perfectly deterministic it's mandatory to have a retry mechanism in place if something is missing in the LLM response.
 
-By default Neuron extracts and validates the data from the LLM response and if there is one or more validation errors automatically retry the request just one more time informing the LLM about what went wrong and for what properties.
+By default Neuron extracts and validates the data from the LLM response and if there is one or more validation errors automatically retry the request just one more time informing the LLM about what went wrong and for what properties.&#x20;
 
 You can eventually customize the number of times the agent must retry to get a correct answer from the LLM:
 
@@ -317,16 +363,6 @@ $person = MyAgent::make()->structured(
 Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
 
 {% embed url="https://docs.inspector.dev/guides/neuron-ai" %}
-
-<figure><img src="../.gitbook/assets/Neuron Structured Observability.png" alt=""><figcaption></figcaption></figure>
-
-Each segment bring its own debug information to follow the agent execution in real time:
-
-<figure><img src="../.gitbook/assets/neuron structured segment.png" alt=""><figcaption></figcaption></figure>
-
-{% hint style="info" %}
-Learn how to enable [**observability**](observability.md) in the next section.
-{% endhint %}
 
 ## Validation Rules
 
@@ -556,7 +592,7 @@ use NeuronAI\StructuredOutput\Validation\Rules\Url;
 
 class Person
 {
-    #[Url]
+    #[Url(schemes: ['http', 'https'])]
     public string $website;
 }
 ```
@@ -586,7 +622,7 @@ namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\IpAddress;
 
-class Spec
+class Person
 {
     #[IpAddress]
     public string $ip;
@@ -595,15 +631,18 @@ class Spec
 
 ### #\[ArrayOf]
 
-The property under validation must be an array that contains all of the given type of object.
+The property under validation must be an array that contains all of the given type of object. Notice that you also need to add the doc-block in order to make the agent able to instance the correct class. Use the full class namespace in the doc-block.
 
 ```php
 namespace App\Neuron\Output;
 
 use NeuronAI\StructuredOutput\Validation\Rules\ArrayOf;
 
-class Post
+class Person
 {
+    /**
+     * @var \App\Neuron\Output\Tag[]
+     */
     #[ArrayOf(Tag::class)]
     public array $tags;
 }

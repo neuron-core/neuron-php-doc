@@ -22,7 +22,7 @@ class ProgressEvent implements Event
 }
 ```
 
-We'll take our example MyWorkflow with multiple nodes from the previous tutorial and modify the nodes to stream upadtes instead of echoing output directly.
+We'll take our example MyWorkflow with multiple nodes from the previous tutorial and modify the nodes  to stream upadtes instead of echoing output directly.
 
 {% hint style="warning" %}
 **Notice**: To stream events from node you need to add `\Generator` as additional return type of the `__invoke` method.
@@ -31,14 +31,18 @@ We'll take our example MyWorkflow with multiple nodes from the previous tutorial
 ```php
 namespace App\Neuron;
 
+use Generator;
 use NeuronAI\Workflow\Node;
 use NeuronAI\Workflow\StartEvent;
 use NeuronAI\Workflow\StopEvent;
 
 class InitialNode extends Node
 {
-    public function __invoke(StartEvent $event, WorkflowState $state): \Generator|FirstEvent
-    {
+    public function __invoke(
+        StartEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): Generator|FirstEvent {
         yield new ProgressEvent("Handling StartEvent");
         
         return new FirstEvent("InitialNode complete");
@@ -47,8 +51,11 @@ class InitialNode extends Node
 
 class NodeOne extends Node
 {
-    public function __invoke(FirstEvent $event, WorkflowState $state): \Generator|SecondEvent
-    {
+    public function __invoke(
+        FirstEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): Generator|SecondEvent {
         yield new ProgressEvent($event->firstMsg);
         
         return new SecondEvent("NodeOne complete");
@@ -57,8 +64,11 @@ class NodeOne extends Node
 
 class NodeTwo extends Node
 {
-    public function __invoke(SecondEvent$event, WorkflowState $state): \Generator|StopEvent
-    {
+    public function __invoke(
+        SecondEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): Generator|StopEvent {
         yield new ProgressEvent($event->secondMsg);
         
         yield new ProgressEvent("NodeTwo complete");
@@ -73,15 +83,15 @@ class NodeTwo extends Node
 To actually get this output, we need to start the workflow and listen for the events, like this:
 
 ```php
-$handler = Workflow::make()
+$workflow = Workflow::make()
+    ->setWorkflowId('wk_id')
     ->addNodes([
         new InitialNode(),
         new NodeOne(),
         new NodeTwo(),
-    ])
-    ->init();
+    ]);
 
-$stream = $handler->events();
+$stream = $workflow->events();
 
 foreach ($stream as $event) {
     if ($event instanceof ProgressEvent) {
@@ -112,12 +122,14 @@ Running Agents inside nodes is one of the most common use case working with work
 ```php
 class InitialNode extends Node
 {
-    public function __invoke(StartEvent $event, WorkflowState $state): \Generator|FirstEvent
-    {
+    public function __invoke(
+        StartEvent $event, 
+        WorkflowState $state,
+        WorkflowResources $resources
+    ): Generator|FirstEvent {
         // Run an agent with streaming
         yield from Agent::make()
-            ->stream(new UserMessage($state->get('prompt')))
-            ->events();
+            ->stream(new UserMessage($state->get('prompt')));
         
         return new FirstEvent("InitialNode complete");
     }
@@ -127,9 +139,9 @@ class InitialNode extends Node
 To get this output you can listen for workflow events as usual:
 
 ```php
-$handler = MyWorkflow::make()->init();
+$workflow = MyWorkflow::make()->setWorkflowId('wk_id');
 
-foreach ($handler->events() as $event) {
+foreach ($workflow->events() as $event) {
     echo match($event::class) {
         TextChunk::class => "\n- ".$event->content,
         ...

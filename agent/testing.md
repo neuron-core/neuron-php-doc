@@ -7,6 +7,14 @@ metaLinks:
 
 # Testing
 
+{% hint style="warning" %}
+#### Coding Agent Skill
+
+Use **`/neuron-test`** to teach your coding agent how to implement unit tests for your agentic entities.
+
+[AI-Assisted Development](../overview/agentic-development.md)
+{% endhint %}
+
 When you test an agent, you don't want every test run to make real API calls to OpenAI, Anthropic, or any other provider. Real calls are slow, cost money, and return different results every time, making your tests flaky and expensive. The same applies to RAG agents: you don't want to spin up a vector database or call an embeddings API just to verify your agent's logic.
 
 Neuron ships with drop-in test doubles that solve this problem. `FakeAIProvider` replaces the AI provider, `FakeEmbeddingsProvider` replaces the embeddings provider, and `FakeVectorStore` replaces the vector store. They return predetermined responses, never hit the network, and record every interaction so you can assert exactly what your agent did.
