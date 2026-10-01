@@ -1,5 +1,8 @@
 ---
 description: The key breakthrough is that interruption isn't a bug, it's a feature.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/workflow/human-in-the-loop
 ---
 
 # Interruption

@@ -1,5 +1,8 @@
 ---
 description: Easily implement LLM interactions with built-in memory and tool usage.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/agent
 ---
 
 # Agent

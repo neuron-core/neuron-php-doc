@@ -1,5 +1,8 @@
 ---
 description: Connect providers specialized in processing Audio to Text and vice-versa
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/providers/audio
 ---
 
 # Audio

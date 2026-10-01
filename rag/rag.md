@@ -2,6 +2,9 @@
 description: >-
   Step by Step guide on how to implement Retrieval-Augmented Generation with
   Neuron framework.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/rag/rag
 ---
 
 # Getting Started

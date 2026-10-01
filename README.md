@@ -1,5 +1,8 @@
 ---
 description: Learn what Neuron is and what you can do with it.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/overview/readme
 ---
 
 # Introduction

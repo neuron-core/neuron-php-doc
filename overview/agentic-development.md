@@ -1,5 +1,9 @@
 ---
 description: Connect the documentation to coding agents for AI Assisted Development
+metaLinks:
+  alternates:
+    - >-
+      https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/overview/agentic-development
 ---
 
 # AI-Assisted Development

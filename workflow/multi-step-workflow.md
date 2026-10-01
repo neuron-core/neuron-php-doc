@@ -2,6 +2,10 @@
 description: >-
   Learn how to handle complex execution flow orchestrating the execution of
   multiple nodes
+metaLinks:
+  alternates:
+    - >-
+      https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/workflow/multi-step-workflow
 ---
 
 # Multi Step Workflow

@@ -2,6 +2,9 @@
 description: >-
   Step by step instructions on how to install Neuron in your application and
   create an Agent.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/overview/getting-started
 ---
 
 # Installation

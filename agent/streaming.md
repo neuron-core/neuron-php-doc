@@ -1,5 +1,8 @@
 ---
 description: Presenting AI response to your user in real-time.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/streaming
 ---
 
 # Streaming

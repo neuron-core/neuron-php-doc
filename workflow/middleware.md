@@ -1,14 +1,17 @@
 ---
 description: Control and customize agent execution at every step
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/workflow/middleware
 ---
 
 # Middleware
 
 ### What is a Middleware
 
-Middleware provides a way to hook the workflow execution and therefore also Agent and RAG, since they too are workflows.&#x20;
+Middleware provides a way to hook the workflow execution and therefore also Agent and RAG, since they too are workflows.
 
-The core Workflow execution involves calling nodes based on the events returned by other nodes. Middleware exposes hooks to step inside `before` and `after`  the execution of nodes:
+The core Workflow execution involves calling nodes based on the events returned by other nodes. Middleware exposes hooks to step inside `before` and `after` the execution of nodes:
 
 <figure><img src="../.gitbook/assets/middleware.png" alt=""><figcaption></figcaption></figure>
 
@@ -18,7 +21,7 @@ The core Workflow execution involves calling nodes based on the events returned 
 
 ### Creating Middleware
 
-You can use the command below to create a middleware  class:
+You can use the command below to create a middleware class:
 
 {% tabs %}
 {% tab title="Unix" %}
@@ -63,7 +66,7 @@ class CustomMiddleware implements WorkflowMiddleware
 
 ### Registering Middleware
 
-If you would like to assign middleware to specific nodes, you may override the  `middleware` method when defining the workflow:
+If you would like to assign middleware to specific nodes, you may override the `middleware` method when defining the workflow:
 
 ```php
 class MyWorkflow extends Workflow

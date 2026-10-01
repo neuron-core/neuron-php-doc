@@ -1,5 +1,8 @@
 ---
 description: Run workflows in an async context.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/async
 ---
 
 # Async
@@ -14,7 +17,7 @@ Neuron supports asynchronous execution and parallel processing of agents, enabli
 
 ### Concurrency vs Async
 
-Concurrency is the high-level concept of managing tasks, which can involve multiple threads/cores (parallelism), whereas async uses event loops/callbacks to let tasks run out of order, perfect for I/O-bound work without waiting.&#x20;
+Concurrency is the high-level concept of managing tasks, which can involve multiple threads/cores (parallelism), whereas async uses event loops/callbacks to let tasks run out of order, perfect for I/O-bound work without waiting.
 
 Concurrency is about managing many things in parallel, while asynchrony is how a single thread can manage many I/O operations efficiently.
 
@@ -22,21 +25,21 @@ AI Agents are typically considered I/O heavy software because the HTTP request t
 
 ## Concurrency
 
-You don't need any particular feature from Neuron to run multiple agents in parallel. You only need your PHP application to be able to span multiple processes to handle the execution of multiple agents at the same time. You can do this with PHP libraries like [spatie/fork](https://github.com/spatie/fork), or framework specific solutions like [Laravel concurrency](https://laravel.com/docs/master/concurrency), or [Symfony process](https://symfony.com/doc/current/components/process.html).&#x20;
+You don't need any particular feature from Neuron to run multiple agents in parallel. You only need your PHP application to be able to span multiple processes to handle the execution of multiple agents at the same time. You can do this with PHP libraries like [spatie/fork](https://github.com/spatie/fork), or framework specific solutions like [Laravel concurrency](https://laravel.com/docs/master/concurrency), or [Symfony process](https://symfony.com/doc/current/components/process.html).
 
-Async is a different story.&#x20;
+Async is a different story.
 
 ## Async
 
 Previous versions of Neuron were strongly coupled with the Guzzle client to perform HTTP requests for model inference on the providers API. Guzzle is a great tool, but it's not compatible with truly async event loops like those provided by frameworks like [Amp](https://github.com/amphp/amp) and [ReactPHP](https://github.com/reactphp/reactphp).
 
-In order to run agents in such async environments it's required to integrate with their specific implementations. That's why Neuron ships with a simple `HttpClientInterface` that can be implemented to allow AI providers run HTTP requests smoothly in an async loop.&#x20;
+In order to run agents in such async environments it's required to integrate with their specific implementations. That's why Neuron ships with a simple `HttpClientInterface` that can be implemented to allow AI providers run HTTP requests smoothly in an async loop.
 
 By default the framework uses the Guzzle implementation, but you can inject custom HTTP clients based on your needs. We already provide implementations for the most common async framework.
 
 ### AmpHttpClient
 
-If you want to use Amp to run multiple async agent requests you need to install  `amphp/http-client` .
+If you want to use Amp to run multiple async agent requests you need to install `amphp/http-client` .
 
 ```bash
 composer require amphp/http-client

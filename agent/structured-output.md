@@ -1,5 +1,8 @@
 ---
 description: Enforce the Agent output based on the provided schema.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/structured-output
 ---
 
 # Structured Output

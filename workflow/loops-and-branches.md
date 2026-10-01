@@ -1,3 +1,9 @@
+---
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/workflow/loops-and-branches
+---
+
 # Loops & Branches
 
 Workflow makes branching and looping logic easy to implement thanks to its event driven design. Once you understand how nodes belong to events, it's easy to start imagining how you can create loops and branching, which is just deciding which event should be returned in an "if condition" or whatever logic.
@@ -8,7 +14,7 @@ To create a loop, simply return the entry event of a previous node as the exit e
 
 Take a look at the example below. The `NodeOne` can have two events as return type, `FirstEvent` and `SecondEvent`. If the node returns FirstEvent it will cause another execution of the same node because FirstEvent is handled by itself, creating a loop.
 
-If the node returns `SecondEvent` it will finally move forward the execution to another node.&#x20;
+If the node returns `SecondEvent` it will finally move forward the execution to another node.
 
 ```php
 class NodeOne extends Node
@@ -53,7 +59,7 @@ $state = Workflow::make()
 */
 ```
 
-You can create a loop from any node to any other node in the workflow by defining the appropriate input event and return events of the invoke method.&#x20;
+You can create a loop from any node to any other node in the workflow by defining the appropriate input event and return events of the invoke method.
 
 <figure><img src="../.gitbook/assets/workflow-loop.png" alt=""><figcaption></figcaption></figure>
 
@@ -61,7 +67,7 @@ The `NodeOne` can even return a StartEvent to jump right to the first node of th
 
 ## Branches
 
-As you've already seen, you can conditionally return different events from a node to define custom execution flows. In this section we'll see an example of a workflow that branches into two different paths.&#x20;
+As you've already seen, you can conditionally return different events from a node to define custom execution flows. In this section we'll see an example of a workflow that branches into two different paths.
 
 First let's create some custom events:
 
@@ -127,7 +133,7 @@ You can of course combine branches and loops in any order to fulfill the needs o
 
 <figure><img src="../.gitbook/assets/parallel-branch.png" alt=""><figcaption></figcaption></figure>
 
-When you want to call the execution of multiple branches in parallel, you need to return the special event `ParallelEvent`  from your node.
+When you want to call the execution of multiple branches in parallel, you need to return the special event `ParallelEvent` from your node.
 
 ```php
 use NeuronAI\Workflow\Events\ParallelEvent;
@@ -228,7 +234,7 @@ As usual the merge node can stop the workflow, or return other events moving the
 
 ### Branch State Isolation
 
-One detail worth noting: **each branch gets an isolated copy of the workflow state**. They start with the same snapshot, but mutations inside a branch don't propagate to sibling branches or to the main workflow. The only way to pass data back is through the `StopEvent` result.&#x20;
+One detail worth noting: **each branch gets an isolated copy of the workflow state**. They start with the same snapshot, but mutations inside a branch don't propagate to sibling branches or to the main workflow. The only way to pass data back is through the `StopEvent` result.
 
 This is intentional, it avoids a whole class of concurrency bugs where branches step on each other's state.
 

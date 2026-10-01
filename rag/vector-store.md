@@ -2,6 +2,9 @@
 description: >-
   Neuron provides you with ready to use components to connect your agent to
   vector databases.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/rag/vector-store
 ---
 
 # Vector Store

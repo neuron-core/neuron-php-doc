@@ -1,5 +1,8 @@
 ---
 description: Evaluating the output of your agentic system
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/evaluation
 ---
 
 # Evals

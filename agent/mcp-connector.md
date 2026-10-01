@@ -2,6 +2,9 @@
 description: >-
   Connect the tools provided by Model Context Protocol (MCP) servers to your
   agent.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/mcp-connector
 ---
 
 # MCP
@@ -38,11 +41,11 @@ class MyAgent extends Agent
 }
 ```
 
-You should create an `McpConnector` instance for each MCP server you want to interact to.&#x20;
+You should create an `McpConnector` instance for each MCP server you want to interact to.
 
 Neuron automatically discovers the tools exposed by the server and connects them to your agent.
 
-When the agent decides to run a tool, Neuron will generate the appropriate request to call the tool on the MCP servers and return the result to the LLM to continue the task.  It feels exactly like with your own defined tools, but you can access a huge archive of predefined actions your agent can perform with just one line of code.
+When the agent decides to run a tool, Neuron will generate the appropriate request to call the tool on the MCP servers and return the result to the LLM to continue the task. It feels exactly like with your own defined tools, but you can access a huge archive of predefined actions your agent can perform with just one line of code.
 
 ### Local MCP Server
 
@@ -131,7 +134,7 @@ Many of the applications you build with Neuron will contain multiple steps with 
 
 ## Filter the list of tools
 
-During connection with complex MCP servers they can includes tools that could lead to undesired behavior in specific contexts. The `exclude()` and `only()` methods address this challenge elegantly, allowing developers to connect with comprehensive MCP servers while maintaining fine-grained control over available capabilities you want to provide to your agent.&#x20;
+During connection with complex MCP servers they can includes tools that could lead to undesired behavior in specific contexts. The `exclude()` and `only()` methods address this challenge elegantly, allowing developers to connect with comprehensive MCP servers while maintaining fine-grained control over available capabilities you want to provide to your agent.
 
 This becomes particularly useful when working with specialized agents that need specific capabilities but you want to reduce the probability of an agent mistake, and reduce tokens consumption.
 

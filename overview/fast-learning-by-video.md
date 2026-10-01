@@ -3,6 +3,10 @@ description: >-
   Position yourself in the AI Agent era with our extensive tutorials and
   technical insights into Neuron capabilities. Learn from practical examples and
   real-world use cases.
+metaLinks:
+  alternates:
+    - >-
+      https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/overview/fast-learning-by-video
 ---
 
 # Video Tutorials
@@ -79,10 +83,10 @@ Neuron changes all that.
 
 As a PHP developer, you now stand at a unique intersection of technologies. For years, PHP has powered a substantial portion of the web. Now, with Neuron AI, you have the ability to infuse these web experiences with artificial intelligence, without leaving the language and ecosystem you know and love.
 
-Neuron is the most advanced PHP framework to build AI driven applications. This book serves as both an introduction to AI Agents concepts for developers and a comprehensive guide to Neuron PHP agentic framework.&#x20;
+Neuron is the most advanced PHP framework to build AI driven applications. This book serves as both an introduction to AI Agents concepts for developers and a comprehensive guide to Neuron PHP agentic framework.
 
 Get it from [Amazon](https://www.amazon.com/dp/B0F1YX8KJB) or [Google Play](https://play.google.com/store/books/details?pcampaignid=books_read_action\&id=agJPEQAAQBAJ\&pli=1).
 
-<a href="https://www.amazon.com/dp/B0F1YX8KJB" class="button secondary" data-icon="amazon">Amazon Books</a>&#x20;
+<a href="https://www.amazon.com/dp/B0F1YX8KJB" class="button secondary" data-icon="amazon">Amazon Books</a>
 
 <a href="https://play.google.com/store/books/details?pcampaignid=books_read_action&#x26;id=agJPEQAAQBAJ&#x26;pli=1" class="button secondary" data-icon="google">Google Play</a>

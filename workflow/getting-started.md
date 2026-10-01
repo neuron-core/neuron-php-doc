@@ -1,5 +1,8 @@
 ---
 description: Guide, moderate, and control your multi-agent system with human-in-the-loop.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/workflow/getting-started
 ---
 
 # Getting Started
@@ -8,9 +11,9 @@ description: Guide, moderate, and control your multi-agent system with human-in-
 
 A workflow is an event-driven, node-based way to control the execution flow of an application.
 
-Your application is divided into sections called Nodes which are triggered by Events, and themselves return Events which trigger further nodes. By combining nodes and events, you can create arbitrarily complex flows that encapsulate logic and make your application more maintainable and easier to understand.&#x20;
+Your application is divided into sections called Nodes which are triggered by Events, and themselves return Events which trigger further nodes. By combining nodes and events, you can create arbitrarily complex flows that encapsulate logic and make your application more maintainable and easier to understand.
 
-A node can be anything from a single line of code to a complex agent. It can have arbitrary inputs and outputs, which are passed around by Events. It's like n8n at code level.&#x20;
+A node can be anything from a single line of code to a complex agent. It can have arbitrary inputs and outputs, which are passed around by Events. It's like n8n at code level.
 
 <figure><img src="../.gitbook/assets/workflow-single-step.png" alt=""><figcaption></figcaption></figure>
 
@@ -18,7 +21,7 @@ Workflow allows you to use all the Neuron components like AI providers, embeddin
 
 Agent and RAG classes are workflows themselves. They represent ready to use implementations of the most common patterns when it comes to tool calls, retrieval, structured output, etc. Workflow allows you to program your agentic system completely from scratch. Agent and RAG can be used inside a Workflow to complete tasks as any other component if you need to perform AI operations during execution.
 
-What makes Neuron Workflow special is its **streaming** and **interruption** capabilities. This means your multi agent  system can stream updates directly to clients, pause mid-process, ask for human input, wait for feedback, and then continue exactly where it left off – even if that's hours or days later.
+What makes Neuron Workflow special is its **streaming** and **interruption** capabilities. This means your multi agent system can stream updates directly to clients, pause mid-process, ask for human input, wait for feedback, and then continue exactly where it left off – even if that's hours or days later.
 
 ### Why Use Workflows Instead of Regular Scripts?
 

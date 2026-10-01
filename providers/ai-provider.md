@@ -1,5 +1,8 @@
 ---
 description: Interact with LLM providers or extend the framework to implement new ones.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/providers/ai-provider
 ---
 
 # AI Provider
@@ -590,7 +593,7 @@ Providers API occasionally experiences outages or rate limiting. Using the Route
 
 #### Routing logic control
 
-You can use routing logic like `RoundRobin` as a load balancer, `ContentRule` to route the request based on the content blocks inside the message (images, files, audio, video), or `DifficultyRule` to determine which model has the best capabilities to handle the incoming prompt.&#x20;
+You can use routing logic like `RoundRobin` as a load balancer, `ContentRule` to route the request based on the content blocks inside the message (images, files, audio, video), or `DifficultyRule` to determine which model has the best capabilities to handle the incoming prompt.
 
 First install the package:
 

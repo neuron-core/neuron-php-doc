@@ -1,5 +1,8 @@
 ---
 description: Integrate services to transform text into vectors for semantic search.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/rag/embeddings-provider
 ---
 
 # Embeddings Provider

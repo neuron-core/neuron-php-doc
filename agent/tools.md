@@ -2,6 +2,9 @@
 description: >-
   Give Agents the ability to interact with your application context and
   services.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/tools
 ---
 
 # Tools & Toolkits

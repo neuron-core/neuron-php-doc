@@ -1,5 +1,8 @@
 ---
 description: Monitor your AI Agents, RAGs, and Workflows in real-time.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/observability
 ---
 
 # Monitoring & Debugging

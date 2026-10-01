@@ -1,5 +1,8 @@
 ---
 description: Learn how to pass data around the workflow
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/workflow/managing-the-state
 ---
 
 # Managing the State
@@ -30,7 +33,7 @@ echo $finalState->get('message');
 
 In our examples so far, we have passed data from node to node using properties of custom events. This is a powerful way to pass data around, but it has limitations. For example, if you want to pass data between steps that are not directly connected, you need to pass the data through all the nodes in between. This can make your code harder to read and maintain.
 
-For this reasons we have the `WorkflowState` object available to every node in the workflow. To use it, the workflow inject the WorkflowState instance as the second argument of the node.&#x20;
+For this reasons we have the `WorkflowState` object available to every node in the workflow. To use it, the workflow inject the WorkflowState instance as the second argument of the node.
 
 ```php
 namespace App\Neuron;

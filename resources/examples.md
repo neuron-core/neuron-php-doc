@@ -2,6 +2,9 @@
 description: >-
   Overcome bottlenecks, and learn about the Workflow features through real code
   examples
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/resources/examples
 ---
 
 # Tips & Tricks
@@ -37,7 +40,7 @@ Instead of a flat 20-node array, break it into logical sections:
 }
 ```
 
-The spread operator (...) keeps the runtime behavior identical. It's still a flat array. But now the\
+The spread operator (...) keeps the runtime behavior identical. It's still a flat array. But now the\
 `nodes()` method reads like a table of contents, and each group is self-documenting.
 
 ## Example Projects
@@ -97,7 +100,7 @@ Stack Used:
 
 ### Laravel Travel Agent
 
-This project demonstrates how to integrate multi-agent workflows in a Laravel application using Neuron PHP AI framework.&#x20;
+This project demonstrates how to integrate multi-agent workflows in a Laravel application using Neuron PHP AI framework.
 
 Stack Used:
 

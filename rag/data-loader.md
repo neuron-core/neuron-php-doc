@@ -1,5 +1,8 @@
 ---
 description: Learn how to create data loader pipelines to feed your RAG applications.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/rag/data-loader
 ---
 
 # Data loader
@@ -14,7 +17,7 @@ To build a structured AI application you need the ability to convert all the inf
 
 <figure><img src="../.gitbook/assets/neuron-ai-data-loader-rag.png" alt=""><figcaption></figcaption></figure>
 
-Neuron gives you several tools (data loaders) to simplify this process.&#x20;
+Neuron gives you several tools (data loaders) to simplify this process.
 
 ```php
 use App\Neuron\MyRAG;
@@ -30,7 +33,7 @@ Using the Neuron toolkit you can create data loading pipelines with the benefits
 
 ## FileDataLoader
 
-If you need to extract text from files the `FileDataLoader` allows you to process any simple text document.&#x20;
+If you need to extract text from files the `FileDataLoader` allows you to process any simple text document.
 
 ```php
 use NeuronAI\RAG\DataLoader\FileDataLoader;
@@ -109,7 +112,7 @@ foreach($documents as $document) {
 MyRAG::make()->addDocuments($documents);
 ```
 
-Once you have these custom fields in the vector store you can use hybrid search for databases that support this feature.&#x20;
+Once you have these custom fields in the vector store you can use hybrid search for databases that support this feature.
 
 {% hint style="info" %}
 Hybrid search allows you to narrow the scope of a semantic search query against records that match certain criteria on other document fields rather that compare only the vector embeddings. Explore the [Vector Store section](vector-store.md) to know which database support hybrid search.
@@ -129,7 +132,7 @@ $documents = FileDataLoader::for($directory)
     ->getDocuments();
 ```
 
-### &#x20;DelimiterTextSplitter (default)
+### DelimiterTextSplitter (default)
 
 This is the default splitter for all data loaders.
 
@@ -254,7 +257,7 @@ If `sourceType` and `sourceName` of the Documents are already present into the v
 
 ## Use standalone components
 
-In the examples below we used the RAG agent instance to process the final part of the ingestion pipeline: generate embeddings for document chunks, and store them into jthe vector database.&#x20;
+In the examples below we used the RAG agent instance to process the final part of the ingestion pipeline: generate embeddings for document chunks, and store them into jthe vector database.
 
 In alternative of take advantage of the RAG agent instance you can use the embedding provider and the vector store as standalone components. Remember that the vector store here must be same connected to the RAG agent.
 

@@ -1,5 +1,8 @@
 ---
 description: Interact with the agent execution flow to customize its behaviour.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/middleware
 ---
 
 # Middleware
@@ -14,7 +17,7 @@ Here is a simple schema of the workflow used to create the agent implementation:
 
 <figure><img src="../.gitbook/assets/NeuronAI.png" alt=""><figcaption></figcaption></figure>
 
-With this architecture in mind, you are free to use middleware to hook the  agent workflow, interruption to keep humans in the loop, or look below for a set of built-in components we provide for common use cases.
+With this architecture in mind, you are free to use middleware to hook the agent workflow, interruption to keep humans in the loop, or look below for a set of built-in components we provide for common use cases.
 
 ### Tool Approval (Human In The Loop)
 
@@ -110,7 +113,7 @@ Or refer to the full [workflow documentation](../workflow/human-in-the-loop.md).
 
 ### Conditional approval
 
-The example above it's a classic on/off approval flow. If a tool is listed in the `ToolApproval` middleware the agent will interrupt the execution, otherwise the tool will be executed as usual.&#x20;
+The example above it's a classic on/off approval flow. If a tool is listed in the `ToolApproval` middleware the agent will interrupt the execution, otherwise the tool will be executed as usual.
 
 The middleware also accepts a callback associated to tools, in order to define your custom approval condition. The callback receives the tool's instance and returns `true` if the tool requires approval, or `false` to skip the interruption and run the tool as it is.
 
@@ -150,7 +153,7 @@ class MyAgent extends Agent
 }
 ```
 
-In the exmple above we require the human approval only if the ticket costs more  than 100, otherwise the callback return false, that means no need for interruption.
+In the exmple above we require the human approval only if the ticket costs more than 100, otherwise the callback return false, that means no need for interruption.
 
 ### Context Summarization
 

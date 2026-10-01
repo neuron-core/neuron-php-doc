@@ -1,5 +1,8 @@
 ---
 description: Stream real -time updates during workflow execution
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/workflow/streaming
 ---
 
 # Streaming
@@ -19,7 +22,7 @@ class ProgressEvent implements Event
 }
 ```
 
-We'll take our example MyWorkflow with multiple nodes from the previous tutorial and modify the nodes  to stream upadtes instead of echoing output directly.
+We'll take our example MyWorkflow with multiple nodes from the previous tutorial and modify the nodes to stream upadtes instead of echoing output directly.
 
 {% hint style="warning" %}
 **Notice**: To stream events from node you need to add `\Generator` as additional return type of the `__invoke` method.

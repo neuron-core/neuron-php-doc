@@ -1,12 +1,15 @@
 ---
 description: Persist the Workflow State across executions.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/workflow/persistence
 ---
 
 # Persistence
 
 When we talk about persistence in Neuron, we're talking about the system's ability to capture and preserve the complete state of a running workflow at any moment. This includes:
 
-* **All variables and their current values**&#x20;
+* **All variables and their current values**
 * **The exact execution position** – which node is active, which have completed, which are waiting
 * **Context and metadata** – timestamps, user information, decision history
 * **Error states and retry counters** – so failures can be handled gracefully

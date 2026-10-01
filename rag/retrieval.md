@@ -1,5 +1,8 @@
 ---
 description: Implement custom retrieval strategies
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/rag/retrieval
 ---
 
 # Retrieval
@@ -63,7 +66,7 @@ If you are implementing custom workflow you can use retrieval as a standalone co
 
 ### Retrieval as a Tool
 
-Neuron provides you with a built-in `RetrievalTool` tool that enables AI agents to perform context retrieval from vector stores if the model think it needs more context to answer the current user question. It's built on top of the `RetrievalInterface` , making it possible to build agents with on-demand RAG (Retrieval Augmented Generation)&#x20;capabilities instead of the authomatic context injection provided by the RAG component.
+Neuron provides you with a built-in `RetrievalTool` tool that enables AI agents to perform context retrieval from vector stores if the model think it needs more context to answer the current user question. It's built on top of the `RetrievalInterface` , making it possible to build agents with on-demand RAG (Retrieval Augmented Generation) capabilities instead of the authomatic context injection provided by the RAG component.
 
 Here is an example using the built-in `SimilarityRetrieval`:
 

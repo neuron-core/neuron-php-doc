@@ -1,5 +1,8 @@
 ---
 description: Unified context unit across AI providers and LLMs.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/messages
 ---
 
 # Messages

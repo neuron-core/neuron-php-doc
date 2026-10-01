@@ -1,5 +1,8 @@
 ---
 description: Improve the RAG output by pre/post processing prompts and retrieval results.
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/rag/pre-post-processor
 ---
 
 # Pre/Post Processor
@@ -10,7 +13,7 @@ With RAG, you are performing a _semantic search_ across many text documents — 
 
 To ensure fast search times at scale, we typically use vector search — that is, we transform our text into vectors, place them all into a vector database, and compare their proximity to a query using a similarity algorithm (like cosine similarity).
 
-To achieve high quality responses from the RAG agent you can work on two parts of the retrieval process:&#x20;
+To achieve high quality responses from the RAG agent you can work on two parts of the retrieval process:
 
 1. Optimize the user prompt (_Pre-Processors_)
 2. Refine the search results gathered from the vector store (_Post-Processors_)
@@ -23,7 +26,7 @@ Consider the complexity hidden within seemingly simple queries. When someone ask
 
 ### Query Transformation
 
-The core of this pattern is to use an LLM to transform the original question into a more structured prompt that the main RAG agent can use to perform a more accurate and effective document retrieval from the vector store.&#x20;
+The core of this pattern is to use an LLM to transform the original question into a more structured prompt that the main RAG agent can use to perform a more accurate and effective document retrieval from the vector store.
 
 Working with Neuron you can pass the instance of the AI provider already attached to your agent:
 
@@ -87,7 +90,7 @@ The three core strategies implemented in the Neuron pre-processor are: rewriting
 
 T**he HyDE approach** represents perhaps the most sophisticated strategy, working backwards from the assumption that the best way to find relevant information is to first imagine what that information might look like. Instead of searching directly with the user's question, HyDE generates hypothetical documents that would ideally answer the query, then uses these generated documents as the basis for similarity searches. This approach is particularly powerful when dealing with abstract concepts or when the user's terminology doesn't closely match the vocabulary used in the source documents.
 
-## Post-Processors&#x20;
+## Post-Processors
 
 For vector search to work instead, we need vectors. These vectors are essentially compressions of the "meaning" behind some text into (typically) 768 or 1536-dimensional vectors. There is some information loss because we're compressing this information into a single vector.
 
@@ -103,7 +106,7 @@ Neuron allows you to define a list of post-processor components to pipe as many 
 
 ### Rerankers
 
-Reranking is one of the most popular post-process operations you can apply to the retrieved documents. A reranking service calculates a similarity score of each documents retrieved from the vector store with the input query.&#x20;
+Reranking is one of the most popular post-process operations you can apply to the retrieved documents. A reranking service calculates a similarity score of each documents retrieved from the vector store with the input query.
 
 We use this score to reorder the documents by relevance and take only the most useful.
 

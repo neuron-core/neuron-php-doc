@@ -1,5 +1,8 @@
 ---
 description: Fake components to help you test your AI powered system
+metaLinks:
+  alternates:
+    - https://app.gitbook.com/s/GHx4l2LknIex7vFIUg1R/agent/testing
 ---
 
 # Testing
