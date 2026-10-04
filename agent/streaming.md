@@ -453,7 +453,7 @@ MyAgent::make()
     ->stream(new UserMessage('Hi'));
 ```
 
-### PusherChannel
+### Pusher
 
 You can stream the Agent output to the frontend via Pusher, or Pusher compatible servers.
 
@@ -469,7 +469,7 @@ class MyAgent extends Agent
     
     protected function streamAdapter(): ?StreamAdapterInterface
     {
-        // Or specialized UI protocols adapters
+        // Or specialized UI protocol adapters
         return new AgentChunkAdapter();
     }
     
@@ -489,13 +489,64 @@ class MyAgent extends Agent
 
 **`batchSize`** instead allows you to define how many events must be collected before sending them in a single batch request. Higher values make the backend execution smoothly but can result in a scattered frontend experience. Lower values makes the frontend experience smoothly running more sending requests on the backend side.
 
+{% hint style="warning" %}
+Use **`/neuron-streaming`** skill or framework specific skills **`/neuron-laravel-integration`** , **`/neuron-symfony-integration`** to give your agent accurate instructions for this integration.
+{% endhint %}
+
 #### Partial Events
 
 Pusher caps an event at 10 KB; Reverb defaults to the same, Soketi to 100 KB, and `maxRequestBytes` (default `10_000`) tunes the ceiling.&#x20;
 
-To support streaming when your real-time server haa such a limit, an event that does not fit the max size - typically a tool result, or a message snapshot - is split into consecutive fragments. Furthermore servers do not guarantee that fragments arrive in order and never interleave. So the browser must be able to reconcile this fragmentation and ordering in order to deliver consistent streaming to your UI components.
+To support streaming when your real-time server has such a limit, an event that does not fit the max size - typically a tool call, tool result, or a message snapshot - is split into consecutive fragments. Furthermore servers do not guarantee that fragments arrive in order and never interleave. So the browser must be able to reconcile this fragmentation and ordering in order to deliver consistent streaming to your UI components.
 
-Neuron ships with a first-party Typescript module that brings this capability in your frontend.
+Neuron ships with a first-party Typescript module that brings this capability into your frontend.
+
+Install the module with:
+
+```shellscript
+npm install @neuron-core/streaming
+```
+
+Check out the dedicated documentation to integrate it in your frontend: [https://www.npmjs.com/package/@neuron-core/streaming](https://www.npmjs.com/package/@neuron-core/streaming)
+
+### Mercure
+
+You can stream the agent output to a Mercure Hub using SSE:
+
+```php
+use NeuronAI\Agent\Adapter\AgentChunkAdapter;
+use NeuronAI\Workflow\Streaming\Channel\PusherChannel;
+use NeuronAI\Workflow\Streaming\Channel\StreamingChannelInterface;
+use Pusher\Pusher;
+
+class MyAgent extends Agent
+{
+    ...
+    
+    protected function streamAdapter(): ?StreamAdapterInterface
+    {
+        // Or specialized UI protocol adapters
+        return new AgentChunkAdapter();
+    }
+    
+    protected function channel(): StreamingChannelInterface
+    {
+        return new MercureChannel(
+            hub: new Hub(...),
+            topic: 'thread:'.$this->getThreadId(),
+            maxRequestBytes: 1_048_576,
+            maxRequestsPerSecond: null,
+            private: true
+        );
+    }
+}
+```
+
+By default `maxRequestsPerSecond` is set to null, because self hosted instances doesn't have any rate-limit. If you use a managed cloud instance, they impose strict rate limits from one up to twenty requests per second based on your subscription plan.
+
+Once you configure the MercureChannel with the same restriction you have on the Mercure server the component automatically limits the pace of which it sends events, and eventually it split the event in multiple fragments if the size is over `maxRequestBytes` . The browser must be able to reconcile this fragmentation and ordering in order to deliver consistent streaming to your UI components.
+
+Neuron ships with a first-party Typescript module that brings this capability into your frontend.
 
 Install the module with:
 
@@ -506,10 +557,10 @@ npm install @neuron-core/streaming
 Check out the dedicated documentation to integrate it in your frontend: [https://www.npmjs.com/package/@neuron-core/streaming](https://www.npmjs.com/package/@neuron-core/streaming)
 
 {% hint style="warning" %}
-Use the skill **`/neuron-streaming`** to give your coding assistant all the details on how to build this itnegration.
+Use **`/neuron-streaming`** skill or framework specific skills **`/neuron-laravel-integration`** , **`/neuron-symfony-integration`** to give your agent accurate instructions for this integration.
 {% endhint %}
 
-### RedisChannel
+### Redis
 
 `RedisChannel` publishes the segment on a Redis Pub/Sub channel, the usual fan-out between a worker running the agent and the process holding the client's connection (an SSE endpoint, a websocket server). It needs `ext-redis` and a connected `Redis` client.
 
@@ -556,7 +607,7 @@ With channels your agent  sends streamed chunks to the specified redis queue. So
 ```
 
 {% hint style="warning" %}
-Use **`/neuron-streaming`** skill or framework specific skills **`/neuron-laravel-integration`** , **`/neuron-symfony-integration`**.
+Use **`/neuron-streaming`** skill or framework specific skills **`/neuron-laravel-integration`** , **`/neuron-symfony-integration`** to give your agent accurate instructions for this integration.
 {% endhint %}
 
 ### Channel errors never break the run
