@@ -855,6 +855,20 @@ class MyAgent extends Agent
 
 From an extensibility perspective, the toolkit system opens remarkable opportunities for community contribution and ecosystem growth. The consistent interface means that third-party developers can create domain-specific toolkits that integrate seamlessly with Neuron's architecture. A developer building agents for financial applications might create a FinancialToolkit that includes tools for currency conversion, interest calculation, and risk assessment. Similarly, a WebScrapingToolkit could package HTTP request tools, HTML parsing capabilities, and data extraction utilities into a single, reusable component.
 
+### Add Tools at runtime
+
+You can add one or more tools to a toolkit and the generated guidelines or the agent system instructions will cover them too. Be aware that filters act also on added tools.&#x20;
+
+```php
+// Add a tool
+MyToolkit::make()->add(new CustomTool());
+
+// This exclude CustomTool rom the toolkit
+MyToolkit::make()
+    ->add(new CustomTool())
+    ->only([AnotherTool::class]);
+```
+
 ## Available Toolkits
 
 Neuron ships with several built-in tools and toolkits that allows you to quickly equip your agents with many skills. You can use these tools individually or attach entire toolkits with a single line of code.
