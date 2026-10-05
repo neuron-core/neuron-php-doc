@@ -51,7 +51,7 @@ composer require inspector-apm/inspector-php
 
 Skills for coding agents have been completely rewritten and reorganized to reflect the improvements and new features of this new major version. We recommend to remove the skills directory inside your coding agent folder (e.g. `.claude`, `.agent`) and follow the installation guide again.
 
-<a class="button primary" data-icon="arrow-right-long">Agentic Skills</a>
+<a href="agentic-development.md" class="button primary" data-icon="arrow-right-long">Agentic Skills</a>
 
 ### Agent return type
 
@@ -59,7 +59,7 @@ In this new major version the Agent entity was subject to a substantial refactor
 
 The most important impact is the return type. The Agent return an instance of the `AgentState` that is an extension of the underlying `WorkflowState` with a couple of helper methods to keep as much as possible the external APIs seen by your application unchanged.
 
-The most impactful change is in the `stream()` method. Without the `AgentHandler` the method returns the generator directly.&#x20;
+The most impactful change is in the `stream()` method. Without the `AgentHandler` the method returns the generator directly.
 
 ```php
 foreach ($agent->stream(new UserMessage("Hello")) as $event) {
@@ -254,7 +254,7 @@ composer require guzzlehttp/guzzle
 
 `VectorStoreInterface` changed to support built-in filtering capabilities. Methods changed their name and signature. If you are implementing `VectorStoreInterface` by yourself you should migrate your implementation to the new contract.
 
-<a href="../rag/vector-store.md" class="button primary" data-icon="arrow-right-long">Vector Stores</a>&#x20;
+<a href="../rag/vector-store.md" class="button primary" data-icon="arrow-right-long">Vector Stores</a>
 
 ### Calculator Toolkit
 
@@ -279,7 +279,7 @@ We recommend to rely on the agentic upgrade process to move your Agent and histo
 
 ### Middleware Signature
 
-The Workflow engine allows you to declare `resources` you want to carry during execution that will not need to be saved during interruptions. Middleware receive resources too, so you can interact with these items during workflow execution. In an Agent for example, resources contains tools, agent instructions, and the chat history. Middleware methods now get an additional argument `$resources`.&#x20;
+The Workflow engine allows you to declare `resources` you want to carry during execution that will not need to be saved during interruptions. Middleware receive resources too, so you can interact with these items during workflow execution. In an Agent for example, resources contains tools, agent instructions, and the chat history. Middleware methods now get an additional argument `$resources`.
 
 ```php
 interface WorkflowMiddleware
@@ -416,4 +416,3 @@ In Neuron AI you could already answer them with [structured output](https://docs
 A classifier has no conversation and no text to stream. The Neuron AI Classifier has its own contract, `ClassifierInterface`, for asking closed questions about some input and receiving probabilities back. You can use it to take decisions inside your Agents or Workflows like guardrails, prompt injections, score the quality of a response, etc.
 
 <a href="../providers/classifier.md" class="button primary" data-icon="arrow-right-long">Classifier</a>
-
