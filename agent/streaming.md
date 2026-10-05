@@ -515,7 +515,7 @@ You can stream the agent output to a Mercure Hub using SSE:
 
 ```php
 use NeuronAI\Agent\Adapter\AgentChunkAdapter;
-use NeuronAI\Workflow\Streaming\Channel\PusherChannel;
+use NeuronAI\Workflow\Streaming\Channel\MercureChannel;
 use NeuronAI\Workflow\Streaming\Channel\StreamingChannelInterface;
 use Pusher\Pusher;
 
