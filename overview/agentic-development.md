@@ -50,6 +50,8 @@ vendor/neuron-core/neuron-ai/skills/
             └── SKILL.md
         └── neuron-frontend-integration/
             └── SKILL.md
+        └── neuron-laravel-integration/
+            └── SKILL.md
         └── neuron-monitoring/
             └── SKILL.md
         └── neuron-rag/
@@ -57,6 +59,8 @@ vendor/neuron-core/neuron-ai/skills/
         └── neuron-streaming/
             └── SKILL.md
         └── neuron-structured-output/
+            └── SKILL.md
+        └── neuron-symfony-integration/
             └── SKILL.md
         └── neuron-test/
             └── SKILL.md
