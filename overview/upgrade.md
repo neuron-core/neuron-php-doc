@@ -20,7 +20,7 @@ and update my application code if necessary.
 
 ## Upgrade to v4 from v3
 
-In this new major version the public APIs of Neuron components weren't changed dramatically (we minimized the impact as much as possible). We've focused on improving the most important component on which the entire framework is built on. Workflow it's the foundation of the entire architecture, the changes implemented in this new version may impact your code, especially if you use patterns like tool approval, interruption, and Streaming Adapters. We recommend to use the upgrade guides for coding agents.
+In this new major version the public APIs of Neuron components weren't changed dramatically (we minimized the impact as much as possible). We've focused on improving the most important component on which the entire framework is built on. Workflow is the foundation of the entire architecture, the changes implemented in this new version may impact your code, especially if you use patterns like tool approval, interruption, and Streaming Adapters. We recommend to use the upgrade guides for coding agents.
 
 We also took advantage of this release to fix other critical issues emerged in the v3 like the Tool Approval flow in the Agent, and other design improvements to have more freedom to evolve the framework with less breaking changes in the future.
 
@@ -59,7 +59,7 @@ In this new major version the Agent entity was subject to a substantial refactor
 
 The most important impact is the return type. The Agent return an instance of the `AgentState` that is an extension of the underlying `WorkflowState` with a couple of helper methods to keep as much as possible the external APIs seen by your application unchanged.
 
-The most impactful change is in the `stream()` method. Without the `AgentHandler` the method return the generator directly.&#x20;
+The most impactful change is in the `stream()` method. Without the `AgentHandler` the method returns the generator directly.&#x20;
 
 ```php
 foreach ($agent->stream(new UserMessage("Hello")) as $event) {
@@ -126,7 +126,7 @@ foreach($handler->events() as $chunk) {
 $finalState = $handler->getResult();
 ```
 
-Following a drastic simplification of the workflow execution logic, the handler is no longer necessary and it is possible to invoke the two methods `run()` and `events()` directly in the workflow.
+Following a drastic simplification of the workflow execution logic, the handler is no longer necessary and it is possible to invoke the two methods `run()` and `events()` directly on the workflow.
 
 ```php
 // One shot run
@@ -146,7 +146,7 @@ The architecture of the workflow execution and its interruption capabilities was
 
 #### Remove WorkflowInterrupt exception
 
-In case of interruption the Workflow doesn't throw the special `WorkflowException` to inform the caller script about the interruption. It just return an "interrupted" state:
+In case of interruption the Workflow doesn't throw the special `WorkflowException` to inform the caller script about the interruption. It just returns an "interrupted" state:
 
 ```php
 $state = $workflow->run();
@@ -242,7 +242,7 @@ Due to the changes in the workflow execution model, the database schema for pers
 
 ### Guzzle dependency removed
 
-In the previous version guzzle was a required composer depedency to power the framework default `GuzzleHttpClient`. This new major version ships with the default `CurlHttpClient` that do not require any package dependency, just `ext-curl` that should be already available in any PHP installation.
+In the previous version guzzle was a required composer dependency to power the framework default `GuzzleHttpClient`. This new major version ships with the default `CurlHttpClient` that does not require any package dependency, just `ext-curl` that should be already available in any PHP installation.
 
 If you are passing a custom GuzzleHttpClient instance to framework components you have to explicitly require guzzle in your application.
 
@@ -250,9 +250,9 @@ If you are passing a custom GuzzleHttpClient instance to framework components yo
 composer require guzzlehttp/guzzle
 ```
 
-### Built-In Vector Store Fitlering
+### Built-In Vector Store Filtering
 
-`VectorStoreInterface` changed to support built-in filtering capabilities. Methods changed their name and signature. If you are implementing `VectorStoreInterface` by yourself you shuold migrate your implementation to the new contract.
+`VectorStoreInterface` changed to support built-in filtering capabilities. Methods changed their name and signature. If you are implementing `VectorStoreInterface` by yourself you should migrate your implementation to the new contract.
 
 <a href="../rag/vector-store.md" class="button primary" data-icon="arrow-right-long">Vector Stores</a>&#x20;
 
@@ -269,17 +269,17 @@ Chat history was subject of major refactor to achieve two goals:
 * Separate the message store from the history and context window management
 * Making Neuron integration in your application easier
 
-`ChatHisotryInterface` was removed. The new public APIs are backed by the new `MessageStoreInterface`. As the name says, the message store is responsible only for storing your messages in a persistence layer. It marks messages that fall out of the context window as `archived` instead of deleting them, so the model sees a trimmed thread while your storage keeps the full history.
+`ChatHistoryInterface` was removed. The new public APIs are backed by the new `MessageStoreInterface`. As the name says, the message store is responsible only for storing your messages in a persistence layer. It marks messages that fall out of the context window as `archived` instead of deleting them, so the model sees a trimmed thread while your storage keeps the full history.
 
 {% hint style="warning" %}
-We recommennd to rely on the agentic upgrade process to move your Agent and history implementation to the new APIs.
+We recommend to rely on the agentic upgrade process to move your Agent and history implementation to the new APIs.
 {% endhint %}
 
 <a href="../agent/chat-history-and-memory.md" class="button primary" data-icon="arrow-right-long">Chat History</a>
 
 ### Middleware Signature
 
-The Worklow engine allows you to declare `resources` you want to carry during execution that will not need to be saved during interruptions. Middleware receive resources too, so you can interact with this items during worklow execution. In an Agent or example, resources contains tools, agent instructions, and the chat history. Middleware mehtods now get an additional argument `$resources`.&#x20;
+The Workflow engine allows you to declare `resources` you want to carry during execution that will not need to be saved during interruptions. Middleware receive resources too, so you can interact with these items during workflow execution. In an Agent for example, resources contains tools, agent instructions, and the chat history. Middleware methods now get an additional argument `$resources`.&#x20;
 
 ```php
 interface WorkflowMiddleware
@@ -319,7 +319,7 @@ interface ReaderInterface
 
 ### Monitoring
 
-The framework is transitioning to the [PSR-14 Event Dispatcher](https://www.php-fig.org/psr/psr-14/) interface, instead of the PHP native \SplObserver. We kept the existing interfaces in place, and also the `LogObserver` usgin adapters, but they are marked as `@deprecated`.
+The framework is transitioning to the [PSR-14 Event Dispatcher](https://www.php-fig.org/psr/psr-14/) interface, instead of the PHP native \SplObserver. We kept the existing interfaces in place, and also the `LogObserver` using adapters, but they are marked as `@deprecated`.
 
 This will make it easier to integrate Neuron agents and agentic workflows in general with other existing frameworks and applications.
 
@@ -389,7 +389,7 @@ As agents become more interactive and capable, application developers are increa
 
 Realtime servers like Pusher, Socketi, or any Pusher compatible server usually put a limit on the size of the payload. Pusher caps an event at 10 KB; Reverb defaults to the same, Soketi to 100 KB.
 
-To support streaming when your real-time server haa such a limit, an event that does not fit the max size - typically a tool result, or a message snapshot - is split into consecutive fragments. Furthermore servers do not guarantee that fragments arrive in order and never interleave. So the browser must be able to reconcile this fragmentation and ordering in order to deliver consistent streaming to your UI components.
+To support streaming when your real-time server has such a limit, an event that does not fit the max size - typically a tool result, or a message snapshot - is split into consecutive fragments. Furthermore servers do not guarantee that fragments arrive in order and never interleave. So the browser must be able to reconcile this fragmentation and ordering in order to deliver consistent streaming to your UI components.
 
 Neuron 4 ships with a first-party Typescript module that brings this capability in your frontend.
 
@@ -413,7 +413,7 @@ Stop a streamed answer mid-flight, for a "stop generating" button. The provider 
 
 In Neuron AI you could already answer them with [structured output](https://docs.neuron-ai.dev/agent/structured-output): describe the allowed answers, force the response into a PHP class, read the property. It is the same mechanism behind the [AI as a judge](https://docs.neuron-ai.dev/agent/evaluation#ai-as-a-judge) pattern in agent evaluations. It works well when the decision is taken once in a while. The trouble begins when you want it on every turn of every conversation, because a generative model produces text one token after the other, and you are paying a general purpose writer, with its latency and its price, to obtain one word. A guardrail that doubles the response time of the agent gets switched off at the first complaint. A judge that costs as much as the agent it evaluates runs on a sample of the traffic, if it runs at all.
 
-A classifier has no conversation and no text to stream. The Neuron AI Classifier is has its own contract, `ClassifierInterface`, for asking closed questions about some input and receiving probabilities back. You can use it to take decision inside your Agents or Workflow like guardrails, prompt injections, score the quality of a response, atc.
+A classifier has no conversation and no text to stream. The Neuron AI Classifier has its own contract, `ClassifierInterface`, for asking closed questions about some input and receiving probabilities back. You can use it to take decisions inside your Agents or Workflows like guardrails, prompt injections, score the quality of a response, etc.
 
 <a href="../providers/classifier.md" class="button primary" data-icon="arrow-right-long">Classifier</a>
 
