@@ -24,7 +24,7 @@ How you reference the skill depends on which AI tool you're using. If you're usi
 npx skills add ./vendor/neuron-core/neuron-ai/skills
 ```
 
-Once installed, the skill will be available to Claude Code automatically. The skilla are installed as a symlink, so it will automatically stay up to date when you update Neuron via composer.
+Once installed, the skills will be available to your coding agent automatically. The skills are installed as a symlink, so they will automatically stay up to date when you update Neuron via composer.
 
 #### Cursor  <a href="#cursor" id="cursor"></a>
 
