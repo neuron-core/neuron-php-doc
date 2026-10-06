@@ -101,3 +101,7 @@ The middleware automatically injects the `ToolSearch` tool in the default tool l
 The agent starts a turn with a minimal tool set, usually just `ToolSearch` itself plus whatever core tools you always want available, and when it needs a capability it does not currently have, it calls `ToolSearch` with a natural language query that returns a ranked list of tool descriptors with their full schemas. At this point a middleware sitting between the agent and the next inference call inspects the search result, extracts the tool identifiers, looks them up in the underlying registry, and adds their full definitions to the tools array that will be sent on the next request to the model.
 
 From the model's perspective the next turn simply arrives with a richer tool list, and it can invoke any of those newly surfaced tools directly with proper schema validation, exactly as if they had been there from the start.
+
+{% hint style="warning" %}
+ToolSearch will invalidate the prompt cache on the provider API the moment the middleware finds some tools and inject them in the tools list.
+{% endhint %}
