@@ -308,6 +308,26 @@ class DescriptionGenerationNode extends Node
 }
 ```
 
+### Max Steps
+
+In the Workflow component, max steps is an opt-in safety limit against loops that never end. A workflow is a graph of nodes, and it can route back to an earlier node (an agent that keeps choosing the same tool, or a node bug that never produces a StopEvent). Such a run would keep running and persisting forever. Max steps caps how many nodes a run may take before the framework gives up and fails it with a WorkflowException.
+
+By default there is no limit (`null`).
+
+```php
+// Set at runtime
+$workflow->setMaxSteps(200);
+
+// As a workflow property
+class OrderWorkflow extends Workflow
+{
+    protected function maxSteps(): ?int
+    {
+        return 50;
+    }
+}
+```
+
 ## Monitoring & Debugging
 
 Many of the applications you build with Neuron will contain multiple steps with multiple invocations of LLM calls. As these applications get more and more complex, it becomes crucial to be able to inspect what exactly is going on inside your agentic system. The best way to do this is with [Inspector](https://inspector.dev/).
