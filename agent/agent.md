@@ -232,6 +232,37 @@ Or call the cache method on the `SystemMessage` to cache the entire system promp
     }
 ```
 
+### Dynamic Context
+
+Part of your system instructions can be dynamic, or change frequently, like a date, some user information, etc.. You can supply this type of context through the `context()` hook or `setContext()`. Under the hood the Agent will inject this part at the end of the conversation, in order to optimize prompt cache on the provider API.&#x20;
+
+Using context for the dynamic part of your system instructions you will probably see a drastical cost reduction.
+
+```php
+class SupportAgent extends Agent
+{
+    protected function instructions(): SystemMessage
+    {
+        return (new SystemMessage('You are a support agent...'))->cache(); // never changes
+    }
+
+    protected function context(): array
+    {
+        return [
+            new TextContent('Today is ' . date('Y-m-d')),
+            new TextContent('The customer is on the Pro plan.'),
+        ];
+    }
+}
+
+// Or, without a set at runtime:
+$agent->setContext(
+    new TextContent("The user is viewing order {$orderId}.")
+);
+```
+
+Fill the context before the first model call of the turn, because a later change restarts the cache from the question. A structured-output retry adds a correction message, and that attempt carries the context on it.
+
 ### Talk to the Agent
 
 We are ready to test how the agent responds to our message based on the new instructions.
