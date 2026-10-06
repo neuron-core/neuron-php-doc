@@ -232,7 +232,7 @@ Or call the cache method on the `SystemMessage` to cache the entire system promp
     }
 ```
 
-### Dynamic Context
+### Dynamic Context and Cache
 
 Part of your system instructions can be dynamic, or change frequently, like a date, some user information, etc.. You can supply this type of context through the `context()` hook or `setContext()`. Under the hood the Agent will inject this part at the end of the conversation, in order to optimize prompt cache on the provider API.&#x20;
 
