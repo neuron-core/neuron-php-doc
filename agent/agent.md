@@ -193,11 +193,11 @@ class YouTubeAgent extends Agent
         TEXT);
         
         $message->addContent(
-            new SystemContent("Write a summary in a paragraph without using lists. Use just fluent text.")
+            new TextContent("Write a summary in a paragraph without using lists. Use just fluent text.")
         );
         
         $message->addContent(
-            new SystemContent("After the summary add a list of three sentences as the three most important take away from the video.")
+            new TextContent("After the summary add a list of three sentences as the three most important take away from the video.")
         );
                 
         return $message;
@@ -209,7 +209,7 @@ If you are willing to use the system prompt caching for providers like Anthropic
 
 ```php
 $message->addContent(
-    new SystemContent("...")->cache()
+    new TextContent("...")->cache()
 );
 ```
 
@@ -221,14 +221,14 @@ Or call the cache method on the `SystemMessage` to cache the entire system promp
         $message = new SystemMessage(...);
         
         $message->addContent(
-            new SystemContent(...)
+            new TextContent(...)
         );
         
         $message->addContent(
-            new SystemContent(...)
+            new TextContent(...)
         );
                 
-        return $message->cache(); // <- Cache everything
+        return $message->cache(); // <- cache everything
     }
 ```
 
