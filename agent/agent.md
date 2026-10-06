@@ -174,7 +174,7 @@ class YouTubeAgent extends Agent
 }
 ```
 
-The SystemMessage class can be also populated with multiple content blocks SystemContent in order to dynamically inject contents into the system instructions:
+The `SystemMessage` class can be also populated with multiple content blocks `TextContent` in order to dynamically inject contents into the system instructions:
 
 ```php
 class YouTubeAgent extends Agent
@@ -205,7 +205,7 @@ class YouTubeAgent extends Agent
 }
 ```
 
-If you are willing to use the system prompt caching for providers like Anthropic, you can call the cache() method on each content part you want to cache:
+If you are willing to use the system prompt caching for providers like Anthropic, OpenAI, Gemini, etc., you can call the `cache()` method on each content part you want to cache:
 
 ```php
 $message->addContent(
