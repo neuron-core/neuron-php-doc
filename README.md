@@ -42,7 +42,7 @@ If the app uses neither framework, start from a plain PHP agent using the neuron
 Finish with a short summary of what you installed and what you found.
 ```
 
-## Our Social Channels
+### Our Social Channels
 
 * Newsletter: [https://neuron-ai.dev](https://neuron-ai.dev/)
 * Inspector: [https://inspector.dev](https://inspector.dev)
