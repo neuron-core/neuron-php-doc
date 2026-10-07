@@ -42,6 +42,15 @@ If the app uses neither framework, start from a plain PHP agent using the neuron
 Finish with a short summary of what you installed and what you found.
 ```
 
+## Our Social Channels
+
+* Website & Newsletter: [https://neuron-ai.dev](https://neuron-ai.dev/)
+* Inspector: [https://inspector.dev](https://inspector.dev)
+* E-Book: [https://www.amazon.it/dp/B0F1YX8KJB](https://www.amazon.it/dp/B0F1YX8KJB)
+* Linkedin: [https://www.linkedin.com/company/neuron-ai-php-framework](https://www.linkedin.com/company/neuron-ai-php-framework)
+* X: [https://x.com/neuronai\_php](https://x.com/neuronai_php)
+* Instagram: [https://www.instagram.com/neuronai\_php\_adk/](https://www.instagram.com/neuronai_php_adk/)
+
 ### Support For Multiple Providers
 
 Neuron uses a common interface for LLM providers (`AIProviderInterface`) as well as for the other components, such as [memory](agent/chat-history-and-memory.md), [embedding](rag/embeddings-provider.md), [vector stores](rag/vector-store.md), [toolkits](agent/tools.md#toolkits-composable-agent-capabilities), etc. The modular architecture allows you to swap components as needed, whether you're changing LLM provider, adjusting memory backends, or scaling across multiple servers.
@@ -256,13 +265,3 @@ We’re using [Discussions](https://github.com/inspector-apm/neuron-ai/discussio
 Neuron is part of the Inspector ecosystem as a trustable platform to create reliable and scalable AI driven solutions.&#x20;
 
 Trace and evaluate your agents execution flow to help you maintain production grade implementations with confidence. Check out the [**monitoring integrations**](agent/observability.md).
-
-## Keep In Touch
-
-* Website & Newsletter: [https://neuron-ai.dev](https://neuron-ai.dev/)
-* Repository: [https://github.com/neuron-code/neuron-ai](https://github.com/inspector-apm/neuron-ai)
-* Inspector: [https://inspector.dev](https://inspector.dev)
-* E-Book: [https://www.amazon.it/dp/B0F1YX8KJB](https://www.amazon.it/dp/B0F1YX8KJB)
-* Linkedin: [https://www.linkedin.com/company/neuron-ai-php-framework](https://www.linkedin.com/company/neuron-ai-php-framework)
-* X: [https://x.com/neuronai\_php](https://x.com/neuronai_php)
-* Instagram: [https://www.instagram.com/neuronai\_php\_adk/](https://www.instagram.com/neuronai_php_adk/)
