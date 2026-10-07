@@ -44,7 +44,7 @@ Finish with a short summary of what you installed and what you found.
 
 ## Our Social Channels
 
-* Website & Newsletter: [https://neuron-ai.dev](https://neuron-ai.dev/)
+* Newsletter: [https://neuron-ai.dev](https://neuron-ai.dev/)
 * Inspector: [https://inspector.dev](https://inspector.dev)
 * E-Book: [https://www.amazon.it/dp/B0F1YX8KJB](https://www.amazon.it/dp/B0F1YX8KJB)
 * Linkedin: [https://www.linkedin.com/company/neuron-ai-php-framework](https://www.linkedin.com/company/neuron-ai-php-framework)
