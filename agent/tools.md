@@ -1241,7 +1241,7 @@ class MyAgent extends Agent
 
 #### Jina Web Search
 
-It makes your Agent able to search the web. It requires access to [Jina API](https://jina.ai/).
+It makes your Agent able to search the web.
 
 ```php
 namespace App\Neuron;
@@ -1266,7 +1266,7 @@ class MyAgent extends Agent
 
 #### Jina URL Reader
 
-Extract web page content from an URL. It requires access to [Jina API](https://jina.ai/).
+Extract web page content from an URL.
 
 ```php
 namespace App\Neuron;
@@ -1283,6 +1283,85 @@ class MyAgent extends Agent
         return [
             JinaUrlReader::make(
                 key: 'JINA_API_KEY'
+            ),
+        ];
+    }
+}
+```
+
+### Firecrawl
+
+Search the web and read pages as Markdown with Firecrawl.
+
+{% hint style="success" %}
+This integration is mantained directly by the [Firecrawl](https://docs.firecrawl.dev/integrations/neuron-ai) team. Contact Firecrawl if you need support.
+{% endhint %}
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Tools\Toolkits\Firecrawl\FirecrawlToolkit;
+
+class MyAgent extends Agent
+{
+    ...
+    
+    protected function tools(): array
+    {
+        return [
+            FirecrawlToolkit::make(
+                key: 'FIRECRAWL_API_KEY'
+            ),
+        ];
+    }
+}
+```
+
+#### Firecrawl Web Search
+
+It makes your Agent able to search the web.
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Tools\Toolkits\Firecrawl\FirecrawlSearchTool;
+
+class MyAgent extends Agent
+{
+    ...
+    
+    protected function tools(): array
+    {
+        return [
+            FirecrawlSearchTool::make(
+                key: 'FIRECRAWL_API_KEY'
+            ),
+        ];
+    }
+}
+```
+
+#### Firecrawl Scrape
+
+Extract web page content from a URL.
+
+```php
+namespace App\Neuron;
+
+use NeuronAI\Agent;
+use NeuronAI\Tools\Toolkits\Firecrawl\FirecrawlScrapeTool;
+
+class MyAgent extends Agent
+{
+    ...
+    
+    protected function tools(): array
+    {
+        return [
+            FirecrawlScrapeTool::make(
+                key: 'FIRECRAWL_API_KEY'
             ),
         ];
     }
