@@ -801,7 +801,7 @@ class MyAgent extends Agent
     protected function tools(): array
     {
     	return [
-            CalculatorToolkit::make()->exclude([
+            BookingToolkit::make()->exclude([
                 Book::class,
             ]),
         ];
