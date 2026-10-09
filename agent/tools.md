@@ -759,9 +759,8 @@ class BookingToolkit extends AbstractToolkit
 {
     public function guidelines(): ?string
     {
-        return "Perform mathematical operations. You can also use this functions to solve
-        mathematical expressions executing smaller operations step by step to calculate 
-        the final result.";
+        return "Use the following tools to help users find suitable hotels 
+        and complete reservations.";
     }
 
     public function provide(): array
@@ -824,7 +823,7 @@ class MyAgent extends Agent
     protected function tools(): array
     {
     	return [
-            CalculatorToolkit::make()->only([
+            BookingToolkit::make()->only([
                 Search::class,
             ]),
         ];
@@ -844,7 +843,7 @@ class MyAgent extends Agent
     protected function tools(): array
     {
     	return [
-            MySQLToolkit::make()
+            BookingToolkit::make()
                 ->with(
                     Book::class, 
                     fn (ToolInterface $tool) => $tool->setMaxTries(1)
