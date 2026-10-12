@@ -620,7 +620,7 @@ class MyAgent extens Agent
             ))
             ->addProvider('openai', new OpenAI(
                 key: 'OPENAI_API_KEY',
-                model: 'gpt-4o',
+                model: 'gpt-5',
             ))
             ->setFallbackOrder('anthropic', 'openai');
     }
