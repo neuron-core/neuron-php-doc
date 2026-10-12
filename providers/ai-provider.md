@@ -616,15 +616,13 @@ class MyAgent extens Agent
         return RouterProvider::make()
             ->addProvider('anthropic', new Anthropic(
                 key: 'ANTHROPIC_API_KEY',
-                model: 'claude-sonnet-4-20250514',
+                model: 'claude-5-sonnet',
             ))
             ->addProvider('openai', new OpenAI(
                 key: 'OPENAI_API_KEY',
                 model: 'gpt-4o',
             ))
-            ->setRule(
-                new RoundRobinRule(['anthropic', 'openai'])
-            );
+            ->setFallbackOrder('anthropic', 'openai');
     }
 
     protected function instructions(): string
@@ -635,7 +633,7 @@ class MyAgent extens Agent
 }
 ```
 
-In the example above we use the `RoundRobinRule` making the router act as a load balancer between the attached AI providers. The package ships with several built-in rules including an LLM classifier to route calls to the appropriate model based on the promp difficulty score: [https://github.com/neuron-core/router#difficultyrule](https://github.com/neuron-core/router#difficultyrule)
+In the example above we set up the fallback rule to use Anthropic as the primary provider and fallback to OpenAI if something go wrong. The package ships with several built-in rules including `LoadBalancingRule` and others. Learn more on the dedicated repository: [https://github.com/neuron-core/router](https://github.com/neuron-core/router)
 
 ## Custom Http Client
 
