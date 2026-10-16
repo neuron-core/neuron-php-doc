@@ -47,7 +47,7 @@ The command will create a class like this:
 namespace App\Neuron;
 
 use NeuronAI\Agent\Agent;
-use NeuronAI\Agent\SystemPrompt;
+use NeuronAI\Chat\Messages\SystemMessage;
 use NeuronAI\Providers\AIProviderInterface;
 
 class YouTubeAgent extends Agent
@@ -60,7 +60,7 @@ class YouTubeAgent extends Agent
     protected function instructions(): string
     {
         return new SystemMessage(
-            "You are a friendly AI Agent created with Neuron framework."
+            "You are a friendly AI Agent created with the Neuron AI framework."
         );
     }
     
@@ -110,7 +110,7 @@ class YouTubeAgent extends Agent
     protected function instructions(): SystemMessage
     {
         return new SystemMessage(
-            "You are a friendly AI Agent created with Neuron framework."
+            "You are a friendly AI Agent created with the Neuron AI framework."
         );
     }
     

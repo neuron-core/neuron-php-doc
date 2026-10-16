@@ -73,7 +73,7 @@ You can easily create your first agent with the Neuron CLI:
 namespace App\Neuron;
 
 use NeuronAI\Agent\Agent;
-use NeuronAI\Agent\SystemPrompt;
+use NeuronAI\Chat\Messages\SystemMessage;
 use NeuronAI\Providers\Anthropic\Anthropic;
 
 class MyAgent extends Agent
@@ -87,10 +87,10 @@ class MyAgent extends Agent
         );
     }
 
-    public function instructions(): string
+    public function instructions(): SystemMessage
     {
-        return (string) new SystemPrompt(
-            background: ["You are a friendly AI Agent created with Neuron framework."],
+        return new SystemMessage(
+            "You are a friendly AI Agent created with the Neuron AI framework."
         );
     }
 }
