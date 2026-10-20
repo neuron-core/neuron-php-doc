@@ -37,10 +37,7 @@ activate the matching skill: neuron-laravel-integration or neuron-symfony-integr
 If Neuron is already part of the app go through the skill's foundations checklist 
 item by item. Report what differs from the recommended setup;
 
-If there isn't any Neuron implementation in the app yet, follow the same checklist to do the first setup. 
-If the app uses neither framework, start from a plain PHP agent using 
-the neuron-agent skill. Finish with a short summary of what you installed 
-and what you found.
+Finish with a short summary of what you installed and what you found.
 ```
 
 ### Install
