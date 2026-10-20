@@ -80,10 +80,10 @@ For any additional support drop in a live chat in the dashboard. We are happy to
 
 ### Register the Inspector Listener
 
-If your application doesn't have a specific integration with PHP environment variables, you can inject the `InspectorListener` component into the agent programmatically, passing the ingestion key generated in the dashboard:
+If your application doesn't have a specific integration with PHP environment variables, you can inject the `InspectorSubscriber` component into the agent programmatically, passing the ingestion key generated in the dashboard:
 
 ```php
-use NeuronAI\Observability\InspctorObserver;
+use Inspector\Neuron\V4\InspectorSubscriber;
 
 /*
  * Inject at runtime
@@ -91,7 +91,7 @@ use NeuronAI\Observability\InspctorObserver;
 $message = MyAgent::make()
     ->subscribe(
         ObservabilityEvent::class, 
-        InspctorObserver::instance('INSPECTOR_INGESTION_KEY')
+        InspectorSubscriber::instance('INSPECTOR_INGESTION_KEY')
     )
     ->chat(...)
     ->getMessage();
@@ -107,7 +107,7 @@ class MyAgent extends Agent
         
         $this->subscribe(
             ObservabilityEvent::class, 
-            InspctorObserver::instance('INSPECTOR_INGESTION_KEY')
+            InspectorSubscriber::instance('INSPECTOR_INGESTION_KEY')
         );
     }
 }
