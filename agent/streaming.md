@@ -144,6 +144,7 @@ Adapter for Vercel AI SDK Data Stream Protocol: [https://ai-sdk.dev/docs/ai-sdk-
 
 ```php
 use NeuronAI\Agent\Adapters\VercelAIAdapter;
+use NeuronAI\Workflow\Streaming\SSEEncoder;
 
 // Instruct the agent
 $stream = MyAgent::make()
@@ -156,7 +157,7 @@ $stream = MyAgent::make()
     );
 
 // Process the response
-foreach ($stream as $line) {
+foreach (SSEEncoder::encode($stream) as $line) {
     echo $line;
 }
 ```
@@ -169,6 +170,7 @@ For more information, visit: [https://docs.ag-ui.com/concepts/events](https://do
 
 ```php
 use NeuronAI\Agent\Adapters\AGUIAdapter;
+use NeuronAI\Workflow\Streaming\SSEEncoder;
 
 // Instruct the agent
 $stream = MyAgent::make()
@@ -181,7 +183,7 @@ $stream = MyAgent::make()
     );
 
 // Process the response
-foreach ($stream as $line) {
+foreach (SSEEncoder::encode($stream) as $line) {
     echo $line;
 }
 ```
@@ -217,6 +219,7 @@ Here is a complete endpoint example:
 ```php
 use NeuronAI\Agent\Adapters\AGUIAdapter;
 use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\Workflow\Streaming\SSEEncoder;
 
 // Parse the AG-UI RunAgentInput payload
 $input = json_decode(file_get_contents('php://input'), true);
@@ -243,7 +246,7 @@ $stream = MyAgent::make()
     ->setStreamAdapter(fn (): AGUIAdapter => $adapter)
     ->stream($messages);
 
-foreach ($stream as $line) {
+foreach (SSEEncoder::encode($stream) as $line) {
     echo $line;
     flush();
 }
