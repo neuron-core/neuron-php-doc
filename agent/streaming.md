@@ -143,7 +143,7 @@ You simply need to provide an adapter instance to the `stream()` method of the a
 Adapter for Vercel AI SDK Data Stream Protocol: [https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol](https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol)
 
 ```php
-use NeuronAI\Chat\Messages\Stream\Adapters\VercelAIAdapter;
+use NeuronAI\Agent\Adapters\VercelAIAdapter;
 
 // Instruct the agent
 $stream = MyAgent::make()
@@ -166,7 +166,7 @@ Implements the streaming event-based protocol defined by AG-UI protocol for real
 For more information, visit: [https://docs.ag-ui.com/concepts/events](https://docs.ag-ui.com/concepts/events)
 
 ```php
-use NeuronAI\Chat\Messages\Stream\Adapters\AGUIAdapter;
+use NeuronAI\Agent\Adapters\AGUIAdapter;
 
 // Instruct the agent
 $stream = MyAgent::make()
@@ -211,7 +211,7 @@ The adapter also provides the HTTP headers required by the SSE transport via the
 Here is a complete endpoint example:
 
 ```php
-use NeuronAI\Chat\Messages\Stream\Adapters\AGUIAdapter;
+use NeuronAI\Agent\Adapters\AGUIAdapter;
 use NeuronAI\Chat\Messages\UserMessage;
 
 // Parse the AG-UI RunAgentInput payload
@@ -258,8 +258,8 @@ Both adapters understand portable step, activity, and custom events. AG-UI uses 
 Map an application event by its exact class when domain code should remain independent from Neuron's portable event objects:
 
 ```php
-use NeuronAI\Chat\Messages\Stream\Adapters\Events\ActivityStreamEvent;
-use NeuronAI\Chat\Messages\Stream\Adapters\VercelAIAdapter;
+use NeuronAI\Agent\Adapters\Events\ActivityStreamEvent;
+use NeuronAI\gent\Adapters\VercelAIAdapter;
 
 $adapter = (new AGUIAdapter())->mapEvent(
     IndexingProgress::class,
