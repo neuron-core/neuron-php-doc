@@ -150,7 +150,7 @@ use NeuronAI\Workflow\Streaming\SSEEncoder;
 $stream = MyAgent::make()
     ->setThreadId('chat_id')
     ->setStreamAdapter(
-        fn (): AGUIAdapter => new VercelAIAdapter()
+        fn (): VercelAIAdapter => new VercelAIAdapter()
     )
     ->stream(
         new UserMessage('What is the square root of 144?')
