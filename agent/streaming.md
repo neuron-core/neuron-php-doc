@@ -148,7 +148,9 @@ use NeuronAI\Agent\Adapters\VercelAIAdapter;
 // Instruct the agent
 $stream = MyAgent::make()
     ->setThreadId('chat_id')
-    ->setStreamAdapter(new VercelAIAdapter())
+    ->setStreamAdapter(
+        fn (): AGUIAdapter => new VercelAIAdapter()
+    )
     ->stream(
         new UserMessage('What is the square root of 144?')
     );
@@ -171,7 +173,9 @@ use NeuronAI\Agent\Adapters\AGUIAdapter;
 // Instruct the agent
 $stream = MyAgent::make()
     ->setThreadId('chat_id')
-    ->setStreamAdapter(new AGUIAdapter('chat_id'))
+    ->setStreamAdapter(
+        fn (): AGUIAdapter => new AGUIAdapter('chat_id')
+    )
     ->stream(
         new UserMessage('What is the square root of 144?')
     );
@@ -236,7 +240,7 @@ foreach ($adapter->getHeaders() as $name => $value) {
 }
 
 $stream = MyAgent::make()
-    ->setStreamAdapter($adapter)
+    ->setStreamAdapter(fn (): AGUIAdapter => $adapter)
     ->stream($messages);
 
 foreach ($stream as $line) {
@@ -411,7 +415,7 @@ use NeuronAI\Workflow\Persistence\FilePersistence;
 
 $agent = MyAgent::make()
     ->setThreadId('chat_id')
-    ->setChannel(new CallbackChannel(
+    ->setChannel(fn (): StreamingChannelInterface => new CallbackChannel(
         onSend: function (ProtocolEvent $item) use ($redis): void {
             $redis->publish('thread-123', serialize($item));
         },
@@ -449,7 +453,7 @@ $channel = new CallbackChannel(
 );
 
 MyAgent::make()
-    ->setChannel($channel)
+    ->setChannel(fn (): StreamingChannelInterface => $channel)
     ->stream(new UserMessage('Hi'));
 ```
 
@@ -690,5 +694,7 @@ class LogChannel implements ChannelInterface
 And attach it like any other channel:
 
 ```php
-$agent->setChannel(new LogChannel(new Logger(__DIR__ . '/storage/workflow.log')));
+$agent->setChannel(
+    fn (): StreamingChannelInterface => new LogChannel(new Logger(__DIR__ . '/storage/workflow.log'))
+);
 ```
