@@ -159,6 +159,7 @@ $stream = MyAgent::make()
 // Process the response
 foreach (SSEEncoder::encode($stream) as $line) {
     echo $line;
+    flush();
 }
 ```
 
@@ -185,6 +186,7 @@ $stream = MyAgent::make()
 // Process the response
 foreach (SSEEncoder::encode($stream) as $line) {
     echo $line;
+    flush();
 }
 ```
 
@@ -253,6 +255,23 @@ foreach (SSEEncoder::encode($stream) as $line) {
 ```
 
 The adapter translates Neuron streaming chunks into the following AG-UI events:
+
+| Neuron                                                       | AG-UI events                                                                                                                               |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| The run starts                                               | `RUN_STARTED`                                                                                                                              |
+| Text chunks                                                  | `TEXT_MESSAGE_START`, `TEXT_MESSAGE_CONTENT`, `TEXT_MESSAGE_END`                                                                           |
+| Reasoning chunks                                             | `REASONING_START`, `REASONING_MESSAGE_START`, `REASONING_MESSAGE_CONTENT`, `REASONING_MESSAGE_END`, `REASONING_END`                        |
+| A server-side tool runs                                      | `TOOL_CALL_START`, `TOOL_CALL_ARGS`, `TOOL_CALL_END`, `TOOL_CALL_RESULT`                                                                   |
+| The model calls a frontend tool (from `RunAgentInput.tools`) | `TOOL_CALL_START`, `TOOL_CALL_ARGS`, `TOOL_CALL_END`, then `RUN_FINISHED` so the client can run the tool                                   |
+| `StepStartedStreamEvent`, `StepFinishedStreamEvent`          | `STEP_STARTED`, `STEP_FINISHED`                                                                                                            |
+| `ActivityStreamEvent`                                        | `ACTIVITY_SNAPSHOT`                                                                                                                        |
+| `CustomStreamEvent`                                          | `CUSTOM`                                                                                                                                   |
+| A tool call needs approval                                   | `STATE_SNAPSHOT`, `MESSAGES_SNAPSHOT`, then `RUN_FINISHED` with an `interrupt` outcome carrying one `confirmation` interrupt per tool call |
+| The run waits for another external input                     | `STATE_SNAPSHOT`, `MESSAGES_SNAPSHOT`, then `RUN_FINISHED` with an `interrupt` outcome whose reason is `neuron:<type>`                     |
+| The run completes                                            | `RUN_FINISHED`                                                                                                                             |
+| The run fails                                                | `RUN_ERROR`                                                                                                                                |
+
+Tool calls are published when Neuron dispatches them, not while the model is still writing the arguments. `STATE_SNAPSHOT` and `MESSAGES_SNAPSHOT` are sent only when a run pauses for input, and the adapter does not emit `STATE_DELTA`.
 
 Tools attached to a Neuron agent are executed on the server. The client is informed of the ongoing execution through the `TOOL_CALL_*` events and receives the tool output in the `TOOL_CALL_RESULT` event, followed by the agent's final text message.
 
