@@ -1103,6 +1103,15 @@ class MyAgent extends Agent
 
 <table data-header-hidden><thead><tr><th width="256"></th><th></th></tr></thead><tbody><tr><td>describe_directory_content</td><td>NeuronAI\Tools\Toolkits\FileSystem\DescribeDirectoryContentTool</td></tr><tr><td>read_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\ReadFileTool</td></tr><tr><td>grep_file_content</td><td>NeuronAI\Tools\Toolkits\FileSystem\GrepFileContentTool</td></tr><tr><td>glob_path</td><td>NeuronAI\Tools\Toolkits\FileSystem\GlobPathTool</td></tr><tr><td>preview_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\PreviewFileTool</td></tr><tr><td>parse_file</td><td>NeuronAI\Tools\Toolkits\FileSystem\ParseFileTool</td></tr></tbody></table>
 
+{% hint style="warning" %}
+The toolkit includes the parse\_file tool by default. This tool allows the agent to read the content of PDF and HTML files rather than only plain text files. To use this tool you need two additional components in your system:
+
+* &#x20;The [**poppler**](https://en.wikipedia.org/wiki/Pdftotext) utility for PDF files;
+* The [**html2text**](https://github.com/mtibben/html2text) composer package for HTML files.
+
+If you prefer to not include this tool in the toolkit you can use the [`exclude()`](tools.md#exclude) method.
+{% endhint %}
+
 ### Tavily&#x20;
 
 This toolkit enable your agent to performs web search, page content extraction, and crawling.
