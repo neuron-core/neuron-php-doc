@@ -1415,13 +1415,9 @@ composer require spatie/fork
 {% hint style="warning" %}
 ### Limitations
 
-This implementation requires the `pcntl` extension which is installed in many Unix and Mac systems by default.
+This implementation requires the `pcntl` extension. **pcntl only works in CLI or background workers, not in web requests.**
 
-**pcntl only works in CLI processes, not in a web context.**
-
-
-
-If the `pcntl` extension is not present in the system running the agent (e.g. Windows machines) the trait automatically fallbacks to the standard tool calls execution. This can be helpful if you have a missmatch between your local development environment and the production environment. You can develop locally with `pcntl` disabled, then deploy to production environments where it may be enabled—**without modifying a single line of code**. The agent adapts automatically to whatever execution environment it finds itself in.
+If the `pcntl` extension is not present in the system the framework automatically fallbacks to the sequential tool calls execution. This can be helpful if you have a missmatch between your local development environment and the production environment.
 {% endhint %}
 
 ### Enable parallel execution
